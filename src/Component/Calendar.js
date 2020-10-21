@@ -1,30 +1,44 @@
-import React from 'react'
-import {View, Text, Image} from 'react-native'
+import React from 'react';
+import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
+import {LocaleConfig} from 'react-native-calendars';
+const windowWidth = Dimensions.get('window').width;
 
-const Calendar = () =>{
-  return(
-
+const Calendar = () => {
+  return (
     <>
-      <View style={{}}>
-            <View 
-            style={{width:150,
-             height:150, 
-             borderRadius:100, 
-             backgroundColor:'red', 
-             position:'absolute', 
-             top:"50%",
-             zIndex:999
-             }}>
-              
-            </View>
-      </View>
-      <View style={{flex:3,  backgroundColor:"#343739"}}>
-          <Text>three</Text>
+      <View style={styles.container}>
+        <View style={styles.circle}></View>
+        <View style={styles.Devision}>
+          <Calendar />
+        </View>
       </View>
     </>
-   
-  )
-}
+  );
+};
 
 export default Calendar;
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    paddingHorizontal: 30,
+    backgroundColor: 'blue',
+  },
+  circle: {
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+    backgroundColor: 'red',
+    zIndex: 1,
+    top: '12%',
+  },
+  Devision: {
+    flex: 3,
+    backgroundColor: 'yellow',
+    width: windowWidth,
+  },
+});
