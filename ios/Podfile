@@ -31,3 +31,11 @@ target 'will-tvOS' do
     # Pods for testing
   end
 end
+
+target 'will' do
+
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Contacts', :path => "#{permissions_path}/Contacts.podspec"
+  pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone.podspec"
+  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications.podspec"
+end
