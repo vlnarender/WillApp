@@ -66,7 +66,6 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
       <Image
         style={{
           zIndex: 1000,
-          elevation: 30,
           marginLeft: 20,
           marginTop: 25,
           position: 'absolute',

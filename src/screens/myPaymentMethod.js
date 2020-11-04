@@ -202,12 +202,7 @@ const MyPaymentMethod = (props) => {
             <ScrollView style={{backgroundColor: 'white'}}>
               <View style={styleCss.mainContainer}>
                 <View style={styleCss.creditHeader}>
-                  <View style={{flex: 1}}>
-                    {/*   <Image
-                style={{width:35, height: 14}}
-                source={require('../../assets/header/arrowLeft.png')}
-              /> */}
-                  </View>
+                  <View style={{flex: 1}}></View>
                   <View style={{flex: 1, alignItems: 'center'}}>
                     <Image
                       style={{width: 50, height: 40}}
