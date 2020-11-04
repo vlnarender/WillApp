@@ -24,6 +24,7 @@ export const lableAPI = (data) => {
   if (data.language == 'ar') {
     language = 'ar';
   }
+  console.log(`${DEV_CONFIGS.url}/lable-list`);
   return fetch(`${DEV_CONFIGS.url}/lable-list`, {
     method: 'POST',
     headers: {
@@ -127,6 +128,8 @@ export const getLoginAPI = (data) => {
     formBody.push(encodedKey + '=' + encodedValue);
   }
   formBody = formBody.join('&');
+  console.log(`${DEV_CONFIGS.url}/login`);
+
   return fetch(`${DEV_CONFIGS.url}/login`, {
     method: 'POST',
     headers: {
@@ -137,6 +140,7 @@ export const getLoginAPI = (data) => {
   })
     .then((response) => response.json())
     .then((responseJson) => {
+      console.log(responseJson);
       return responseJson;
     });
 };

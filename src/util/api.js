@@ -133,7 +133,6 @@ export const USER_API = (data, API_NAME) => {
 
 export const ADD_AND_UPDATE_API = async (data, API_NAME) => {
   let localstorage = await getAsyncStorage();
-  // console.log('formBody', data);
 
   let formBody = [];
   for (let property in data) {
@@ -141,11 +140,8 @@ export const ADD_AND_UPDATE_API = async (data, API_NAME) => {
     let encodedValue = encodeURIComponent(data[property]);
     formBody.push(encodedKey + '=' + encodedValue);
   }
-
   formBody = formBody.join('&');
-  console.log('formBody', formBody);
 
-  console.log(data, API_NAME, 'api');
   return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
     method: 'POST',
     headers: {
@@ -157,7 +153,6 @@ export const ADD_AND_UPDATE_API = async (data, API_NAME) => {
   })
     .then((response) => response.json())
     .then((responseJson) => {
-      // console.log('inside ADD_AND_UPDATE_API', responseJson);
       return responseJson;
     })
     .catch((error) => {

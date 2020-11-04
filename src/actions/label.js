@@ -9,6 +9,7 @@ function labelAction() {
     dispatch(request());
     return GET_API('lable-list').then(
       (data) => {
+        console.log(data);
         if (data.success) {
           dispatch(success(data.data));
         } else {

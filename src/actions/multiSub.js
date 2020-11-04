@@ -2,8 +2,16 @@ import {userConstants} from './actionTypes';
 import {ADD_AND_UPDATE_API} from '../util/api';
 export const multiSubActions = {
   multiSubAction,
+  multiSubWeek,
+  multiSubSelectedWeek,
 };
 
+function multiSubWeek(data) {
+  return {type: userConstants.MULTI_SUB_WEEK, data};
+}
+function multiSubSelectedWeek(data) {
+  return {type: userConstants.MULTI_SUB_SELECTED_WEEK, data};
+}
 function multiSubAction(data) {
   return (dispatch) => {
     dispatch(request());

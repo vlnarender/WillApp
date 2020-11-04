@@ -1,3 +1,4 @@
+import {act} from 'react-test-renderer';
 import {userConstants} from '../actions/actionTypes';
 
 const initialState = {
@@ -6,6 +7,8 @@ const initialState = {
   multiSubStatus: false,
   multiSubError: '',
   multiSubMessage: '',
+  multiSubWeek: 1,
+  SelectedWeek: 1,
 };
 
 export default function (state = initialState, action) {
@@ -13,6 +16,17 @@ export default function (state = initialState, action) {
     case userConstants.MULTI_SUB_REQUEST:
       return {
         loading: true,
+      };
+    case userConstants.MULTI_SUB_SELECTED_WEEK:
+      console.log('MULTI_SUB_SELECTED_WEEK', action);
+      return {
+        ...state,
+        SelectedWeek: action.data,
+      };
+    case userConstants.MULTI_SUB_WEEK:
+      return {
+        ...state,
+        multiSubWeek: action.data,
       };
     case userConstants.MULTI_SUB_SUCCESS:
       return {

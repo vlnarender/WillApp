@@ -13,8 +13,7 @@ import {CalendarList} from 'react-native-calendars';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-simple-toast';
 import {multiSubActions} from '../../actions/multiSub';
-let styleCss = require('../../GlobalStyle');
-const {height, width} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const MultiSubCalender = (props) => {
   const {featureId, itemId} = props.route.params;
   const [visible, setVisible] = useState(false);
@@ -97,11 +96,14 @@ const MultiSubCalender = (props) => {
               </View>
 
               <View style={styles.roundShap}>
-                <TouchableOpacity onPress={() => setVisible(true)}>
-                  <View style={styles.innerroundShap}>
+                <View style={styles.innerroundShap}>
+                  <TouchableOpacity
+                    onPress={() => setVisible(true)}
+                    style={{
+                      marginTop: 20,
+                    }}>
                     <View
                       style={{
-                        marginTop: 20,
                         paddingVertical: 5,
                         paddingHorizontal: 12,
                         backgroundColor: '#F2AE88',
@@ -122,12 +124,12 @@ const MultiSubCalender = (props) => {
                         source={require('../../../assets/ud_arrow.png')}
                       />
                     </View>
-                    <Text
-                      style={{color: '#fff', fontWeight: 'bold', fontSize: 18}}>
-                      Week
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                  <Text
+                    style={{color: '#fff', fontWeight: 'bold', fontSize: 18}}>
+                    Week
+                  </Text>
+                </View>
               </View>
             </View>
 
@@ -201,6 +203,7 @@ const MultiSubCalender = (props) => {
                         setValueone(res.key);
                         setSelectWeek(res.text);
                         setVisible(false);
+                        props.multiSubWeek(res.key);
                       }}
                       key={res.key}
                       style={styles.first}>
@@ -227,6 +230,7 @@ const MultiSubCalender = (props) => {
 
 const actionCreators = {
   multiSubAction: multiSubActions.multiSubAction,
+  multiSubWeek: multiSubActions.multiSubWeek,
 };
 export default connect(null, actionCreators)(MultiSubCalender);
 const styles = StyleSheet.create({

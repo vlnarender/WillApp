@@ -122,7 +122,7 @@ const MultiSubs = (props) => {
                     padding: 5,
                   }}>
                   <View>
-                    <Text>Week {week}</Text>
+                    <Text>Week {props.SelectedWeek}</Text>
                   </View>
                   <View style={{justifyContent: 'center', paddingLeft: 5}}>
                     <Image
@@ -186,7 +186,6 @@ const MultiSubs = (props) => {
                         }}>
                         {planData.company_list[item].diet_company.map(
                           (list, index) => {
-                            console.log(list);
                             return (
                               <View style={styles.cardBox} key={index}>
                                 <TouchableOpacity
@@ -288,6 +287,8 @@ const mapStateToProps = (state) => {
   return {
     multiSubStatus: state.multiSubReducer.multiSubStatus,
     multiSubData: state.multiSubReducer.multiSubData,
+    multiSubWeek: state.multiSubReducer.multiSubWeek,
+    SelectedWeek: state.multiSubReducer.SelectedWeek,
     labelData: state.labelReducer.labelData,
   };
 };
