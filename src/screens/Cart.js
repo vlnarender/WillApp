@@ -1,3 +1,8 @@
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
 import {connect} from 'react-redux';
 import React from 'react';
 import {
@@ -18,7 +23,6 @@ const {height, width} = Dimensions.get('window');
 let styleCss = require('../GlobalStyle');
 const CartComponent = (props) => {
   const navigation = useNavigation();
-  console.log(JSON.stringify(props.route.params.cartData));
   return (
     <>
       <Header />

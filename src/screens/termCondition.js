@@ -1,3 +1,8 @@
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
 import React from 'react';
 import {connect} from 'react-redux';
 import {

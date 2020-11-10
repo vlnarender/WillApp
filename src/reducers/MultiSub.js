@@ -1,3 +1,8 @@
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
 import {act} from 'react-test-renderer';
 import {userConstants} from '../actions/actionTypes';
 
@@ -8,7 +13,9 @@ const initialState = {
   multiSubError: '',
   multiSubMessage: '',
   multiSubWeek: 1,
-  SelectedWeek: 1,
+  selectedWeek: 1,
+  selectedMeal: [],
+  LIST_ITEMS: null,
 };
 
 export default function (state = initialState, action) {
@@ -17,11 +24,22 @@ export default function (state = initialState, action) {
       return {
         loading: true,
       };
-    case userConstants.MULTI_SUB_SELECTED_WEEK:
-      console.log('MULTI_SUB_SELECTED_WEEK', action);
+    case userConstants.MULTI_SUB_ADD_SELECTED_DATA:
+      console.log('action.data', action.data);
       return {
         ...state,
-        SelectedWeek: action.data,
+        selectedMeal: [...state.selectedMeal, action.data],
+      };
+    case userConstants.MULTI_SUB_LIST_ITEMS:
+      console.log('MULTI_SUB_LIST_ITEMS', action.data);
+      return {
+        ...state,
+        LIST_ITEMS: action.data,
+      };
+    case userConstants.MULTI_SUB_SELECTED_WEEK:
+      return {
+        ...state,
+        selectedWeek: action.data,
       };
     case userConstants.MULTI_SUB_WEEK:
       return {
@@ -32,6 +50,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         multiSubData: action.user.data,
+        selectedWeek: 1,
         loading: false,
         multiSubStatus: true,
         multiSubMessage: action.user.message,

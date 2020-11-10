@@ -1,4 +1,9 @@
-import React, {useState} from 'react';
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
 const {height, width} = Dimensions.get('window');
 
@@ -9,13 +14,39 @@ import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Swiper from 'react-native-swiper';
 let styleCss = require('../../GlobalStyle');
 import Header from '../../components/Header';
-
+import {WEEK_LIST} from '../../_helpers/globalVeriable';
+import {useNavigation} from '@react-navigation/native';
+import {multiSubActions} from '../../actions/multiSub';
 const PlanList = (props) => {
   const {itemId, featureId, oneday, week} = props.route.params;
-  const [selectedButton, setSelectedButton] = useState(0);
+  const navigation = useNavigation();
+  const [selectedButton, setSelectedButton] = useState({
+    planId: null,
+    packageId: null,
+    data: null,
+  });
+  const [finalSelection, setFinalSelection] = useState();
   const [selectedIndex, setSelectedIndex] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState('Select First');
   const [selectedIndexRestaurent, setSelectedIndexRestaurent] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setSelectedPrice('Select First');
+      setFinalSelection();
+      setSelectedIndex([]);
+      setSelectedIndexRestaurent([]);
+      setSelectedButton({
+        planId: null,
+        packageId: null,
+        data: null,
+      });
+    });
+    return () => {
+      // Unsubscribe for the focus Listener
+      unsubscribe;
+    };
+  }, []);
   const selectItem = (index) => {
     if (selectedIndex.indexOf(index) > -1) {
       let newArray = selectedIndex.filter((indexObject) => {
@@ -49,7 +80,6 @@ const PlanList = (props) => {
 
   if (props.mealListData) {
     value = props.mealListData.data[0];
-    console.log(JSON.stringify(value));
     return (
       <>
         <Header />
@@ -90,21 +120,20 @@ const PlanList = (props) => {
               Plans
             </Text>
             <View style={{flexDirection: 'row', paddingBottom: 5}}>
-              {props.mealListData.data.map((item, index) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => selectValue(index)}
-                    key={index}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View style={styles.radioCircle}>
-                        {selectedButton === index && (
-                          <View style={styles.selectedRb} />
-                        )}
-                      </View>
-                      <Text style={styles.radioText}>Week {week + 1}</Text>
+              {WEEK_LIST.map((item, index) => {
+                if (index + 1 === props.selectedWeek) {
+                  return (
+                    <View style={{flexDirection: 'row'}} key={index}>
+                      <View
+                        style={[
+                          {marginRight: 5, marginTop: 3},
+                          styles.selectedRb,
+                        ]}
+                      />
+                      <Text style={styles.radioText}>{item.text}</Text>
                     </View>
-                  </TouchableOpacity>
-                );
+                  );
+                }
               })}
             </View>
             <View style={{paddingBottom: 60}}>
@@ -114,60 +143,114 @@ const PlanList = (props) => {
                     Price : {selectedPrice}
                   </Text>
 
-                  <View style={{flexDirection: 'row'}}>
-                    <View style={styles.imgBox}>
-                      <Image
-                        style={{
-                          width: 60,
-                          height: 60,
-                          borderRadius: 10,
-                        }}
-                        source={{
-                          uri:
-                            'https://will-app.s3.ap-south-1.amazonaws.com/' +
-                            value.image,
-                        }}
-                      />
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={styles.imgBox}>
+                        <Image
+                          style={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: 10,
+                          }}
+                          source={{
+                            uri:
+                              'https://will-app.s3.ap-south-1.amazonaws.com/' +
+                              value.image,
+                          }}
+                        />
+                      </View>
+                      <View style={{flexDirection: 'column', padding: 10}}>
+                        <Text>{value.program_name}</Text>
+                        {value.plan_package.map((item, index) => {
+                          return (
+                            <TouchableOpacity
+                              style={{flexDirection: 'row'}}
+                              onPress={() => {
+                                console.log(JSON.stringify(item));
+                                let arrayData = item;
+                                arrayData.package_diet_package = arrayData.package_diet_package.map(
+                                  function (el) {
+                                    el.meal = el.meal.map((me) => {
+                                      var o = Object.assign({}, me);
+                                      o.isSelected = false;
+                                      return o;
+                                    });
+                                    var o = Object.assign({}, el);
+                                    o.isSelected = false;
+                                    return o;
+                                  },
+                                );
+                                setSelectedPrice(`${item.package_price} KD`);
+                                setSelectedButton({
+                                  planId: value.plan_id,
+                                  packageId: item.id,
+                                  data: arrayData,
+                                });
+                                setFinalSelection({
+                                  plan_id: value.plan_id,
+                                  restaurant_id: value.restaurant_id,
+                                  type: value.type,
+                                  type_name: value.type_name,
+                                  feature_id: value.feature_id,
+                                  feature_name: value.feature_name,
+                                  plan_type: value.plan_type,
+                                  relative_id: value.relative_id,
+                                  program_id: value.program_id,
+                                  program_name: value.program_name,
+                                  image: value.image,
+                                  duration_type: value.duration_type,
+                                  duration_type_name: value.duration_type_name,
+                                  duration: value.duration,
+                                });
+                              }}
+                              key={index}>
+                              <View style={styles.radioCircle}>
+                                {selectedButton.planId === value.plan_id &&
+                                  selectedButton.packageId === item.id && (
+                                    <View style={styles.selectedRb} />
+                                  )}
+                              </View>
+                              <Text style={styles.itemContent}>
+                                {item.package_name}
+                              </Text>
+                              <Text
+                                style={[{paddingLeft: 5}, styles.itemContent]}>
+                                {item.package_price} KD
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        })}
+                      </View>
                     </View>
-                    <View style={{flexDirection: 'column', padding: 10}}>
-                      <Text>{value.program_name}</Text>
-                      {value.plan_package.map((item, index) => {
-                        return (
-                          <TouchableOpacity
-                            style={{flexDirection: 'row'}}
-                            onPress={() => {
-                              setSelectedPrice(`${item.package_price} KD`);
-                            }}
-                            key={index}>
-                            <View style={styles.radioCircle}></View>
-                            <Text style={styles.itemContent}>
-                              {item.package_name}
-                            </Text>
-                            <Text
-                              style={[{paddingLeft: 5}, styles.itemContent]}>
-                              {item.package_price} KD
-                            </Text>
-                          </TouchableOpacity>
-                        );
-                      })}
-                    </View>
-                    <View
-                      style={{
-                        alignItems: 'flex-end',
-                        marginTop: 10,
-                      }}>
+                    <View>
                       <Image
                         style={{
                           width: 22,
                           height: 22,
                         }}
-                        source={plusOrange}
+                        source={
+                          selectedButton.planId === value.plan_id
+                            ? checkGreen
+                            : plusOrange
+                        }
                       />
                     </View>
                   </View>
                 </View>
 
-                <TouchableOpacity style={styles.checkout}>
+                <TouchableOpacity
+                  style={styles.checkout}
+                  onPress={() => {
+                    props.multiSub_LIST_ITEM({
+                      ...finalSelection,
+                      plan_package: selectedButton,
+                    });
+                    props.navigation.navigate('MultiMealSelection');
+                  }}>
                   <Text style={styles.checkoutText}>Continue</Text>
                 </TouchableOpacity>
               </View>
@@ -327,6 +410,11 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     mealListData: state.mealListReducer.mealListData,
+    multiSubWeek: state.commonReducer.multiSubWeek,
+    selectedWeek: state.commonReducer.selectedWeek,
   };
 };
-export default connect(mapStateToProps, null)(PlanList);
+const action = {
+  multiSub_LIST_ITEM: multiSubActions.multiSublist_item,
+};
+export default connect(mapStateToProps, action)(PlanList);

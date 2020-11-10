@@ -1,3 +1,8 @@
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
 import React from 'react';
 import {connect} from 'react-redux';
 import {
@@ -16,10 +21,11 @@ import {cartActions} from '../actions/cart';
 const {height, width} = Dimensions.get('window');
 import Toast from 'react-native-simple-toast';
 import {ADD_AND_UPDATE_API} from '../util/api';
+import moment from 'moment';
 import {parseInt} from 'lodash';
+import Loader from './Loader';
 const CommonCalendar = (props) => {
   const navigation = useNavigation();
-  console.log(props.route);
   const monthName = () => {
     const months = [
       'January',
@@ -40,14 +46,12 @@ const CommonCalendar = (props) => {
   var today = new Date();
 
   const dietCompanyPlannavigation = (day) => {
-    console.log('diet company plan');
     ADD_AND_UPDATE_API(
       {
         restaurant_id: props.restaurant_id,
       },
       'get/company/duration/week',
     ).then((item) => {
-      console.log(item);
       if (item.data.length != 0) {
         props
           .dietCompanyPlanAction({
@@ -70,148 +74,162 @@ const CommonCalendar = (props) => {
     });
   };
   const programPalnnavigation = (day) => {
-    console.log('inside program plan', props.program_id);
-    ADD_AND_UPDATE_API(
-      {
+    props
+      .programPlanAction({
         program_id: props.program_id,
         restaurant_id: props.restaurant_id,
-      },
-      'get/program/duration/week',
-    ).then((item) => {
-      props
-        .programPlanAction({
-          program_id: props.program_id,
-          restaurant_id: props.restaurant_id,
-          type: parseInt(item.data[0].gender),
-          week: parseInt(item.data[0].week.replace('Week', '')),
-        })
-        .then(() => {
-          navigation.navigate('PlanListProgram', {
-            selectedDate: day.dateString,
-          });
+      })
+      .then(() => {
+        navigation.navigate('PlanListProgram', {
+          selectedDate: day.dateString,
         });
-    });
+      });
   };
 
-  var priorDate = new Date().setDate(today.getDate() + 3);
-  const getMarkedDates = () => {
-    if (props.calenderData) {
-      console.log(props.calendarData);
-      let tmp = {};
-      if (props.calenderData.data.length) {
-        props.calenderData.data.calendar.map((data) => {
-          tmp = {
-            ...tmp,
-            [data.date]: {
-              disabled: true,
-              disableTouchEvent: true,
-              customStyles: {
-                container: {
-                  backgroundColor: '#75798e',
-                },
-                text: {
-                  color: '#ccc',
-                  fontWeight: 'bold',
-                },
-              },
+  // var priorDate = new Date().setDate(today.getDate() + 3);
+  const getDisabledDates = (calenderDate) => {
+    const disabledDates = {};
+    const start = moment(new Date());
+    const end = moment(new Date()).add(2, 'days');
+    for (
+      let m = moment(start).add(1, 'days');
+      m.diff(end, 'days') <= 0;
+      m.add(1, 'days')
+    ) {
+      disabledDates[m.format('YYYY-MM-DD')] = {
+        textColor: '#f2ae88',
+        disabled: true,
+        disableTouchEvent: true,
+        customStyles: {
+          container: {
+            backgroundColor:
+              new Date().getDate() === new Date(m).getDate()
+                ? '#f2ae88'
+                : '#75798e',
+          },
+          text: {
+            color: '#fff',
+            fontWeight: 'bold',
+          },
+        },
+      };
+    }
+    if (props.calenderData.data.calendar) {
+      props.calenderData.data.calendar.map((element) => {
+        disabledDates[moment(element.date).format('YYYY-MM-DD')] = {
+          textColor: '#75798e',
+          disabled: true,
+          disableTouchEvent: true,
+          customStyles: {
+            container: {
+              backgroundColor: '#75798e',
             },
-          };
-        });
-        return tmp;
-      } else {
-        return {};
-      }
-    } else return {};
-  };
-  console.log('+++++++', props.programName);
-  return (
-    <View style={styles.container}>
-      <View style={styles.close}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image
-            style={{width: 20, height: 20}}
-            source={require('../../assets/header/cross.png')}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.circle}>
-        <View style={styles.innerroundShap}>
-          <Text style={styles.todayDate}>{new Date().getDate()}</Text>
-          <Text style={styles.todayMonth}>{monthName()}</Text>
-        </View>
-      </View>
-      <View style={styles.Devision}>
-        <Text style={styles.heading}>Select your Date</Text>
-        <Calendar
-          horizontal={true}
-          pagingEnabled={true}
-          scrollEnabled={true}
-          markingType={'period'}
-          disableAllTouchEventsForDisabledDays
-          rowHeight={5}
-          theme={{
-            calendarBackground: '#343739',
-            todayBackgroundColor: '#f2ae88',
-            textDisabledColor: '#6a6e7f',
-            dayTextColor: '#ffffff',
-            monthTextColor: '#ffffff',
-            todayTextColor: '#ffffff',
-            selectedDayBackgroundColor: '#333248',
-          }}
-          minDate={priorDate}
-          onDayPress={(day) => {
-            props.selectedDate(day.dateString);
-            props.programName === 'diet_company'
-              ? dietCompanyPlannavigation(day.dateString)
-              : programPalnnavigation(day.dateString);
-          }}
-          markingType={'custom'}
-          markedDates={getMarkedDates()}
-        />
+            text: {
+              color: '#ccc',
+              fontWeight: 'bold',
+            },
+          },
+        };
+      });
+    }
 
-        <View style={styles.seleceted}>
-          <View style={styles.rowSpace}>
-            <View style={styles.colorBox1}></View>
-            <View>
-              <Text style={styles.textColor}>Selected days</Text>
-            </View>
+    return disabledDates;
+  };
+
+  if (props.calenderData) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.close}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image
+              style={{width: 20, height: 20}}
+              source={require('../../assets/header/cross.png')}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.circle}>
+          <View style={styles.innerroundShap}>
+            <Text style={styles.todayDate}>{new Date().getDate()}</Text>
+            <Text style={styles.todayMonth}>{monthName()}</Text>
           </View>
-          <View>
+        </View>
+        <View style={styles.Devision}>
+          <Text style={styles.heading}>Select your Date</Text>
+          <Calendar
+            horizontal={true}
+            pagingEnabled={true}
+            minDate={new Date()}
+            scrollEnabled={true}
+            markingType={'period'}
+            disableAllTouchEventsForDisabledDays
+            rowHeight={5}
+            theme={{
+              calendarBackground: '#343739',
+              todayBackgroundColor: '#f2ae88',
+              textDisabledColor: '#6a6e7f',
+              dayTextColor: '#ffffff',
+              monthTextColor: '#ffffff',
+              todayTextColor: '#ffffff',
+              selectedDayBackgroundColor: '#333248',
+            }}
+            onDayPress={(day) => {
+              props.selectedDate(day.dateString);
+              props.programName === 'diet_company'
+                ? dietCompanyPlannavigation(day.dateString)
+                : programPalnnavigation(day.dateString);
+            }}
+            markingType={'custom'}
+            markedDates={{
+              ...getDisabledDates(),
+            }}
+          />
+
+          <View style={styles.seleceted}>
             <View style={styles.rowSpace}>
-              <View style={styles.colorBox2}></View>
+              <View style={styles.colorBox1}></View>
               <View>
-                <Text style={styles.textColor}>Not Selected</Text>
+                <Text style={styles.textColor}>Selected days</Text>
+              </View>
+            </View>
+            <View>
+              <View style={styles.rowSpace}>
+                <View style={styles.colorBox2}></View>
+                <View>
+                  <Text style={styles.textColor}>Not Selected</Text>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-        <View style={styles.rowTwo}>
-          <View style={styles.rowSpace}>
-            <View style={styles.colorBox3}></View>
-            <Text style={styles.textColor}>Unavailable for Selected</Text>
+          <View style={styles.rowTwo}>
+            <View style={styles.rowSpace}>
+              <View style={styles.colorBox3}></View>
+              <Text style={styles.textColor}>Unavailable for Selected</Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
-  );
+    );
+  } else {
+    return <Loader />;
+  }
 };
 
 const mapStateToProps = (state) => {
   return {
-    calenderError: state.calenderReducer.calenderError,
     calenderMessage: state.calenderReducer.calenderMessage,
-    calenderData: state.calenderReducer.calenderData,
     calenderStatus: state.calenderReducer.calenderStatus,
-    program_id: state.cartReducer.program_id,
-    features_id: state.cartReducer.features_id,
+    calenderError: state.calenderReducer.calenderError,
+    calenderData: state.calenderReducer.calenderData,
     restaurant_id: state.cartReducer.restaurant_id,
+    features_id: state.cartReducer.features_id,
     programName: state.cartReducer.programName,
+    program_id: state.cartReducer.program_id,
   };
 };
 
 const reduxActions = {
-  programPlanAction: programPlanActions.programPlanAction,
   dietCompanyPlanAction: dietCompanyPlanActions.dietCompanyPlanAction,
+  programPlanAction: programPlanActions.programPlanAction,
   selectedDate: cartActions.selectedDate,
 };
 export default connect(mapStateToProps, reduxActions)(CommonCalendar);

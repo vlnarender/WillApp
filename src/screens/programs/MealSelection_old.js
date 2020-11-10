@@ -4,7 +4,7 @@
  * @Owner Will
  */
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -25,7 +25,6 @@ import {
   UP_DOWN_ARROW_BLACK,
   UP_ICON,
   IN_ICON,
-  IMAGE_CDN,
 } from '../../_helpers/ImageProvide';
 import {programPlanActions} from '../../actions/programPlan';
 import Loader from '../../components/Loader';
@@ -50,41 +49,20 @@ const MealSelection = (props) => {
     Meal,
     week,
   } = props.route.params;
-  const [mealDataInfo, setmealDataInfo] = useState([]);
+  const [mealDataInfo, setmealDataInfo] = useState(MEAL);
   const [daysNumber, setDaysNumber] = useState(1);
-  const [MealTitle, setMealTitle] = useState([]);
+  const [MealTitle, setMealTitle] = useState(MealListData);
   const [getPlan_packages_id, setPlan_packages_id] = useState();
-  const selectItem = (index) => {};
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      setmealDataInfo(MEAL);
-      setMealTitle([]);
-      setPlan_packages_id();
-      initializeMeal();
-    });
-    return unsubscribe;
-  }, []);
-  const initializeMeal = () => {
-    let tempArray = [];
-    Meal.package_diet_package.map((data) => {
-      tempArray.push({
-        day: null,
-        meal: data.meal,
-        meal_name: data.meal_name,
-        plan_diet_package_id: null,
-        meal_type: null,
-        meal_id: null,
-        meal_list_id: null,
-        mealData: null,
-        type: null,
-        plan_id: null,
-      });
-    });
-    setmealDataInfo(tempArray);
+  const selectItem = (index) => {
+    setMealTitle(
+      MealTitle.map((x, i) => {
+        return {...x, selected: index === i ? true : false};
+      }),
+    );
   };
+
+  console.log(JSON.stringify(Meal));
   const selectMeal = (
-    index,
     mealData,
     mealId,
     type,
@@ -94,28 +72,63 @@ const MealSelection = (props) => {
     plan_packages_id,
   ) => {
     let tf = true;
-    setPlan_packages_id(plan_packages_id);
     setmealDataInfo(
       mealDataInfo.map((x, i) => {
-        return index === i
-          ? {
+        if (x != undefined) {
+          if (
+            x.day === (daysNumber || null) &&
+            x.meal_type === (meal_type || null)
+          ) {
+            tf = false;
+            let y = {
               ...x,
               plan_diet_package_id: plan_diet_package_id,
-              meal_type: meal_type,
               meal_id: mealId,
-              meal_list_id: plan_packages_id,
-              mealData: mealData,
-              type: type,
-              plan_id: plan_id,
-            }
-          : x;
+            };
+
+            return y;
+          } else {
+            return x;
+          }
+        } else {
+          tf = true;
+          return x;
+        }
+      }),
+    );
+    if (tf) {
+      setmealDataInfo([
+        ...mealDataInfo,
+        {
+          day: daysNumber,
+          plan_diet_package_id: plan_diet_package_id,
+          meal_type: meal_type,
+          meal_id: mealId,
+        },
+      ]);
+    }
+
+    setMealTitle(
+      MealTitle.map((x, i) => {
+        if (x.type === type) {
+          return {
+            ...x,
+            mealID: mealId,
+            data: mealData,
+            plan_id: plan_id,
+            meal_type: meal_type,
+            mealListId: mealData.meal_id,
+            plan_diet_package_id: plan_diet_package_id,
+            plan_packages_id: plan_packages_id,
+          };
+        } else return {...x};
       }),
     );
   };
   const checkoutList = () => {
     let tmpTF = false;
-    mealDataInfo.map((data) => {
-      tmpTF = (data.meal_id === null) & true;
+    MealTitle.map((data) => {
+      tmpTF = (data.mealID === null) & true;
     });
     if (tmpTF) {
       Toast.showWithGravity(
@@ -125,10 +138,11 @@ const MealSelection = (props) => {
       );
     } else {
       if (daysNumber % 7 === 0) {
-        let myArray = MealTitle;
+        let myArray = mealDataInfo;
         myArray = myArray.filter(function (obj) {
           return obj.day !== null && obj;
         });
+
         temp_diet_company.push({
           restaurant_id: props.restaurant_id,
           week: daysNumber / 7,
@@ -136,8 +150,7 @@ const MealSelection = (props) => {
           plan_packages_id: getPlan_packages_id,
           meals: myArray,
         });
-        setMealTitle([]);
-        // setmealDataInfo(MEAL);
+        setmealDataInfo(MEAL);
         if (daysNumber === week * 7) {
           let cartTemp = {
             duration_type: BasicInfo.duration_type,
@@ -154,8 +167,8 @@ const MealSelection = (props) => {
           });
         }
       }
-      setMealTitle([...MealTitle, mealDataInfo]);
-      initializeMeal();
+
+      setMealTitle(MealListData);
       setDaysNumber(daysNumber + 1);
     }
   };
@@ -223,15 +236,15 @@ const MealSelection = (props) => {
               style={{
                 width: '95%',
               }}>
-              {mealDataInfo.map((item, mtindex) => {
+              {MealTitle.map((item, mtindex) => {
                 return (
-                  <Collapse isCollapsed={true} key={mtindex}>
+                  <Collapse isCollapsed={item.selected} key={mtindex}>
                     <CollapseHeader>
                       <TouchableOpacity
                         onPress={() => selectItem(mtindex)}
                         activeOpacity={0.9}>
                         <View style={styles.heading}>
-                          <Text style={styles.text}>{item.meal_name}</Text>
+                          <Text style={styles.text}>{item.type}</Text>
                           <View>
                             <Image
                               style={{width: 20, height: 20}}
@@ -243,105 +256,114 @@ const MealSelection = (props) => {
                     </CollapseHeader>
                     <CollapseBody>
                       <View style={styles.cardBox}>
-                        {item.meal.map((mealData, mindex) => {
-                          return mealData.meal_list.map((meal_list, ml) => {
-                            return (
-                              <TouchableOpacity
-                                key={ml}
-                                onPress={() => {
-                                  setPlan_packages_id(item.plan_packages_id);
-                                  selectMeal(
-                                    mtindex,
-                                    meal_list,
-                                    mealData.id,
-                                    item.meal_name,
-                                    item.meal_type,
-                                    mealData.plan_diet_package_id,
-                                    item.plan_packages_id,
-                                    meal_list.meal_id,
-                                  );
-                                }}
-                                style={{
-                                  flexDirection: 'row',
-                                  marginVertical: 5,
-                                  borderBottomWidth: 1,
-                                  borderBottomColor: '#ccc',
-                                }}>
-                                <View>
-                                  <View style={styles.imgBox}>
-                                    <Image
-                                      style={{
-                                        width: 70,
-                                        height: 60,
-                                        borderRadius: 10,
-                                      }}
-                                      source={{
-                                        uri: IMAGE_CDN + meal_list.image,
-                                      }}
-                                    />
-                                  </View>
-                                </View>
-                                <View
-                                  style={{
-                                    flex: 2,
-                                    paddingHorizontal: 10,
-                                  }}>
-                                  <Text style={styles.headingText}>
-                                    {meal_list.meal_name}
-                                  </Text>
-                                  <Text style={styles.itemContent}>
-                                    {meal_list.discription}
-                                  </Text>
-                                </View>
+                        {Meal.package_diet_package.map((mealData, mindex) => {
+                          return (
+                            item.type === mealData.meal_name &&
+                            mealData.meal.map((mealList, mlIndex) => {
+                              return mealList.meal_list.map((meal_list, ml) => {
+                                return (
+                                  <TouchableOpacity
+                                    key={mlIndex}
+                                    onPress={() => {
+                                      setPlan_packages_id(
+                                        mealData.plan_packages_id,
+                                      );
+                                      selectMeal(
+                                        meal_list,
+                                        mealList.id,
+                                        item.type,
+                                        mealData.meal_type,
+                                        mealList.plan_diet_package_id,
+                                        mealData.plan_packages_id,
+                                        Meal.plan_id,
+                                      );
+                                    }}
+                                    style={{
+                                      flexDirection: 'row',
+                                      marginVertical: 5,
+                                      borderBottomWidth: 1,
+                                      borderBottomColor: '#ccc',
+                                    }}>
+                                    <View>
+                                      <View style={styles.imgBox}>
+                                        <Image
+                                          style={{
+                                            width: 70,
+                                            height: 60,
+                                            borderRadius: 10,
+                                          }}
+                                          source={{
+                                            uri:
+                                              'https://will-app.s3.ap-south-1.amazonaws.com/' +
+                                              meal_list.image,
+                                          }}
+                                        />
+                                      </View>
+                                    </View>
 
-                                <View style={{width: 100}}>
-                                  <View>
                                     <View
                                       style={{
-                                        alignItems: 'flex-end',
-                                        marginTop: 10,
+                                        flex: 2,
+                                        paddingHorizontal: 10,
                                       }}>
-                                      <Image
-                                        style={{
-                                          width: 22,
-                                          height: 22,
-                                        }}
-                                        source={
-                                          item.meal_id === mealData.id &&
-                                          item.meal_list_id ===
-                                            meal_list.meal_id
-                                            ? CHECK_GREEN
-                                            : PLUS_ORANGE
-                                        }
-                                      />
-                                    </View>
-                                  </View>
-                                  <View style={styles.powerBox}>
-                                    <View style={{flexDirection: 'row'}}>
-                                      <Text style={styles.itemText}>
-                                        P {meal_list.protein}g
+                                      <Text style={styles.headingText}>
+                                        {meal_list.meal_name}
                                       </Text>
-                                      <Text style={styles.itemText}>
-                                        Ca {meal_list.calorie}
+                                      <Text style={styles.itemContent}>
+                                        {meal_list.discription}
                                       </Text>
                                     </View>
-                                    <View
-                                      style={{
-                                        flexDirection: 'row',
-                                        marginTop: 10,
-                                      }}>
-                                      <Text style={styles.itemText}>
-                                        C {meal_list.carbohydrate}g
-                                      </Text>
-                                      <Text style={styles.itemText}>
-                                        F {meal_list.fat}g
-                                      </Text>
+
+                                    <View style={{width: 100}}>
+                                      <View>
+                                        <View
+                                          style={{
+                                            alignItems: 'flex-end',
+                                            marginTop: 10,
+                                          }}>
+                                          <Image
+                                            style={{
+                                              width: 22,
+                                              height: 22,
+                                            }}
+                                            source={
+                                              item.mealListId ===
+                                                meal_list.meal_id &&
+                                              item.mealID === mealList.id
+                                                ? CHECK_GREEN
+                                                : PLUS_ORANGE
+                                            }
+                                          />
+                                        </View>
+                                      </View>
+                                      <View style={styles.powerBox}>
+                                        <View style={{flexDirection: 'row'}}>
+                                          <Text style={styles.itemText}>
+                                            P {meal_list.protein}g
+                                          </Text>
+                                          <Text style={styles.itemText}>
+                                            Ca {meal_list.calorie}
+                                          </Text>
+                                        </View>
+                                        <View
+                                          style={{
+                                            flexDirection: 'row',
+                                            marginTop: 10,
+                                          }}>
+                                          <Text style={styles.itemText}>
+                                            C {meal_list.carbohydrate}g
+                                          </Text>
+                                          <Text style={styles.itemText}>
+                                            F {meal_list.fat}g
+                                          </Text>
+                                        </View>
+                                      </View>
                                     </View>
-                                  </View>
-                                </View>
-                              </TouchableOpacity>
-                            );
-                          });
+                                  </TouchableOpacity>
+                                );
+                              });
+                            })
+                          );
                         })}
                       </View>
                     </CollapseBody>

@@ -1,4 +1,9 @@
-import React, {useState} from 'react';
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
@@ -20,7 +25,9 @@ import {
   CHECK_GREEN,
   PLUS_ORANGE,
 } from '../../_helpers/ImageProvide';
+import {useNavigation} from '@react-navigation/native';
 const MultiSubs = (props) => {
+  const navigation = useNavigation();
   const {featureId, date, week} = props.route.params;
   const [selectedIndex, setSelectedIndex] = useState([]);
   const [weekList, setweekList] = useState([
@@ -33,6 +40,27 @@ const MultiSubs = (props) => {
     {selected: false, plan: null, planId: null},
     {selected: false, plan: null, planId: null},
   ]);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setSelectedIndex([]);
+      setweekList([
+        {selected: true, plan: null, planId: null},
+        {selected: false, plan: null, planId: null},
+        {selected: false, plan: null, planId: null},
+        {selected: false, plan: null, planId: null},
+        {selected: false, plan: null, planId: null},
+        {selected: false, plan: null, planId: null},
+        {selected: false, plan: null, planId: null},
+        {selected: false, plan: null, planId: null},
+      ]);
+    });
+
+    return () => {
+      // Unsubscribe for the focus Listener
+      unsubscribe;
+    };
+  }, []);
+
   const selectItem = (index) => {
     if (selectedIndex.indexOf(index) > -1) {
       let newArray = selectedIndex.filter((indexObject) => {
@@ -122,7 +150,7 @@ const MultiSubs = (props) => {
                     padding: 5,
                   }}>
                   <View>
-                    <Text>Week {props.SelectedWeek}</Text>
+                    <Text>Week {props.selectedWeek}</Text>
                   </View>
                   <View style={{justifyContent: 'center', paddingLeft: 5}}>
                     <Image
@@ -140,140 +168,127 @@ const MultiSubs = (props) => {
           <ScrollView contentContainerStyle={styleCss.scrollViewCard}>
             {Object.keys(planData.company_list).map(
               (item, company_list_index) => {
-                return (
-                  <Collapse
-                    isCollapsed={weekList[company_list_index].selected}
-                    key={company_list_index}
-                    style={{paddingHorizontal: 20}}>
-                    <CollapseHeader>
-                      <TouchableOpacity
-                        onPress={() => {
-                          setweekList(
-                            weekList.map((x, i) => {
-                              return {
-                                ...x,
-                                selected:
-                                  company_list_index === i ? true : false,
-                              };
-                            }),
-                          );
-                          selectItem(company_list_index);
-                        }}
-                        activeOpacity={0.9}>
-                        <View style={styles.heading}>
-                          <Text style={styles.text}>{item}</Text>
-                          <View>
-                            <Image
-                              style={{width: 20, height: 20}}
-                              source={
-                                weekList[company_list_index].selected
-                                  ? upIcon
-                                  : inIcon
-                              }
-                            />
+                if (company_list_index === props.selectedWeek - 1) {
+                  return (
+                    <Collapse
+                      isCollapsed={
+                        company_list_index === props.selectedWeek - 1
+                      }
+                      key={company_list_index}
+                      style={{paddingHorizontal: 20}}>
+                      <CollapseHeader>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setweekList(
+                              weekList.map((x, i) => {
+                                return {
+                                  ...x,
+                                  selected:
+                                    company_list_index === i ? true : false,
+                                };
+                              }),
+                            );
+                            selectItem(company_list_index);
+                          }}
+                          activeOpacity={0.9}>
+                          <View style={styles.heading}>
+                            <Text style={styles.text}>{item}</Text>
+                            <View>
+                              <Image
+                                style={{width: 20, height: 20}}
+                                source={
+                                  weekList[company_list_index].selected
+                                    ? upIcon
+                                    : inIcon
+                                }
+                              />
+                            </View>
                           </View>
-                        </View>
-                      </TouchableOpacity>
-                    </CollapseHeader>
-                    <CollapseBody>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignContent: 'center',
-                          alignItems: 'center',
-                          flexWrap: 'wrap',
-                          justifyContent: 'center',
-                        }}>
-                        {planData.company_list[item].diet_company.map(
-                          (list, index) => {
-                            return (
-                              <View style={styles.cardBox} key={index}>
-                                <TouchableOpacity
-                                  onPress={() => {
-                                    setweekList(
-                                      weekList.map((x, i) => {
-                                        return {
-                                          ...x,
-                                          planId:
-                                            company_list_index === i && list.id,
-                                        };
-                                      }),
-                                    );
-                                    // props
-                                    //   .mealListAction({
-                                    //     restaurant_id: list.id,
-                                    //     feature_id: featureId,
-                                    //     date: date,
-                                    //   })
-                                    //   .then(() => {
-                                    //     props.navigation.navigate(
-                                    //       'MultiSubsPlan',
-                                    //       {
-                                    //         itemId: list,
-                                    //         featureId: featureId,
-                                    //         oneday: date,
-                                    //         week: company_list_index,
-                                    //       },
-                                    //     );
-                                    //   });
-                                  }}>
-                                  <Image
-                                    style={{
-                                      height: 150,
-                                      borderRadius: 10,
-                                    }}
-                                    source={{
-                                      uri: list.image_url + list.image,
-                                    }}
-                                  />
-                                  <View
-                                    style={{
-                                      position: 'absolute',
-                                      alignSelf: 'flex-end',
-                                      padding: 5,
+                        </TouchableOpacity>
+                      </CollapseHeader>
+                      <CollapseBody>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignContent: 'center',
+                            alignItems: 'center',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                          }}>
+                          {planData.company_list[item].diet_company.map(
+                            (list, index) => {
+                              return (
+                                <View style={styles.cardBox} key={index}>
+                                  <TouchableOpacity
+                                    onPress={() => {
+                                      setweekList(
+                                        weekList.map((x, i) => {
+                                          return {
+                                            ...x,
+                                            planId:
+                                              company_list_index === i &&
+                                              list.id,
+                                          };
+                                        }),
+                                      );
+                                      props
+                                        .mealListAction({
+                                          restaurant_id: list.id,
+                                          feature_id: featureId,
+                                          date: date,
+                                        })
+                                        .then(() => {
+                                          props.navigation.navigate(
+                                            'MultiSubsPlan',
+                                            {
+                                              itemId: list,
+                                              featureId: featureId,
+                                              oneday: date,
+                                              week: company_list_index,
+                                            },
+                                          );
+                                        });
                                     }}>
                                     <Image
-                                      style={{width: 20, height: 21}}
-                                      source={
-                                        list.id ===
-                                        weekList[company_list_index].planId
-                                          ? CHECK_GREEN
-                                          : PLUS_ORANGE
-                                      }
+                                      style={{
+                                        height: 150,
+                                        borderRadius: 10,
+                                      }}
+                                      source={{
+                                        uri: list.image_url + list.image,
+                                      }}
                                     />
-                                  </View>
-                                  <Text style={{padding: 10}}>{list.name}</Text>
-                                </TouchableOpacity>
-                              </View>
-                            );
-                          },
-                        )}
-                      </View>
-                    </CollapseBody>
-                  </Collapse>
-                );
+                                    <View
+                                      style={{
+                                        position: 'absolute',
+                                        alignSelf: 'flex-end',
+                                        padding: 5,
+                                      }}>
+                                      <Image
+                                        style={{width: 20, height: 21}}
+                                        source={
+                                          list.id ===
+                                          weekList[company_list_index].planId
+                                            ? CHECK_GREEN
+                                            : PLUS_ORANGE
+                                        }
+                                      />
+                                    </View>
+                                    <Text style={{padding: 10}}>
+                                      {list.name}
+                                    </Text>
+                                  </TouchableOpacity>
+                                </View>
+                              );
+                            },
+                          )}
+                        </View>
+                      </CollapseBody>
+                    </Collapse>
+                  );
+                }
               },
             )}
-            <TouchableOpacity
-              onPress={() => {
-                console.log('continue');
-              }}
-              style={{
-                backgroundColor: '#F2AE88',
-                marginVertical: 10,
-                padding: 10,
-                borderRadius: 10,
-              }}>
-              <Text
-                style={{
-                  alignSelf: 'center',
-                  color: '#fff',
-                  paddingHorizontal: 150,
-                  fontWeight: 'bold',
-                }}>
-                Continue
-              </Text>
-            </TouchableOpacity>
           </ScrollView>
         </ScrollView>
       </>
@@ -287,8 +302,8 @@ const mapStateToProps = (state) => {
   return {
     multiSubStatus: state.multiSubReducer.multiSubStatus,
     multiSubData: state.multiSubReducer.multiSubData,
-    multiSubWeek: state.multiSubReducer.multiSubWeek,
-    SelectedWeek: state.multiSubReducer.SelectedWeek,
+    multiSubWeek: state.commonReducer.multiSubWeek,
+    selectedWeek: state.commonReducer.selectedWeek,
     labelData: state.labelReducer.labelData,
   };
 };

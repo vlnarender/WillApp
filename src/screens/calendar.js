@@ -20,27 +20,12 @@ const OneDayCalender = (props) => {
       let isActive = true;
       const fetchUser = async () => {
         try {
-          const Token = await AsyncStorage.getItem('token');
-          var data = {};
-          data.restaurant_id = itemId.id;
-          console.log(data);
+          var data = {
+            restaurant_id: itemId.id,
+          };
           ADD_AND_UPDATE_API(data, 'restaurant/calendar').then(
             (data) => {
-              setSelect(false);
-              if (data.success) {
-                if (Object.keys(data.data).length > 0) {
-                  setSelect(true);
-                  setValue(data.data.calendar);
-                } else {
-                  setSelect(false);
-                  Toast.showWithGravity(
-                    "Don't have any calendar",
-                    Toast.SHORT,
-                    Toast.CENTER,
-                  );
-                  props.navigation.navigate('OneDayPlan');
-                }
-              }
+              setSelect(true);
             },
             (error) => {
               Toast.showWithGravity(data.message, Toast.SHORT, Toast.CENTER);
@@ -93,10 +78,10 @@ const OneDayCalender = (props) => {
     const d = new Date();
     return months[d.getMonth()];
   };
-  const getDisabledDates = (startDate, calenderDate) => {
+  const getDisabledDates = (calenderDate) => {
     const disabledDates = {};
-    const start = moment(startDate);
-    const end = moment(startDate).add(2, 'days');
+    const start = moment(new Date());
+    const end = moment(new Date()).add(2, 'days');
 
     for (
       let m = moment(start).add(1, 'days');
@@ -107,6 +92,18 @@ const OneDayCalender = (props) => {
         textColor: '#f2ae88',
         disabled: true,
         disableTouchEvent: true,
+        customStyles: {
+          container: {
+            backgroundColor:
+              new Date().getDate() === new Date(m).getDate()
+                ? '#f2ae88'
+                : '#75798e',
+          },
+          text: {
+            color: '#fff',
+            fontWeight: 'bold',
+          },
+        },
       };
     }
     calenderDate.forEach((element) => {
@@ -114,6 +111,15 @@ const OneDayCalender = (props) => {
         textColor: '#75798e',
         disabled: true,
         disableTouchEvent: true,
+        customStyles: {
+          container: {
+            backgroundColor: '#75798e',
+          },
+          text: {
+            color: '#ccc',
+            fontWeight: 'bold',
+          },
+        },
       };
     });
 
@@ -173,7 +179,7 @@ const OneDayCalender = (props) => {
                   selectedDayBackgroundColor: '#333248',
                 }}
                 markedDates={{
-                  ...getDisabledDates(new Date(), calendar),
+                  ...getDisabledDates(calendar),
                 }}
               />
             </View>

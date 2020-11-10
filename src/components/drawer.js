@@ -39,6 +39,7 @@ import MultiSubCalendar from '../screens/multiSub/multisubcalendar';
 import OneDayPlanMealListing from '../screens/onedayplanmeallisting';
 import MealSelection from '../screens/programs/MealSelection';
 import CartComponent from '../screens/Cart';
+import MultiMealSelection from '../screens/multiSub/MultiMealSelection';
 let styleCss = require('../GlobalStyle');
 const Drawer = createDrawerNavigator();
 function FocusAwareStatusBar(props) {
@@ -238,7 +239,11 @@ const DrawerNavigator = (props) => {
           component={CartComponent}
           options={{swipeEnabled: false}}
         />
-
+        <Drawer.Screen
+          name="MultiMealSelection"
+          component={MultiMealSelection}
+          options={{swipeEnabled: false}}
+        />
         <Drawer.Screen
           name="PlanListProgram"
           component={PlanListProgram}

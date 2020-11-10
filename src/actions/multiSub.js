@@ -1,11 +1,24 @@
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
 import {userConstants} from './actionTypes';
 import {ADD_AND_UPDATE_API} from '../util/api';
 export const multiSubActions = {
   multiSubAction,
   multiSubWeek,
   multiSubSelectedWeek,
+  multiSubAddSelectedData,
+  multiSublist_item,
 };
 
+function multiSublist_item(data) {
+  return {type: userConstants.MULTI_SUB_LIST_ITEMS, data};
+}
+function multiSubAddSelectedData(data) {
+  return {type: userConstants.MULTI_SUB_ADD_SELECTED_DATA, data};
+}
 function multiSubWeek(data) {
   return {type: userConstants.MULTI_SUB_WEEK, data};
 }

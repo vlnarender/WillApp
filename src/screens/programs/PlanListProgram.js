@@ -1,5 +1,10 @@
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
 import {useNavigation} from '@react-navigation/native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -42,6 +47,23 @@ const PlanListProgram = (props) => {
   const [weekNumber, setweekNumber] = useState(1);
   const [SelectedPrice, setSelectedPrice] = useState('Select First');
   const [BasicInfo, setBasicInfo] = useState({});
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setplanId(0);
+      setMeal(0);
+      setGender([
+        {gender: 'ALL', checked: true},
+        {gender: 'Male', checked: false},
+        {gender: 'Female', checked: false},
+      ]);
+      setgender_id(1);
+      setweekNumber(1);
+      setSelectedPrice('Select First');
+      setBasicInfo({});
+    });
+    return unsubscribe;
+  }, []);
 
   const selectPlanList = (item) => {
     let index = parseInt(item.Week.replace('Week', ''));
@@ -258,6 +280,7 @@ const PlanListProgram = (props) => {
                                     setproductId(item.id);
                                     setMeal(item);
                                     setBasicInfo({
+                                      price: item.package_price,
                                       plan_type: data.plan_type,
                                       relative_id: data.relative_id,
                                       duration_type: data.duration_type,
@@ -296,12 +319,25 @@ const PlanListProgram = (props) => {
                   })}
                   <TouchableOpacity
                     onPress={() => {
+                      let arrayData = meal;
+                      arrayData.package_diet_package = arrayData.package_diet_package.map(
+                        function (el) {
+                          el.meal = el.meal.map((me) => {
+                            var o = Object.assign({}, me);
+                            o.isSelected = false;
+                            return o;
+                          });
+                          var o = Object.assign({}, el);
+                          o.isSelected = false;
+                          return o;
+                        },
+                      );
                       navigation.navigate('MealSelection', {
                         BasicInfo: BasicInfo,
                         selectedPlan: props.selectedPlan,
                         NumberOfWeeks: weekNumber,
                         GenderId: gender_id,
-                        Meal: meal,
+                        Meal: arrayData,
                         week: weekNumber,
                       });
                     }}

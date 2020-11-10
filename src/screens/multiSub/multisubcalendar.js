@@ -1,4 +1,9 @@
-import React, {useState} from 'react';
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -13,8 +18,10 @@ import {CalendarList} from 'react-native-calendars';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-simple-toast';
 import {multiSubActions} from '../../actions/multiSub';
+import {useNavigation} from '@react-navigation/native';
 const {width} = Dimensions.get('window');
 const MultiSubCalender = (props) => {
+  const navigation = useNavigation();
   const {featureId, itemId} = props.route.params;
   const [visible, setVisible] = useState(false);
   const [valueone, setValueone] = useState(null);
@@ -53,8 +60,18 @@ const MultiSubCalender = (props) => {
       text: 'week 8',
     },
   ];
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setVisible(false);
+      setValueone(null);
+      setValueone(null);
+      setSelectWeek('Select');
+    });
+    return unsubscribe;
+  }, []);
   const onDayPress = (day) => {
     if (valueone != null) {
+      props.multiSubSelectedWeek(1);
       props
         .multiSubAction({
           feature_id: featureId,
@@ -231,6 +248,7 @@ const MultiSubCalender = (props) => {
 const actionCreators = {
   multiSubAction: multiSubActions.multiSubAction,
   multiSubWeek: multiSubActions.multiSubWeek,
+  multiSubSelectedWeek: multiSubActions.multiSubSelectedWeek,
 };
 export default connect(null, actionCreators)(MultiSubCalender);
 const styles = StyleSheet.create({

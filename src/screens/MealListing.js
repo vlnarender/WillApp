@@ -47,7 +47,6 @@ const MealListing = (props) => {
     }
   };
   if (props.mealListData) {
-    console.log(props.mealListData);
     const value =
       props.mealListData.data[0].duration_type === '1'
         ? props.mealListData.data[0].plan_package.package_diet_package

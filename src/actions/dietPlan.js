@@ -9,10 +9,6 @@ function dietCompanyPlanAction(data) {
     dispatch(request());
     return ADD_AND_UPDATE_API(data, `get/company/plan-list/by-restaurant`).then(
       (data) => {
-        console.log(
-          '============= get/company/plan-list/by-restaurant ==================',
-          JSON.stringify(data),
-        );
         if (data.success) {
           dispatch(success(data.data));
         } else {

@@ -8,13 +8,12 @@ import {addressListActions} from '../actions/addresslist';
 import {addAddressActions} from '../actions/addaddress';
 import AsyncStorage from '@react-native-community/async-storage';
 let styleCss = require('../GlobalStyle');
+import {ARROW_LEFT, LOGO} from '../_helpers/ImageProvide';
 const Addaddress = (props) => {
   const [basic, setBasic] = useState('');
   const [complete, setComplete] = useState('');
   const [type, setType] = useState('');
   const [checked, setChecked] = useState(false);
-  const [token, setToken] = useState('');
-  const [lan_guage, setLanguage] = useState('en');
   useEffect(() => {
     getValue();
   }, []);
@@ -70,17 +69,11 @@ const Addaddress = (props) => {
               <View style={{flex: 1, alignItems: 'flex-start'}}>
                 <TouchableOpacity
                   onPress={() => props.navigation.navigate('Addresslist')}>
-                  <Image
-                    style={{width: 36, height: 14}}
-                    source={require('../../assets/header/arrowLeft.png')}
-                  />
+                  <Image style={{width: 36, height: 14}} source={ARROW_LEFT} />
                 </TouchableOpacity>
               </View>
               <View style={{flex: 1, alignItems: 'center'}}>
-                <Image
-                  style={{width: 50, height: 40}}
-                  source={require('../../assets/header/logo.png')}
-                />
+                <Image style={{width: 50, height: 40}} source={LOGO} />
               </View>
               <View style={{flex: 1}}></View>
             </View>

@@ -15,6 +15,12 @@ import {addressListActions} from '../actions/addresslist';
 import {editAddressActions} from '../actions/editaddress';
 import AsyncStorage from '@react-native-community/async-storage';
 let styleCss = require('../GlobalStyle');
+import {
+  LOGO,
+  ARROW_LEFT,
+  CHECKED,
+  HEADER_unchecked,
+} from '../_helpers/ImageProvide';
 const Editaddress = (props) => {
   const {itemId} = props.route.params;
   const [basic, setBasic] = useState('');
@@ -86,17 +92,11 @@ const Editaddress = (props) => {
               <View style={{flex: 1, alignItems: 'flex-start'}}>
                 <TouchableOpacity
                   onPress={() => props.navigation.navigate('Addresslist')}>
-                  <Image
-                    style={{width: 36, height: 14}}
-                    source={require('../../assets/header/arrowLeft.png')}
-                  />
+                  <Image style={{width: 36, height: 14}} source={ARROW_LEFT} />
                 </TouchableOpacity>
               </View>
               <View style={{flex: 1, alignItems: 'center'}}>
-                <Image
-                  style={{width: 50, height: 40}}
-                  source={require('../../assets/header/logo.png')}
-                />
+                <Image style={{width: 50, height: 40}} source={LOGO} />
               </View>
               <View style={{flex: 1}}></View>
             </View>
@@ -127,10 +127,7 @@ const Editaddress = (props) => {
                     setChecked(!checked);
                   }}
                   style={styles.radioAlign}>
-                  <Image
-                    style={styles.imgSize}
-                    source={require('../../assets/header/checked.png')}
-                  />
+                  <Image style={styles.imgSize} source={CHECKED} />
                   <View>
                     <Text numberOfLines={1} style={styles.radioText}>
                       Make this my default address?
@@ -143,10 +140,7 @@ const Editaddress = (props) => {
                     setChecked(!checked);
                   }}
                   style={styles.radioAlign}>
-                  <Image
-                    style={styles.imgSize}
-                    source={require('../../assets/header/unchecked.png')}
-                  />
+                  <Image style={styles.imgSize} source={HEADER_unchecked} />
                   <View>
                     <Text numberOfLines={1} style={styles.radioText}>
                       Make this my default address?

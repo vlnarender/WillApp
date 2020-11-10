@@ -1,3 +1,8 @@
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
 import {userConstants} from './actionTypes';
 export const cartActions = {
   cartDeleteAction,

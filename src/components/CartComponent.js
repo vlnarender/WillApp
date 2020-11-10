@@ -1,3 +1,8 @@
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';

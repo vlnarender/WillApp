@@ -22,6 +22,7 @@ import cardReducer from './card';
 import cartReducer from './cart';
 import homeReducer from './home';
 import otpReducer from './otp';
+import commonReducer from './common';
 const AppReducer = combineReducers({
   registrationReducer: registrationReducer,
   editaddressReducer: editaddressReducer,
@@ -44,6 +45,7 @@ const AppReducer = combineReducers({
   cardReducer: cardReducer,
   cartReducer: cartReducer,
   otpReducer: otpReducer,
+  commonReducer: commonReducer,
   programPlanReduce: programPlanReduce,
 });
 

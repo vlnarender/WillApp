@@ -1,3 +1,8 @@
+/**
+ * @author suraj kumar
+ * @email surajknkumar@gmail.com
+ * @Owner Will
+ */
 import {userConstants} from './actionTypes';
 import {ADD_AND_UPDATE_API} from '../util/api';
 export const programActions = {

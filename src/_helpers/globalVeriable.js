@@ -3,14 +3,47 @@
  * @email surajknkumar@gmail.com
  * @Owner Will
  */
-export const MEAL = [
+
+export const WEEK_LIST = [
   {
-    day: null,
-    plan_diet_package_id: null,
-    meal_type: null,
-    meal_id: null,
+    key: 1,
+    text: 'Week 1',
+  },
+  {
+    key: 2,
+    text: 'Week 2',
+  },
+  {
+    key: 3,
+    text: 'Week 3',
+  },
+  {
+    key: 4,
+    text: 'Week 4',
+  },
+  {
+    key: 5,
+    text: 'Week 5',
+  },
+  {
+    key: 6,
+    text: 'Week 6',
+  },
+  {
+    key: 7,
+    text: 'Week 7',
+  },
+  {
+    key: 8,
+    text: 'Week 8',
   },
 ];
+export const MEAL = {
+  day: null,
+  plan_diet_package_id: null,
+  meal_type: null,
+  meal_id: null,
+};
 
 export const DIET_COMPANY = [
   {
