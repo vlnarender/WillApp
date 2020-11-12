@@ -42,10 +42,7 @@ const Home = (props) => {
     setVisible(!visible);
   };
   const navigateToPlan = (item) => {
-    const navi =
-      item.name === 'One Day Plan' || item.name === 'خطة اليوم الواحد'
-        ? 'OneDayPlan'
-        : 'MultiSubsCalendar';
+    const navi = item.id === 1 ? 'OneDayPlan' : 'MultiSubsCalendar';
     props.onedayplanAction({feature_id: item.id}).then(() =>
       navigation.navigate(navi, {
         featureId: item.id,

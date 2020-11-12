@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
 const {height, width} = Dimensions.get('window');
-
+import Toast from 'react-native-simple-toast';
+import {ADD_TO_THE_CART} from '../util/api';
 import {
   Collapse,
   CollapseHeader,
@@ -14,12 +15,14 @@ import {
   UP_ICON,
   IN_ICON,
 } from '../_helpers/ImageProvide';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
 let styleCss = require('../GlobalStyle');
 const MealListing = (props) => {
+  const navigation = useNavigation();
   const [selectedIndex, setSelectedIndex] = useState([]);
   const [selectedIndexRestaurent, setSelectedIndexRestaurent] = useState([]);
-  const [planList, setPlanList] = useState(false);
+  const [mealList, setMealList] = useState([]);
   const selectItem = (index) => {
     if (selectedIndex.indexOf(index) > -1) {
       let newArray = selectedIndex.filter((indexObject) => {
@@ -33,18 +36,57 @@ const MealListing = (props) => {
       setSelectedIndex([...selectedIndex, index]);
     }
   };
-  const selectItemRestaurent = (index1, index2, index) => {
-    if (selectedIndexRestaurent.indexOf(index) > -1) {
+  const selectItemRestaurent = (index, meal_id, meal, plan_diet_package_id) => {
+    let tf = true;
+    if (selectedIndexRestaurent.indexOf(meal_id) > -1) {
       let newArray = selectedIndexRestaurent.filter((indexObject) => {
-        if (indexObject == index) {
+        if (indexObject == meal_id) {
           return false;
         }
         return true;
       });
       setSelectedIndexRestaurent(newArray);
     } else {
-      setSelectedIndexRestaurent([...selectedIndexRestaurent, index]);
+      setSelectedIndexRestaurent([...selectedIndexRestaurent, meal_id]);
     }
+    if (mealList.length !== 0) {
+      setMealList(
+        mealList.map((x, i) => {
+          if (x.meal_id === meal.meal_id) {
+            tf = false;
+          }
+          console.log(
+            '----------------------------------',
+            x.meal_id,
+            meal.meal_id,
+            i,
+            x.meal_id === meal.meal_id,
+            tf,
+            '----------------------------------',
+          );
+          return x.meal_id === meal.meal_id
+            ? {
+                ...x,
+                meal_type: meal.meal_type_id,
+                plan_diet_package_id: plan_diet_package_id,
+              }
+            : x;
+        }),
+      );
+    }
+    if (tf) {
+      console.log('inside meal tf');
+      setMealList([
+        ...mealList,
+        {
+          day: 1,
+          meal_id: meal.meal_id,
+          meal_type: meal.meal_type_id,
+          plan_diet_package_id: plan_diet_package_id,
+        },
+      ]);
+    }
+    console.log(mealList);
   };
   if (props.mealListData) {
     const value =
@@ -52,7 +94,43 @@ const MealListing = (props) => {
         ? props.mealListData.data[0].plan_package.package_diet_package
         : props.mealListData.data[0].plan_package[0].package_diet_package;
 
-    const checkoutList = () => {};
+    const checkoutList = () => {
+      if (selectedIndexRestaurent.length === 3) {
+        console.log(mealList);
+        const data = props.mealListData.data[0];
+        let assumblingData = {
+          type: parseInt(data.type),
+          start_date: props.day,
+          duration_type: parseInt(data.duration_type),
+          duration: data.duration,
+          relative_id: data.relative_id,
+          diet_company: [
+            {
+              restaurant_id: data.restaurant_id,
+              week: 1,
+              plan_id: data.plan_id,
+              plan_packages_id: 1,
+              meals: mealList,
+            },
+          ],
+        };
+        console.log(JSON.stringify(assumblingData));
+        ADD_TO_THE_CART(assumblingData, 'user/addToCart').then((datat) => {
+          console.log(
+            '----------------------------------------------',
+            datat,
+            '-----------------------------------',
+          );
+          navigation.navigate('Cart');
+        });
+      } else {
+        Toast.showWithGravity(
+          'Please select all the meal listed',
+          Toast.SHORT,
+          Toast.CENTER,
+        );
+      }
+    };
     return (
       <>
         <View style={[{marginTop: 10}, styleCss.mainContainer]}>
@@ -91,9 +169,10 @@ const MealListing = (props) => {
                                     <TouchableOpacity
                                       onPress={() =>
                                         selectItemRestaurent(
-                                          i,
-                                          ind,
+                                          index,
                                           meal.meal_id,
+                                          meal,
+                                          list.plan_diet_package_id,
                                         )
                                       }>
                                       <Text style={styles.kd}>

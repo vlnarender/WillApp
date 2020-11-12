@@ -1,6 +1,5 @@
 import Axios from 'axios';
 import {DEV_CONFIGS, PROD_CONFIGS} from './constant';
-import qs from 'qs';
 import AsyncStorage from '@react-native-community/async-storage';
 const axios = Axios.create({
   baseURL: PROD_CONFIGS.url,
@@ -150,6 +149,51 @@ export const ADD_AND_UPDATE_API = async (data, API_NAME) => {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     body: formBody,
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+export const ADD_TO_THE_CART = async (data, API_NAME) => {
+  let localstorage = await getAsyncStorage();
+  console.log(
+    '++++++++++++++++++++',
+    JSON.stringify(data),
+    '=====================',
+    `${DEV_CONFIGS.url}/${API_NAME}`,
+    localstorage.language,
+    localstorage.bearer,
+  );
+  return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
+    method: 'POST',
+    headers: {
+      'X-Localization': localstorage.language,
+      Authorization: localstorage.bearer,
+      'Content-Type': 'application/json',
+    },
+    body: data,
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+export const GET_MY_CART = async (API_NAME) => {
+  let localstorage = await getAsyncStorage();
+  return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
+    method: 'POST',
+    headers: {
+      'X-Localization': localstorage.language,
+      Authorization: localstorage.bearer,
+    },
   })
     .then((response) => response.json())
     .then((responseJson) => {

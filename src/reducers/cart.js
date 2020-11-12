@@ -3,7 +3,6 @@
  * @email surajknkumar@gmail.com
  * @Owner Will
  */
-import {sample} from 'lodash';
 import {userConstants} from '../actions/actionTypes';
 
 const initialState = {
@@ -11,7 +10,7 @@ const initialState = {
   features_id: '',
   restaurant_id: '',
   selectedDate: '',
-  cardAdd: [],
+  cartAdd: [],
   listOfItems: 0,
   selectedPlan: {},
   imageUrl: '',
@@ -24,6 +23,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         selectedDate: action.data,
+      };
+    case userConstants.CART_LIST_OF_ITEM:
+      return {
+        ...state,
+        listOfItems: action.data,
       };
     case userConstants.CART_SELECTED_IMAGE_URL:
       return {
@@ -59,15 +63,13 @@ export default function (state = initialState, action) {
     case userConstants.CART_ADD:
       return {
         ...state,
-        cardAdd: [...cardAdd, action.data],
-        listOfItems: state.listOfItems + 1,
+        cartAdd: [...state.cartAdd, action.data],
       };
     case userConstants.CART_DELETE:
-      state.cardAdd.splice(action.data, 1);
+      state.cartAdd.splice(action.data, 1);
       return {
         ...state,
-        cardAdd: [...cardAdd],
-        listOfItems: state.listOfItems - 1,
+        cartAdd: [...state.cartAdd],
       };
     default:
       return state;

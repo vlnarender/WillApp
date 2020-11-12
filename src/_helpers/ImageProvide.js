@@ -4,7 +4,9 @@
  * @Owner Will
  */
 
+export const CONGRATULATION = require('../../assets/congratulation.png');
 export const ARROW_LEFT = require('../../assets/header/arrowLeft.png');
+export const COMMON_ARROW_LEFT = require('../../assets/arrowLeft.png');
 export const ARROW_RIGHT = require('../../assets/header/arrowRight.png');
 export const CAMERA_WHITE = require('../../assets/header/cameraWhite.png');
 export const CART = require('../../assets/header/cart.png');
@@ -119,3 +121,4 @@ export const IN_ICON = require('../../assets/inIcon.png');
 export const UP_DOWN_ARROW = require('../../assets/ud_arrow.png');
 export const UP_DOWN_ARROW_BLACK = require('../../assets/ud_arrow_black.png');
 export const IMAGE_CDN = 'https://will-app.s3.ap-south-1.amazonaws.com/';
+export const EDIT_PENCIL = require('../../assets/edit_pencial.png');

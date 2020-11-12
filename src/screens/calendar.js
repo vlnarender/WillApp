@@ -17,6 +17,7 @@ const OneDayCalender = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       setSelect(false);
+      setValue([]);
       let isActive = true;
       const fetchUser = async () => {
         try {
@@ -139,7 +140,7 @@ const OneDayCalender = (props) => {
               <View style={styles.arrow}>
                 <TouchableOpacity
                   onPress={() => {
-                    props.navigation.goBack('OneDayPlan');
+                    props.navigation.navigate('Home');
                     setSelect(false);
                   }}>
                   <Image

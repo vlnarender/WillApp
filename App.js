@@ -6,8 +6,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {
   MainStackNavigator,
   CustomStackNavigator,
-} from './src/components/stackNavigator';
-import DrawerNavigator from './src/components/drawer';
+} from './src/components/navigation/stackNavigator';
+import DrawerNavigator from './src/components/navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import {getUniqueId, getSystemName} from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';

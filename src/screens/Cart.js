@@ -4,7 +4,7 @@
  * @Owner Will
  */
 import {connect} from 'react-redux';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Image,
@@ -23,6 +23,10 @@ const {height, width} = Dimensions.get('window');
 let styleCss = require('../GlobalStyle');
 const CartComponent = (props) => {
   const navigation = useNavigation();
+  useEffect(() => {
+    getCartDetail();
+  });
+  const getCartDetail = () => {};
   return (
     <>
       <Header />

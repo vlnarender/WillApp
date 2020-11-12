@@ -91,16 +91,6 @@ module.exports = StyleSheet.create({
 
   header: {
     width: '100%',
-    height: 45,
-    backgroundColor: 'white',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.9,
-    shadowRadius: 1,
-    elevation: 6,
     flexDirection: 'row',
   },
 

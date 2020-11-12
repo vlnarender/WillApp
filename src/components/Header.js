@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 let styleCss = require('../GlobalStyle');
+import {connect} from 'react-redux';
 
 const Header = (props) => {
   const navigation = useNavigation();
@@ -51,7 +52,7 @@ const Header = (props) => {
               alignSelf: 'center',
               color: '#fff',
             }}>
-            0
+            {props.listOfItem}
           </Text>
         </View>
       </View>
@@ -59,4 +60,7 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state) => {
+  return {listOfItem: state.cartReducer.listOfItems};
+};
+export default connect(mapStateToProps, null)(Header);
