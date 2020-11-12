@@ -173,10 +173,11 @@ export const ADD_TO_THE_CART = async (data, API_NAME) => {
     method: 'POST',
     headers: {
       'X-Localization': localstorage.language,
-      Authorization: localstorage.bearer,
       'Content-Type': 'application/json',
+      Authorization: localstorage.bearer,
     },
-    body: data,
+
+    body: JSON.stringify(data),
   })
     .then((response) => response.json())
     .then((responseJson) => {

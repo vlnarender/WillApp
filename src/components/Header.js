@@ -31,30 +31,35 @@ const Header = (props) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Cart');
+          }}>
           <Image
             style={{height: 40, width: 40}}
             source={require('../../assets/header/cart.png')}
           />
-        </TouchableOpacity>
-        <View
-          style={{
-            position: 'absolute',
-            padding: 10,
-            width: 18,
-            height: 18,
-            borderRadius: 100,
-            backgroundColor: '#fcb85f',
-          }}>
-          <Text
+          <View
             style={{
               position: 'absolute',
-              alignSelf: 'center',
-              color: '#fff',
+              width: 18,
+              height: 18,
+              borderRadius: 100,
+              backgroundColor: '#fcb85f',
+              marginTop: 10,
+              marginLeft: 15,
             }}>
-            {props.listOfItem}
-          </Text>
-        </View>
+            <Text
+              style={{
+                position: 'absolute',
+                alignSelf: 'center',
+                color: '#fff',
+                fontWeight: 'bold',
+              }}>
+              {props.listOfItem}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

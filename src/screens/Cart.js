@@ -26,6 +26,7 @@ const CartComponent = (props) => {
   useEffect(() => {
     getCartDetail();
   });
+  console.log(JSON.stringify(props.route.params.cartData));
   const getCartDetail = () => {};
   return (
     <>

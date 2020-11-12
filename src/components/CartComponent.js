@@ -7,23 +7,30 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, Dimensions, Button} from 'react-native';
 let styleCss = require('../GlobalStyle');
+import {connect} from 'react-redux';
 import Header from './Header';
 import Loader from '../components/Loader';
 const {width} = Dimensions.get('window');
-import {GET_MY_CART} from '../util/api';
-import {CROSS, EDIT_PENCIL, IMAGE_CDN} from '../_helpers/ImageProvide';
+import {ADD_AND_UPDATE_API, GET_MY_CART} from '../util/api';
+import {
+  CHECKED,
+  CROSS,
+  EDIT_PENCIL,
+  HEADER_unchecked,
+  IMAGE_CDN,
+} from '../_helpers/ImageProvide';
 import {
   ScrollView,
   TextInput,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
+import {cartActions} from '../actions/cart';
 const CartComponent = (props) => {
   const navigation = useNavigation();
   const [loader, setLoader] = useState(true);
   const [MealList, setMealList] = useState(null);
   useEffect(() => {
     GET_MY_CART('user/myCart').then((data) => {
-      console.log(JSON.stringify(data));
       setMealList(data.data);
       data.success ? setLoader(false) : setLoader(true);
     });
@@ -32,8 +39,15 @@ const CartComponent = (props) => {
     console.log('editAddress');
   };
   const checkOut = () => {
-    console.log('check out');
     navigation.navigate('PaymentMethod');
+  };
+  const emptyYourCart = () => {
+    ADD_AND_UPDATE_API({cart_id: MealList.cart_id}, 'user/remove-myCart').then(
+      () => {
+        props.ListOfItems();
+        navigation.navigate('Home');
+      },
+    );
   };
   if (loader) {
     return <Loader />;
@@ -49,10 +63,12 @@ const CartComponent = (props) => {
                 <Text style={{fontWeight: 'bold', fontSize: 20}}>
                   My shopping bag
                 </Text>
-                <Image
-                  style={{width: 20, height: 20, marginTop: 5}}
-                  source={CROSS}
-                />
+                <TouchableOpacity onPress={() => emptyYourCart()}>
+                  <Image
+                    style={{width: 20, height: 20, marginTop: 5}}
+                    source={CROSS}
+                  />
+                </TouchableOpacity>
               </View>
               <Text style={{fontSize: 15, paddingVertical: 8}}>
                 {MealList.meal_list.length} items added
@@ -150,16 +166,22 @@ const CartComponent = (props) => {
               <Text style={styles.total}>Delivery Address</Text>
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View>
-                  <Text>Annie Smith</Text>
-                  <Text>example_mail@mail.com</Text>
-                  <Text>1 Chapal Hill</Text>
-                  <Text>Heswall</Text>
-                  <Text>Bournemouth</Text>
-                  <Text style={{fontSize: 15, fontWeight: '400'}}>
-                    Phone Number: 65058335
-                  </Text>
-                </View>
+                {MealList.my_address.map((address, index) => {
+                  return (
+                    <View key={index} style={{flexDirection: 'row'}}>
+                      <View>
+                        <Text>{address.basic_address}</Text>
+                        <Text>{address.address_type}</Text>
+                        <Text>{address.complete_address}</Text>
+                        <Text>Bournemouth</Text>
+                      </View>
+                      <Image
+                        source={address.is_active && CHECKED}
+                        style={{width: 20, height: 20}}
+                      />
+                    </View>
+                  );
+                })}
                 <View style={{justifyContent: 'space-between'}}>
                   <TouchableOpacity
                     style={{flexDirection: 'row', justifyContent: 'flex-end'}}
@@ -243,4 +265,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
-export default CartComponent;
+
+const actionProps = {
+  ListOfItems: cartActions.ListOfItems,
+};
+export default connect(null, actionProps)(CartComponent);

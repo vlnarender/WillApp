@@ -4,7 +4,7 @@ import {verticleScale, scale} from './helper';
 const {height, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
-  container: {height, width},
+  container: {height: height / 0.9, width},
   bgImage: {height: `100%`},
   blackShade: {
     position: 'absolute',

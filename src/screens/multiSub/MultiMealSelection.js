@@ -20,6 +20,7 @@ import Toast from 'react-native-simple-toast';
 import Header from '../../components/Header';
 import {multiSubActions} from '../../actions/multiSub';
 import {connect} from 'react-redux';
+import {ADD_TO_THE_CART} from '../../util/api';
 import {
   CHECK_GREEN,
   PLUS_ORANGE,
@@ -53,13 +54,23 @@ const MultiMealSelection = (props) => {
       unsubscribe;
     };
   }, [props.LIST_ITEMS]);
-  const mealListingList = (id, meal_id, index, mealListData) => {
+  const mealListingList = (
+    id,
+    meal_id,
+    index,
+    mealListData,
+    meal_type,
+    plan_diet_package_id,
+  ) => {
     setmealListing(
       mealListing.map((x, i) => {
         if (index === i) {
           x.id = id;
           x.meal_id = meal_id;
           x.selectedData = mealListData;
+          x.day = daysNumber;
+          x.plan_diet_package_id = plan_diet_package_id;
+          x.meal_type = meal_type;
         }
         return x;
       }),
@@ -67,10 +78,17 @@ const MultiMealSelection = (props) => {
   };
   const getPrimaryData = () => {
     let array = [];
-    console.log('props.LIST_ITEMS', props.LIST_ITEMS);
     if (props.LIST_ITEMS) {
       props.LIST_ITEMS.plan_package.data.package_diet_package.map((item) => {
-        array.push({id: null, meal_id: null, data: item, selectedData: null});
+        array.push({
+          id: null,
+          meal_id: null,
+          data: item,
+          selectedData: null,
+          day: null,
+          plan_diet_package_id: null,
+          meal_type: null,
+        });
       });
     }
     setmealListing(array);
@@ -82,7 +100,7 @@ const MultiMealSelection = (props) => {
       if (item.id === null) {
         tf = false;
         Toast.showWithGravity(
-          'Please select atlist one meal from each section (Breakfast,Lunch,Dinner etc.)',
+          'Please select atlist one meal from each section.',
           Toast.SHORT,
           Toast.CENTER,
         );
@@ -90,16 +108,57 @@ const MultiMealSelection = (props) => {
     });
     if (tf) {
       let tempVar = mealListing.map((data) => {
-        return data.selectedData !== null && data.selectedData;
+        return data.selectedData !== null && data;
       });
-      setSelectedData([...selectedData, tempVar]);
+
+      setSelectedData([
+        ...selectedData,
+        {
+          day: tempVar[0].day,
+          meal_id: tempVar[0].meal_id,
+          meal_type: tempVar[0].meal_type,
+          plan_diet_package_id: tempVar[0].plan_diet_package_id,
+        },
+      ]);
+
       if (daysNumber === 7) {
+        let sendData = {
+          duration: props.LIST_ITEMS.duration,
+          duration_type: props.LIST_ITEMS.duration_type,
+          plan_type: props.LIST_ITEMS.plan_type,
+          relative_id: props.LIST_ITEMS.relative_id,
+          type: 2,
+          start_date: props.selectedDate,
+          diet_company: [
+            {
+              restaurant_id: props.LIST_ITEMS.restaurant_id,
+              week: props.selectedWeek,
+              plan_id: props.LIST_ITEMS.plan_id,
+              plan_packages_id: 2,
+              meals: [
+                ...props.selectedMeal,
+                [
+                  ...selectedData,
+                  {
+                    day: tempVar[0].day,
+                    meal_id: tempVar[0].meal_id,
+                    meal_type: tempVar[0].meal_type,
+                    plan_diet_package_id: tempVar[0].plan_diet_package_id,
+                  },
+                ],
+              ],
+            },
+          ],
+        };
         if (props.selectedWeek === props.multiSubWeek) {
-          console.log(props.selectedMeal);
-          navigation.navigate('Cart');
+          ADD_TO_THE_CART(sendData).then((data) => {
+            if (data.success) {
+              navigation.navigate('Cart');
+            }
+          });
         } else {
           props.multiSubSelectedWeek(props.selectedWeek + 1);
-          props.multiSubAddSelectedData({...selectedData, tempVar});
+          props.multiSubAddSelectedData(sendData);
           navigation.navigate('MultiSubs');
         }
       }
@@ -108,7 +167,6 @@ const MultiMealSelection = (props) => {
     }
   };
   if (props.LIST_ITEMS && mealListing) {
-    console.log(props.LIST_ITEMS);
     return (
       <>
         <Header />
@@ -170,9 +228,7 @@ const MultiMealSelection = (props) => {
                 return (
                   <Collapse isCollapsed={true} key={mtindex}>
                     <CollapseHeader>
-                      <TouchableOpacity
-                        onPress={() => console.log('hi')}
-                        activeOpacity={0.9}>
+                      <TouchableOpacity activeOpacity={0.9}>
                         <View style={styles.heading}>
                           <Text style={styles.text}>{item.data.meal_name}</Text>
                           <View>
@@ -198,6 +254,8 @@ const MultiMealSelection = (props) => {
                                       mealListData.meal_id,
                                       mtindex,
                                       mealListData,
+                                      mealListData.meal_type_id,
+                                      meal_list.plan_diet_package_id,
                                     );
                                   }}
                                   style={{
@@ -315,6 +373,7 @@ const mapStateToProps = (state) => {
     multiSubWeek: state.commonReducer.multiSubWeek,
     selectedWeek: state.commonReducer.selectedWeek,
     selectedMeal: state.multiSubReducer.selectedMeal,
+    selectedDate: state.cartReducer.selectedDate,
     LIST_ITEMS: state.multiSubReducer.LIST_ITEMS,
   };
 };

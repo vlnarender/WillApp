@@ -173,9 +173,9 @@ const TermConditionStackNavigator = () => {
 const CartStackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName={'Cart'}
+      initialRouteName={'CartComponent'}
       screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Cart" component={CartComponent} />
+      <Stack.Screen name="CartComponent" component={CartComponent} />
     </Stack.Navigator>
   );
 };

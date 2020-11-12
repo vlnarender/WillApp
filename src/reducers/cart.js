@@ -3,6 +3,7 @@
  * @email surajknkumar@gmail.com
  * @Owner Will
  */
+import {act} from 'react-test-renderer';
 import {userConstants} from '../actions/actionTypes';
 
 const initialState = {

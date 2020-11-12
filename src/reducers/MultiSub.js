@@ -25,13 +25,11 @@ export default function (state = initialState, action) {
         loading: true,
       };
     case userConstants.MULTI_SUB_ADD_SELECTED_DATA:
-      console.log('action.data', action.data);
       return {
         ...state,
         selectedMeal: [...state.selectedMeal, action.data],
       };
     case userConstants.MULTI_SUB_LIST_ITEMS:
-      console.log('MULTI_SUB_LIST_ITEMS', action.data);
       return {
         ...state,
         LIST_ITEMS: action.data,

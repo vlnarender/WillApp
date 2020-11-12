@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
 const {height, width} = Dimensions.get('window');
 import Toast from 'react-native-simple-toast';
-import {ADD_TO_THE_CART} from '../util/api';
+import {ADD_TO_THE_CART, GET_MY_CART} from '../util/api';
 import {
   Collapse,
   CollapseHeader,
@@ -17,6 +17,7 @@ import {
 } from '../_helpers/ImageProvide';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
+import {cartActions} from '../actions/cart';
 let styleCss = require('../GlobalStyle');
 const MealListing = (props) => {
   const navigation = useNavigation();
@@ -55,15 +56,7 @@ const MealListing = (props) => {
           if (x.meal_id === meal.meal_id) {
             tf = false;
           }
-          console.log(
-            '----------------------------------',
-            x.meal_id,
-            meal.meal_id,
-            i,
-            x.meal_id === meal.meal_id,
-            tf,
-            '----------------------------------',
-          );
+
           return x.meal_id === meal.meal_id
             ? {
                 ...x,
@@ -75,7 +68,6 @@ const MealListing = (props) => {
       );
     }
     if (tf) {
-      console.log('inside meal tf');
       setMealList([
         ...mealList,
         {
@@ -86,7 +78,6 @@ const MealListing = (props) => {
         },
       ]);
     }
-    console.log(mealList);
   };
   if (props.mealListData) {
     const value =
@@ -96,7 +87,6 @@ const MealListing = (props) => {
 
     const checkoutList = () => {
       if (selectedIndexRestaurent.length === 3) {
-        console.log(mealList);
         const data = props.mealListData.data[0];
         let assumblingData = {
           type: parseInt(data.type),
@@ -114,13 +104,8 @@ const MealListing = (props) => {
             },
           ],
         };
-        console.log(JSON.stringify(assumblingData));
-        ADD_TO_THE_CART(assumblingData, 'user/addToCart').then((datat) => {
-          console.log(
-            '----------------------------------------------',
-            datat,
-            '-----------------------------------',
-          );
+        ADD_TO_THE_CART(assumblingData, 'user/addToCart').then((data) => {
+          props.ListOfItems();
           navigation.navigate('Cart');
         });
       } else {
@@ -392,4 +377,7 @@ const mapStateToProps = (state) => {
     mealListData: state.mealListReducer.mealListData,
   };
 };
-export default connect(mapStateToProps, null)(MealListing);
+const actionProps = {
+  ListOfItems: cartActions.ListOfItems,
+};
+export default connect(mapStateToProps, actionProps)(MealListing);

@@ -6,6 +6,7 @@
 import {userConstants} from './actionTypes';
 import {GET_MY_CART} from '../util/api';
 import {cos} from 'react-native-reanimated';
+import {object} from 'yup';
 
 export const cartActions = {
   cartDeleteAction,
@@ -22,9 +23,15 @@ export const cartActions = {
 };
 function ListOfItems() {
   return (dispatch) => {
-    GET_MY_CART(`creditcard/list`).then((data) => {
+    GET_MY_CART(`user/myCart`).then((data) => {
       if (data.success) {
-        dispatch(success(data.data.length));
+        if (Array.isArray(data)) {
+          dispatch(success(data.data.length));
+        } else {
+          dispatch(success(1));
+        }
+      } else {
+        dispatch(success(0));
       }
     });
   };

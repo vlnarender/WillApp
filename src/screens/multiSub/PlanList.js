@@ -170,7 +170,6 @@ const PlanList = (props) => {
                             <TouchableOpacity
                               style={{flexDirection: 'row'}}
                               onPress={() => {
-                                console.log(JSON.stringify(item));
                                 let arrayData = item;
                                 arrayData.package_diet_package = arrayData.package_diet_package.map(
                                   function (el) {
