@@ -31,6 +31,7 @@ const CartComponent = (props) => {
   const [MealList, setMealList] = useState(null);
   useEffect(() => {
     GET_MY_CART('user/myCart').then((data) => {
+      console.log('user/myCart', data);
       setMealList(data.data);
       data.success ? setLoader(false) : setLoader(true);
     });
@@ -71,53 +72,93 @@ const CartComponent = (props) => {
                 </TouchableOpacity>
               </View>
               <Text style={{fontSize: 15, paddingVertical: 8}}>
-                {MealList.meal_list.length} items added
+                {MealList.plan_type
+                  ? `Selected Program `
+                  : MealList.meal_list.length + ` items added`}
               </Text>
             </View>
-            <View>
-              {MealList.meal_list.map((meal_list, index) => {
-                return (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      paddingVertical: 5,
-                    }}
-                    key={index}>
-                    <View>
-                      <View style={styles.imgBox}>
-                        <Image
-                          style={{
-                            height: 60,
-                            borderRadius: 5,
-                          }}
-                          source={{
-                            uri: IMAGE_CDN + meal_list.image,
-                          }}
-                        />
-                      </View>
-                    </View>
-                    <View
-                      style={[
-                        {
-                          flex: 2,
-                          paddingHorizontal: 10,
-                        },
-                        styles.borderBottomBox,
-                      ]}>
-                      <View>
-                        <Text style={styles.headingText}>{meal_list.name}</Text>
-                        <Text style={styles.itemContent}>
-                          {meal_list.description}
-                        </Text>
-                      </View>
-                      <View style={{alignSelf: 'flex-end'}}>
-                        <Text>KD {meal_list.price}</Text>
-                      </View>
-                    </View>
+            {MealList.plan_type ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  paddingVertical: 5,
+                }}>
+                <View>
+                  <View style={styles.imgBox}>
+                    <Image
+                      style={{
+                        height: 60,
+                        borderRadius: 5,
+                      }}
+                      source={{
+                        uri: IMAGE_CDN + MealList.program_details.image,
+                      }}
+                    />
                   </View>
-                );
-              })}
-            </View>
+                </View>
+
+                <View
+                  style={[
+                    {
+                      paddingHorizontal: 10,
+                    },
+                    styles.borderBottomBox,
+                  ]}>
+                  <Text style={styles.headingText}>
+                    {MealList.program_details.name}
+                  </Text>
+                  <Text>{MealList.concat_duration}</Text>
+                  <Text> {MealList.package_name}</Text>
+                </View>
+              </View>
+            ) : (
+              <View>
+                {MealList.meal_list.map((meal_list, index) => {
+                  return (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        paddingVertical: 5,
+                      }}
+                      key={index}>
+                      <View>
+                        <View style={styles.imgBox}>
+                          <Image
+                            style={{
+                              height: 60,
+                              borderRadius: 5,
+                            }}
+                            source={{
+                              uri: IMAGE_CDN + meal_list.image,
+                            }}
+                          />
+                        </View>
+                      </View>
+                      <View
+                        style={[
+                          {
+                            flex: 2,
+                            paddingHorizontal: 10,
+                          },
+                          styles.borderBottomBox,
+                        ]}>
+                        <View>
+                          <Text style={styles.headingText}>
+                            {meal_list.name}
+                          </Text>
+                          <Text style={styles.itemContent}>
+                            {meal_list.description}
+                          </Text>
+                        </View>
+                        <View style={{alignSelf: 'flex-end'}}>
+                          <Text>KD {meal_list.price}</Text>
+                        </View>
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
+            )}
             <View>
               <View style={styles.thiredSection}>
                 <Text>Total</Text>

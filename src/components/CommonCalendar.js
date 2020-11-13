@@ -46,32 +46,16 @@ const CommonCalendar = (props) => {
   var today = new Date();
 
   const dietCompanyPlannavigation = (day) => {
-    ADD_AND_UPDATE_API(
-      {
+    rprops
+      .dietCompanyPlanAction({
+        program_id: props.program_id,
         restaurant_id: props.restaurant_id,
-      },
-      'get/company/duration/week',
-    ).then((item) => {
-      if (item.data.length != 0) {
-        props
-          .dietCompanyPlanAction({
-            restaurant_id: props.restaurant_id,
-            type: parseInt(item.data[0].gender),
-            week: parseInt(item.data[0].week.replace('Week', '')),
-          })
-          .then(() => {
-            navigation.navigate('PlanListProgram', {
-              selectedDate: day,
-            });
-          });
-      } else {
-        Toast.showWithGravity(
-          'No Record found,Please go back and reselect the company',
-          Toast.SHORT,
-          Toast.CENTER,
-        );
-      }
-    });
+      })
+      .then(() => {
+        navigation.navigate('PlanListProgram', {
+          selectedDate: day,
+        });
+      });
   };
   const programPalnnavigation = (day) => {
     props
