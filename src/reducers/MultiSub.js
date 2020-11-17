@@ -3,7 +3,6 @@
  * @email surajknkumar@gmail.com
  * @Owner Will
  */
-import {act} from 'react-test-renderer';
 import {userConstants} from '../actions/actionTypes';
 
 const initialState = {
@@ -15,7 +14,7 @@ const initialState = {
   multiSubWeek: 1,
   selectedWeek: 1,
   selectedMeal: [],
-  LIST_ITEMS: null,
+  list_items: null,
 };
 
 export default function (state = initialState, action) {
@@ -27,12 +26,12 @@ export default function (state = initialState, action) {
     case userConstants.MULTI_SUB_ADD_SELECTED_DATA:
       return {
         ...state,
-        selectedMeal: [...state.selectedMeal, action.data],
+        selectedMeal: [state.selectedMeal, action.data],
       };
     case userConstants.MULTI_SUB_LIST_ITEMS:
       return {
         ...state,
-        LIST_ITEMS: action.data,
+        list_items: action.data,
       };
     case userConstants.MULTI_SUB_SELECTED_WEEK:
       return {

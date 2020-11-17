@@ -4,6 +4,7 @@
  * @Owner Will
  */
 
+export const DELETE_ICON = require('../../assets/delete.png');
 export const CONGRATULATION = require('../../assets/congratulation.png');
 export const ARROW_LEFT = require('../../assets/header/arrowLeft.png');
 export const COMMON_ARROW_LEFT = require('../../assets/arrowLeft.png');

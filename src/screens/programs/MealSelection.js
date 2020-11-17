@@ -172,7 +172,7 @@ const MealSelection = (props) => {
       // console.log(JSON.stringify(mealDataInfo));
       setMealTitle([...MealTitle, mealDataInfo]);
       initializeMeal();
-      setDaysNumber(daysNumber + 1);
+      (daysNumber === week * 7) != setDaysNumber(daysNumber + 1);
     }
   };
   if (selectedPlan) {

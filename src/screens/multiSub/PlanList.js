@@ -244,11 +244,13 @@ const PlanList = (props) => {
                 <TouchableOpacity
                   style={styles.checkout}
                   onPress={() => {
-                    props.multiSub_LIST_ITEM({
-                      ...finalSelection,
-                      plan_package: selectedButton,
-                    });
-                    props.navigation.navigate('MultiMealSelection');
+                    if (selectedButton.planId !== null) {
+                      props.multiSub_LIST_ITEM({
+                        ...finalSelection,
+                        plan_package: selectedButton,
+                      });
+                      props.navigation.navigate('MultiMealSelection');
+                    }
                   }}>
                   <Text style={styles.checkoutText}>Continue</Text>
                 </TouchableOpacity>

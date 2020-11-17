@@ -21,6 +21,7 @@ import Modal from 'react-native-modal';
 import {programActions} from '../actions/program';
 import {cartActions} from '../actions/cart';
 let styleCss = require('../GlobalStyle');
+import Toast from 'react-native-simple-toast';
 
 const Home = (props) => {
   const navigation = useNavigation();
@@ -42,26 +43,50 @@ const Home = (props) => {
     setVisible(!visible);
   };
   const navigateToPlan = (item) => {
-    const navi = item.id === 1 ? 'OneDayPlan' : 'MultiSubsCalendar';
-    props.onedayplanAction({feature_id: item.id}).then(() =>
-      navigation.navigate(navi, {
-        featureId: item.id,
-      }),
-    );
+    if (props.listOfItems === 0) {
+      const navi = item.id === 1 ? 'OneDayPlan' : 'MultiSubsCalendar';
+      props.onedayplanAction({feature_id: item.id}).then(() =>
+        navigation.navigate(navi, {
+          featureId: item.id,
+        }),
+      );
+    } else {
+      Toast.showWithGravity(
+        'You already have selected some on your card.Please remove it or compelte the process.',
+        Toast.SHORT,
+        Toast.CENTER,
+      );
+    }
   };
   const dietCompanyNavigation = (data) => {
-    props.restaurantId(data.id);
-    props.programName('diet_company');
-    navigation.navigate('CommonCalendar', {
-      restaurant_id: data.id,
-    });
+    if (props.listOfItems === 0) {
+      props.restaurantId(data.id);
+      props.programName('diet_company');
+      navigation.navigate('CommonCalendar', {
+        restaurant_id: data.id,
+      });
+    } else {
+      Toast.showWithGravity(
+        'You already have selected some on your card.Please remove it or compelte the process.',
+        Toast.SHORT,
+        Toast.CENTER,
+      );
+    }
   };
   const programPopUp = (data) => {
-    props.programName('programs');
-    props.programId(data.id);
-    props.progeamAction({program_id: data.id}).then((data) => {
-      navigation.navigate('Programs');
-    });
+    if (props.listOfItems === 0) {
+      props.programName('programs');
+      props.programId(data.id);
+      props.progeamAction({program_id: data.id}).then((data) => {
+        navigation.navigate('Programs');
+      });
+    } else {
+      Toast.showWithGravity(
+        'You already have selected some on your card.Please remove it or compelte the process.',
+        Toast.SHORT,
+        Toast.CENTER,
+      );
+    }
   };
   if (props.homeStatus && props.labelStatus) {
     const DATA3 = [
@@ -450,6 +475,7 @@ const mapStateToProps = (state) => {
     homeStatus: state.homeReducer.homeStatus,
     labelData: state.labelReducer.labelData,
     labelStatus: state.labelReducer.labelStatus,
+    listOfItems: state.cartReducer.listOfItems,
   };
 };
 const actionCreators = {

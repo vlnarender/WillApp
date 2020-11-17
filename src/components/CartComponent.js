@@ -4,7 +4,7 @@
  * @Owner Will
  */
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, forceUpdate} from 'react';
 import {View, Text, Image, StyleSheet, Dimensions, Button} from 'react-native';
 let styleCss = require('../GlobalStyle');
 import {connect} from 'react-redux';
@@ -16,6 +16,7 @@ import {
   CHECKED,
   CROSS,
   EDIT_PENCIL,
+  DELETE_ICON,
   HEADER_unchecked,
   IMAGE_CDN,
 } from '../_helpers/ImageProvide';
@@ -29,13 +30,22 @@ const CartComponent = (props) => {
   const navigation = useNavigation();
   const [loader, setLoader] = useState(true);
   const [MealList, setMealList] = useState(null);
+
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setLoader(true);
+      setMealList(null);
+      getData();
+    });
+    return unsubscribe;
+  }, []);
+  const getData = () => {
     GET_MY_CART('user/myCart').then((data) => {
       console.log('user/myCart', data);
       setMealList(data.data);
       data.success ? setLoader(false) : setLoader(true);
     });
-  }, []);
+  };
   const editAddress = () => {
     console.log('editAddress');
   };
@@ -65,10 +75,7 @@ const CartComponent = (props) => {
                   My shopping bag
                 </Text>
                 <TouchableOpacity onPress={() => emptyYourCart()}>
-                  <Image
-                    style={{width: 20, height: 20, marginTop: 5}}
-                    source={CROSS}
-                  />
+                  <Image style={{marginTop: 5}} source={DELETE_ICON} />
                 </TouchableOpacity>
               </View>
               <Text style={{fontSize: 15, paddingVertical: 8}}>
