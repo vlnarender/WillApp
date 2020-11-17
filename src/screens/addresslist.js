@@ -13,8 +13,8 @@ import {addressListActions} from '../actions/addresslist';
 import {addressSetActions} from '../actions/addressset';
 import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
-import Toast from 'react-native-simple-toast';
-import {set} from 'react-native-reanimated';
+import {CROSS, HEADER_unchecked} from '../_helpers/ImageProvide';
+
 const Addresslist = (props) => {
   const [checked, setChecked] = useState(0);
   const [token, setToken] = useState('');
@@ -82,10 +82,7 @@ const Addresslist = (props) => {
                 <View style={{flex: 1, alignItems: 'flex-end', marginTop: 20}}>
                   <TouchableOpacity
                     onPress={() => props.navigation.navigate('Home')}>
-                    <Image
-                      style={{width: 20, height: 20}}
-                      source={require('../../assets/header/cross.png')}
-                    />
+                    <Image style={{width: 20, height: 20}} source={CROSS} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -130,7 +127,7 @@ const Addresslist = (props) => {
                           style={styles.radioAlign}>
                           <Image
                             style={styles.imgSize}
-                            source={require('../../assets/header/unchecked.png')}
+                            source={HEADER_unchecked}
                           />
                           <View>
                             {item.is_default_address === 1 ? (
@@ -197,10 +194,7 @@ const Addresslist = (props) => {
                 <View style={{flex: 1, alignItems: 'flex-end'}}>
                   <TouchableOpacity
                     onPress={() => props.navigation.navigate('Home')}>
-                    <Image
-                      style={{width: 20, height: 20}}
-                      source={require('../../assets/header/cross.png')}
-                    />
+                    <Image style={{width: 20, height: 20}} source={CROSS} />
                   </TouchableOpacity>
                 </View>
               </View>

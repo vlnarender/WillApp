@@ -16,6 +16,7 @@ import CreditCard from './noCreditCard';
 import {DEV_CONFIGS} from '../util/constant';
 import {COOMMON_API} from '../util/api';
 let styleCss = require('../GlobalStyle');
+import {CROSS, HEADER_unchecked} from '../_helpers/ImageProvide';
 
 const MyPaymentMethod = (props) => {
   const [checked, setChecked] = useState(0);
@@ -95,10 +96,7 @@ const MyPaymentMethod = (props) => {
                   <View style={{flex: 1, alignItems: 'flex-end'}}>
                     <TouchableOpacity
                       onPress={() => props.navigation.navigate('Home')}>
-                      <Image
-                        style={{width: 20, height: 20}}
-                        source={require('../../assets/header/cross.png')}
-                      />
+                      <Image style={{width: 20, height: 20}} source={CROSS} />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -156,7 +154,7 @@ const MyPaymentMethod = (props) => {
                               style={styles.radioAlign}>
                               <Image
                                 style={styles.imgSize}
-                                source={require('../../assets/header/unchecked.png')}
+                                source={HEADER_unchecked}
                               />
                               <View>
                                 <Text
@@ -212,10 +210,7 @@ const MyPaymentMethod = (props) => {
                   <View style={{flex: 1, alignItems: 'flex-end'}}>
                     <TouchableOpacity
                       onPress={() => props.navigation.navigate('Home')}>
-                      <Image
-                        style={{width: 20, height: 20}}
-                        source={require('../../assets/header/cross.png')}
-                      />
+                      <Image style={{width: 20, height: 20}} source={CROSS} />
                     </TouchableOpacity>
                   </View>
                 </View>

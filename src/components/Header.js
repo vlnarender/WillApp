@@ -3,6 +3,7 @@ import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 let styleCss = require('../GlobalStyle');
 import {connect} from 'react-redux';
+import {HEADER_MENU_ICON, HEADER_SMALL_LOGO} from '../_helpers/ImageProvide';
 
 const Header = (props) => {
   const navigation = useNavigation();
@@ -10,18 +11,12 @@ const Header = (props) => {
     <View style={styleCss.header}>
       <View style={{flex: 1, alignSelf: 'center', alignItems: 'center'}}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <Image
-            style={{width: 20, height: 15}}
-            source={require('../../assets/header/menuIcon.png')}
-          />
+          <Image style={{width: 20, height: 15}} source={HEADER_MENU_ICON} />
         </TouchableOpacity>
       </View>
       <View style={{flex: 4, alignItems: 'center', alignSelf: 'center'}}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <Image
-            style={{width: 50, height: 50}}
-            source={require('../../assets/header/smallLogo.png')}
-          />
+          <Image style={{width: 50, height: 50}} source={HEADER_SMALL_LOGO} />
         </TouchableOpacity>
       </View>
       <View

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Image, StyleSheet, ImagePropTypes} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {CROSS} from '../_helpers/ImageProvide';
 import {Calendar, CalendarList} from 'react-native-calendars';
 import moment from 'moment';
 import _ from 'lodash';
@@ -66,10 +67,7 @@ const OneDay = (props) => {
           <ScrollView>
             <View style={styles.topBg}>
               <View style={styles.arrow}>
-                <Image
-                  style={styles.arrowImg}
-                  source={require('../../assets/header/cross.png')}
-                />
+                <Image style={styles.arrowImg} source={CROSS} />
               </View>
 
               <View style={styles.roundShap}>

@@ -8,7 +8,7 @@ import {addressListActions} from '../actions/addresslist';
 import {addAddressActions} from '../actions/addaddress';
 import AsyncStorage from '@react-native-community/async-storage';
 let styleCss = require('../GlobalStyle');
-import {ARROW_LEFT, LOGO} from '../_helpers/ImageProvide';
+import {ARROW_LEFT, HEADER_unchecked, LOGO} from '../_helpers/ImageProvide';
 const Addaddress = (props) => {
   const [basic, setBasic] = useState('');
   const [complete, setComplete] = useState('');
@@ -120,10 +120,7 @@ const Addaddress = (props) => {
                     setChecked(!checked);
                   }}
                   style={styles.radioAlign}>
-                  <Image
-                    style={styles.imgSize}
-                    source={require('../../assets/header/unchecked.png')}
-                  />
+                  <Image style={styles.imgSize} source={HEADER_unchecked} />
                   <View>
                     <Text numberOfLines={1} style={styles.radioText}>
                       Make this my default address?

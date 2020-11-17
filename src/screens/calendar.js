@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import {CROSS} from '../_helpers/ImageProvide';
+
 import {useFocusEffect} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {CalendarList} from 'react-native-calendars';
@@ -143,10 +144,7 @@ const OneDayCalender = (props) => {
                     props.navigation.navigate('Home');
                     setSelect(false);
                   }}>
-                  <Image
-                    style={styles.arrowImg}
-                    source={require('../../assets/header/cross.png')}
-                  />
+                  <Image style={styles.arrowImg} source={CROSS} />
                 </TouchableOpacity>
               </View>
 

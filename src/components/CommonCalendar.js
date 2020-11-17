@@ -18,11 +18,9 @@ import {useNavigation} from '@react-navigation/native';
 import {programPlanActions} from '../actions/programPlan';
 import {dietCompanyPlanActions} from '../actions/dietPlan';
 import {cartActions} from '../actions/cart';
+import {CROSS} from '../_helpers/ImageProvide';
 const {height, width} = Dimensions.get('window');
-import Toast from 'react-native-simple-toast';
-import {ADD_AND_UPDATE_API} from '../util/api';
 import moment from 'moment';
-import {parseInt} from 'lodash';
 import Loader from './Loader';
 const CommonCalendar = (props) => {
   const navigation = useNavigation();
@@ -125,10 +123,7 @@ const CommonCalendar = (props) => {
       <View style={styles.container}>
         <View style={styles.close}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              style={{width: 20, height: 20}}
-              source={require('../../assets/header/cross.png')}
-            />
+            <Image style={{width: 20, height: 20}} source={CROSS} />
           </TouchableOpacity>
         </View>
         <View style={styles.circle}>

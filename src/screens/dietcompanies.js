@@ -14,6 +14,7 @@ import {labelActions} from '../actions/label';
 import {homeActions} from '../actions/home';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import {HEADER_MENU_ICON, HEADER_SMALL_LOGO} from '../_helpers/ImageProvide';
 let styleCss = require('../GlobalStyle');
 
 const DATA3 = [
@@ -85,7 +86,7 @@ const Dietcompanies = (props) => {
                 <TouchableOpacity onPress={() => navigation.openDrawer()}>
                   <Image
                     style={{width: 20, height: 15}}
-                    source={require('../../assets/header/menuIcon.png')}
+                    source={HEADER_MENU_ICON}
                   />
                 </TouchableOpacity>
               </View>
@@ -93,7 +94,7 @@ const Dietcompanies = (props) => {
                 style={{flex: 4, alignItems: 'center', alignSelf: 'center'}}>
                 <Image
                   style={{width: 50, height: 50}}
-                  source={require('../../assets/header/smallLogo.png')}
+                  source={HEADER_SMALL_LOGO}
                 />
               </View>
               <View style={{flex: 1}}></View>

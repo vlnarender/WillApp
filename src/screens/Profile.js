@@ -18,6 +18,7 @@ let styleCss = require('../GlobalStyle');
 import {DEV_CONFIGS} from '../util/constant';
 import {COOMMON_API} from '../util/api';
 import Header from '../components/Header';
+import {HEADER_PROFILE_IMG} from '../_helpers/ImageProvide';
 const Profile = (props) => {
   const data = [
     {
@@ -126,7 +127,7 @@ const Profile = (props) => {
                     ) : (
                       <Image
                         style={{width: '100%', height: '100%'}}
-                        source={require('../../assets/header/profileimg.png')}
+                        source={HEADER_PROFILE_IMG}
                       />
                     )}
                   </View>
