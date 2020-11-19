@@ -15,6 +15,7 @@ import Toast from 'react-native-simple-toast';
 import {ScrollView} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import {registerActions} from '../actions/registrationAction';
+import {loginActions} from '../actions/login';
 import RoundCheckbox from 'rn-round-checkbox';
 import AsyncStorage from '@react-native-community/async-storage';
 const FieldWrapper = ({children, label, formikProps, formikKey}) => (
@@ -415,10 +416,17 @@ const RegisterScreen = (props) => {
                       marginBottom: 0,
                       marginTop: 0,
                     }}>
-                    <View
+                    <TouchableOpacity
                       style={{height: 50}}
                       onPress={() => {
-                        props.navigation.navigate('Login');
+                        props.logAction(
+                          {
+                            device_token: 'nnn',
+                            device_type: '2',
+                            language: 'en',
+                          },
+                          props.navigation,
+                        );
                       }}>
                       <Text
                         style={{
@@ -426,9 +434,9 @@ const RegisterScreen = (props) => {
                           color: '#f2ae88',
                           fontWeight: 'bold',
                         }}>
-                        Continue as a guest
+                        <Text> Continue as a guest</Text>
                       </Text>
-                    </View>
+                    </TouchableOpacity>
                   </View>
                   <TouchableOpacity>
                     <View
@@ -493,6 +501,7 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
+  logAction: loginActions.loginUserAction,
   registerUserAction: registerActions.registerUserAction,
 };
 

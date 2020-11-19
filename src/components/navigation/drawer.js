@@ -140,12 +140,15 @@ const DrawerNavigator = (props) => {
         navigation: 'LogOut',
       },
     ];
-    const navigationAction = (navigation) => {
+    const navigationAction = async (navigation) => {
+      let userType = await AsyncStorage.getItem('UserType');
       switch (navigation) {
         case 'LogOut':
           Alert.alert(
             props.labelData.lout_out,
-            'Do you want to logout?',
+            userType === 'Guest'
+              ? 'Please register first'
+              : 'Do you want to logout?',
             [
               {
                 text: 'Cancel',
@@ -156,7 +159,9 @@ const DrawerNavigator = (props) => {
               {
                 text: 'Confirm',
                 onPress: () => {
-                  signOut(props);
+                  userType === 'Guest'
+                    ? props.navigation.navigate('Register')
+                    : signOut(props);
                 },
               },
             ],

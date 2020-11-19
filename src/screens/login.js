@@ -323,9 +323,21 @@ const LoginScreen = (props) => {
                         textAlign: 'center',
                       }}>
                       <View style={{height: 50}}>
-                        <Text style={{fontSize: 16, color: '#f2ae88'}}>
-                          Continouse as guest
-                        </Text>
+                        <TouchableOpacity
+                          onPress={() => {
+                            props.logAction(
+                              {
+                                device_token: 'nnn',
+                                device_type: '2',
+                                language: 'en',
+                              },
+                              props.navigation,
+                            );
+                          }}>
+                          <Text style={{fontSize: 16, color: '#f2ae88'}}>
+                            Continouse as guest
+                          </Text>
+                        </TouchableOpacity>
                       </View>
                     </View>
 

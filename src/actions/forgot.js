@@ -11,7 +11,6 @@ function forgotUserAction(data, navigation) {
     USER_API(data, 'user/set-new-password').then(
       (data) => {
         if (data.success) {
-          //AsyncStorage.setItem('token',data.data.authorization_token)
           dispatch(success(data));
           navigation.navigate('Login');
         } else {
