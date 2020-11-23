@@ -16,9 +16,14 @@ export const loginActions = {
 function loginUserAction(data, navigation) {
   return (dispatch) => {
     dispatch(request());
-    console.log(data);
-    AsyncStorage.setItem('UserType', data.device_type === 1 ? 'User' : 'Guest');
-    let path = data.device_type === 1 ? 'login' : 'guest/login';
+    AsyncStorage.setItem(
+      'UserType',
+      parseInt(data.device_type) === 1 ? 'User' : 'Guest',
+    );
+
+    let path = parseInt(data.device_type) === 1 ? 'login' : 'guest/login';
+    console.log(data, path);
+
     USER_API(data, path).then(
       (data) => {
         console.log(JSON.stringify(data));

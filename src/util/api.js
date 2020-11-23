@@ -107,6 +107,7 @@ export const GET_API = async (API_NAME) => {
 /***** common USER api which need only form data for response *****/
 
 export const USER_API = (data, API_NAME) => {
+  // console.log(API_NAME, 'USER_API', data);
   let formBody = [];
   for (let property in data) {
     let encodedKey = encodeURIComponent(property);

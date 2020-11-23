@@ -138,86 +138,84 @@ const OtpScreen = (props) => {
   };
   return (
     <SafeAreaView>
-      <ScrollView>
-        <View
+      <View
+        style={{
+          marginTop: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 50,
+        }}>
+        <Image source={require('../../assets/login/logo.png')} />
+        <Text
           style={{
-            marginTop: 0,
-            justifyContent: 'center',
-            alignItems: 'center',
+            color: '#f2ae88',
+            fontSize: 15,
+            textAlign: 'center',
           }}>
-          <Image source={require('../../assets/login/logo.png')} />
-          <Text
-            style={{
-              color: '#f2ae88',
-              marginBottom: 30,
-              fontSize: 15,
-              textAlign: 'center',
-            }}>
-            A verification code sent to your email ending with **{email}**
-          </Text>
+          A verification code sent to your email ending with **{email}**
+        </Text>
 
-          <Formik
-            initialValues={{
-              // username: '',
-              password: '',
-            }}
-            onSubmit={(values, actions) => {
-              var user = {};
-              user.verification_code = values.password;
-              user.user_id = userid;
-              user.device_token = device_token;
-              user.device_type = device_type;
-              user.grant_type = 'password';
-              props.otpAction(user, props.navigation);
-              actions.setSubmitting(true);
-            }}
-            validationSchema={validationSchema}>
-            {(formikProps) => (
+        <Formik
+          initialValues={{
+            // username: '',
+            password: '',
+          }}
+          onSubmit={(values, actions) => {
+            var user = {};
+            user.verification_code = values.password;
+            user.user_id = userid;
+            user.device_token = device_token;
+            user.device_type = device_type;
+            user.grant_type = 'password';
+            props.otpAction(user, props.navigation);
+            actions.setSubmitting(true);
+          }}
+          validationSchema={validationSchema}>
+          {(formikProps) => (
+            <React.Fragment>
+              <StyledInputPass
+                icon={'pass'}
+                formikProps={formikProps}
+                formikKey="password"
+                placeholder="Verification Code"
+                secureTextEntry
+              />
+
               <React.Fragment>
-                <StyledInputPass
-                  icon={'pass'}
-                  formikProps={formikProps}
-                  formikKey="password"
-                  placeholder="Verification Code"
-                  secureTextEntry
-                />
-
-                <React.Fragment>
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                      marginTop: 25,
-                    }}>
-                    <TouchableOpacity onPress={formikProps.handleSubmit}>
-                      <View
-                        style={{
-                          backgroundColor: '#f2ae88',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          borderRadius: 15,
-                          padding: 10,
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    marginTop: 25,
+                  }}>
+                  <TouchableOpacity onPress={formikProps.handleSubmit}>
+                    <View
+                      style={{
+                        backgroundColor: '#f2ae88',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 15,
+                        padding: 10,
+                        width: 300,
+                        height: 50,
+                        shadowColor: 'red',
+                        shadowRadius: 16,
+                        shadowOpacity: 10,
+                        shadowOffset: {
                           width: 300,
                           height: 50,
-                          shadowColor: 'red',
-                          shadowRadius: 16,
-                          shadowOpacity: 10,
-                          shadowOffset: {
-                            width: 300,
-                            height: 50,
-                          },
-                          elevation: 12,
-                        }}>
-                        <Text style={{color: 'white'}}>Submit</Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </React.Fragment>
+                        },
+                        elevation: 12,
+                      }}>
+                      <Text style={{color: 'white'}}>Submit</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </React.Fragment>
-            )}
-          </Formik>
-        </View>
-      </ScrollView>
+            </React.Fragment>
+          )}
+        </Formik>
+      </View>
     </SafeAreaView>
   );
 };
