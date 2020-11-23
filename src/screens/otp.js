@@ -41,8 +41,7 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     borderWidth: 1,
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
-    elevation: 20,
+    shadowOpacity: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',

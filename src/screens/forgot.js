@@ -29,16 +29,21 @@ const StyledInput = ({label, formikProps, formikKey, icon, ...rest}) => {
   const inputStyles = {
     borderColor: '#e0e0e0',
     padding: 10,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
     paddingLeft: 50,
     textAlign: 'left',
     height: 50,
     width: 300,
     borderWidth: 1,
+    shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 5,
-    elevation: 5,
+    backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
+    marginTop: -15,
     fontStyle: 'italic',
   };
   if (formikProps.touched[formikKey] && formikProps.errors[formikKey]) {
@@ -86,7 +91,6 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 8,
-    elevation: 20,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -103,6 +107,13 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
       formikKey={formikKey}
       formikProps={formikProps}
       icon={icon}>
+      <TextInput
+        style={inputStyles}
+        inlineImageLeft="email"
+        onChangeText={formikProps.handleChange(formikKey)}
+        onBlur={formikProps.handleBlur(formikKey)}
+        {...rest}
+      />
       <Image
         style={{
           zIndex: 1000,
@@ -111,13 +122,6 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
           position: 'absolute',
         }}
         source={require('../../assets/login/pass.png')}
-      />
-      <TextInput
-        style={inputStyles}
-        inlineImageLeft="email"
-        onChangeText={formikProps.handleChange(formikKey)}
-        onBlur={formikProps.handleBlur(formikKey)}
-        {...rest}
       />
     </FieldWrapper>
   );
@@ -163,10 +167,9 @@ const ForgotScreen = (props) => {
     Toast.showWithGravity(props.forgotMessage, Toast.LONG, Toast.CENTER);
   }
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
       <View
         style={{
-          marginTop: 0,
           justifyContent: 'center',
           alignItems: 'center',
         }}>
@@ -174,7 +177,6 @@ const ForgotScreen = (props) => {
         <Text
           style={{
             color: '#f2ae88',
-            marginBottom: 30,
             fontSize: 23,
             textAlign: 'center',
           }}>
@@ -185,7 +187,6 @@ const ForgotScreen = (props) => {
           style={{
             width: '50%',
             color: '#f2ae88',
-            marginBottom: 30,
             fontSize: 15,
             textAlign: 'center',
           }}>
@@ -234,7 +235,6 @@ const ForgotScreen = (props) => {
                   style={{
                     justifyContent: 'center',
                     textAlign: 'center',
-                    marginTop: 25,
                   }}>
                   <TouchableOpacity onPress={formikProps.handleSubmit}>
                     <View
@@ -253,9 +253,11 @@ const ForgotScreen = (props) => {
                           width: 300,
                           height: 50,
                         },
-                        elevation: 12,
+                        elevation: 2,
                       }}>
-                      <Text style={{color: 'white'}}>Submit</Text>
+                      <Text style={{color: 'white', fontWeight: 'bold'}}>
+                        Submit
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -268,44 +270,6 @@ const ForgotScreen = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  inner: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-    padding: 20,
-  },
-  bStyle: {
-    marginTop: 10,
-    paddingTop: 15,
-    paddingBottom: 15,
-    marginLeft: 30,
-    marginRight: 30,
-    backgroundColor: '#00BCD4',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#fff',
-  },
-
-  btnContainer: {
-    marginTop: 40,
-    alignSelf: 'stretch',
-  },
-  inputContainer: {
-    height: 40,
-    alignSelf: 'stretch',
-    textAlign: 'center',
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  banner: {
-    alignSelf: 'stretch',
-  },
-});
 const mapStateToProps = (state) => ({
   forgotError: state.forgotReducer.forgotError,
   forgotMessage: state.forgotReducer.forgotMessage,

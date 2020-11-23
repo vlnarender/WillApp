@@ -142,7 +142,6 @@ const DrawerNavigator = (props) => {
     ];
     const navigationAction = async (navigation) => {
       let userType = await AsyncStorage.getItem('UserType');
-      console.log('userType', userType);
       switch (navigation) {
         case 'LogOut':
           Alert.alert(

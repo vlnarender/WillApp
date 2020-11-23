@@ -26,19 +26,24 @@ const FieldWrapper = ({children, label, formikProps, formikKey}) => (
 
 const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
   const inputStyles = {
+    borderColor: '#e0e0e0',
+    padding: 10,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
     paddingLeft: 50,
-    marginBottom: 5,
     textAlign: 'left',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset: {width: 20, height: 20},
+    shadowColor: 'black',
     shadowOpacity: 5,
-    elevation: 10,
+    backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
+    marginTop: -15,
     fontStyle: 'italic',
-    borderColor: '#ccc',
   };
   const iconStyle = {
     marginTop: 20,
@@ -164,7 +169,6 @@ const ForgotOtpScreen = (props) => {
                   style={{
                     justifyContent: 'center',
                     textAlign: 'center',
-                    marginTop: 25,
                   }}>
                   <TouchableOpacity onPress={formikProps.handleSubmit}>
                     <View
@@ -177,12 +181,13 @@ const ForgotOtpScreen = (props) => {
                         width: 300,
                         height: 50,
                         shadowColor: 'red',
-                        shadowRadius: 16,
+                        shadowRadius: 10,
                         shadowOpacity: 5,
-
-                        elevation: 12,
+                        elevation: 2,
                       }}>
-                      <Text style={{color: 'white'}}>Submit</Text>
+                      <Text style={{color: 'white', fontWeight: 'bold'}}>
+                        Submit
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 </View>

@@ -34,6 +34,7 @@ const StyledInputName = ({label, formikProps, formikKey, icon, ...rest}) => {
     padding: 10,
     paddingTop: 10,
     paddingRight: 10,
+    elevation: 5,
     paddingBottom: 10,
     paddingLeft: 50,
     textAlign: 'left',
@@ -42,8 +43,7 @@ const StyledInputName = ({label, formikProps, formikKey, icon, ...rest}) => {
     borderWidth: 1,
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
-    elevation: 20,
+    shadowOpacity: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -91,6 +91,7 @@ const StyledInputPhone = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
+    elevation: 5,
     textAlign: 'left',
     height: 50,
     width: 300,
@@ -98,7 +99,7 @@ const StyledInputPhone = ({label, formikProps, formikKey, icon, ...rest}) => {
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 8,
-    elevation: 20,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -153,7 +154,7 @@ const StyledInput = ({label, formikProps, formikKey, icon, ...rest}) => {
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 8,
-    elevation: 20,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -208,7 +209,7 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 8,
-    elevation: 20,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
