@@ -1,11 +1,8 @@
 import {userConstants} from '../actions/actionTypes';
-// import {AsyncStorage} from 'react-native';
 
 const initialState = {
   forgotData: {},
   loading: false,
-  //isSignout: false,
-  //userToken: null,
   forgotError: '',
   forgotMessage: '',
 };
@@ -21,26 +18,9 @@ export default function (state = initialState, action) {
         ...state,
         forgotData: action.user.data,
         loading: false,
-        //showOtp: true,
-        //userToken: action.user.accessToken,
         forgotMessage: action.user.message,
       };
 
-    /*  case userConstants.TOKEN_RESTORE:
-      return {
-        ...state,
-        userData: state.userData,
-        userToken: action.token,
-      };
-
-    case userConstants.LOGOUT_REQUEST:
-      return {
-        ...state,
-        userData: '',
-        loading: false,
-        showOtp: true,
-        userToken: '',
-      }; */
     case userConstants.FORGOT_FAILURE:
       return {
         ...state,

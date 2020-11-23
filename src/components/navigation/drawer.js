@@ -15,7 +15,9 @@ import {
   DrawerItem,
   useIsDrawerOpen,
 } from '@react-navigation/drawer';
-import {COOMMON_API} from '../util/api';
+import {COOMMON_API} from '../../util/api';
+import Toast from 'react-native-simple-toast';
+import AsyncStorage from '@react-native-community/async-storage';
 import {DrawerActions, CommonActions} from '@react-navigation/native';
 import {
   SettingStackNavigator,
@@ -29,18 +31,20 @@ import {
   CommonCalendarStackNavigator,
 } from './stackNavigator';
 import BottomTabNavigator from './navigation';
-import OneDayCalender from '../screens/calendar';
-import Toast from 'react-native-simple-toast';
-import MultiSubs from '../screens/multiSub/multiSubs';
-import PlanList from '../screens/multiSub/PlanList';
-import AsyncStorage from '@react-native-community/async-storage';
-import PlanListProgram from '../screens/programs/PlanListProgram';
-import MultiSubCalendar from '../screens/multiSub/multisubcalendar';
-import OneDayPlanMealListing from '../screens/onedayplanmeallisting';
-import MealSelection from '../screens/programs/MealSelection';
-import CartComponent from '../screens/Cart';
-import MultiMealSelection from '../screens/multiSub/MultiMealSelection';
-let styleCss = require('../GlobalStyle');
+import OneDayCalender from '../../screens/calendar';
+import MultiSubs from '../../screens/multiSub/multiSubs';
+import PlanList from '../../screens/multiSub/PlanList';
+import PlanListProgram from '../../screens/programs/PlanListProgram';
+import MultiSubCalendar from '../../screens/multiSub/multisubcalendar';
+import OneDayPlanMealListing from '../../screens/onedayplanmeallisting';
+import MealSelection from '../../screens/programs/MealSelection';
+import CartComponent from '../../screens/Cart';
+import MultiMealSelection from '../../screens/multiSub/MultiMealSelection';
+import PaymentMethod from '../PaymentMethod';
+import GetCardDetail from '../GetCardDetail';
+import AddNewCard from '../AddNewCard';
+import Conformation from '../Conformation';
+let styleCss = require('../../GlobalStyle');
 const Drawer = createDrawerNavigator();
 function FocusAwareStatusBar(props) {
   const isDrawerOpen = useIsDrawerOpen();
@@ -102,46 +106,49 @@ const DrawerNavigator = (props) => {
     const drowerList = [
       {
         lable: props.labelData.my_profile,
-        image: require('../../assets/menu/user.png'),
+        image: require('../../../assets/menu/user.png'),
         navigation: 'Profile',
       },
       {
         lable: props.labelData.my_orders,
-        image: require('../../assets/menu/myorder.png'),
+        image: require('../../../assets/menu/myorder.png'),
         navigation: 'Profile',
       },
       {
         lable: props.labelData.my_add,
-        image: require('../../assets/menu/location.png'),
+        image: require('../../../assets/menu/location.png'),
         navigation: 'Address',
       },
       {
         lable: props.labelData.my_payment_methods,
-        image: require('../../assets/menu/card.png'),
+        image: require('../../../assets/menu/card.png'),
         navigation: 'Card',
       },
       {
         lable: props.labelData.setting,
-        image: require('../../assets/menu/settings.png'),
+        image: require('../../../assets/menu/settings.png'),
         navigation: 'Setting',
       },
       {
         lable: props.labelData.notification,
-        image: require('../../assets/menu/bell.png'),
+        image: require('../../../assets/menu/bell.png'),
         navigation: 'Profile',
       },
       {
         lable: props.labelData.lout_out,
-        image: require('../../assets/menu/logout.png'),
+        image: require('../../../assets/menu/logout.png'),
         navigation: 'LogOut',
       },
     ];
-    const navigationAction = (navigation) => {
+    const navigationAction = async (navigation) => {
+      let userType = await AsyncStorage.getItem('UserType');
       switch (navigation) {
         case 'LogOut':
           Alert.alert(
             props.labelData.lout_out,
-            'Do you want to logout?',
+            userType === 'Guest'
+              ? 'Please register first'
+              : 'Do you want to logout?',
             [
               {
                 text: 'Cancel',
@@ -152,7 +159,9 @@ const DrawerNavigator = (props) => {
               {
                 text: 'Confirm',
                 onPress: () => {
-                  signOut(props);
+                  userType === 'Guest'
+                    ? props.navigation.navigate('Register')
+                    : signOut(props);
                 },
               },
             ],
@@ -199,7 +208,7 @@ const DrawerNavigator = (props) => {
                         marginLeft: 70,
                         marginBottom: 20,
                       }}
-                      source={require('../../assets/menu/عربي.png')}
+                      source={require('../../../assets/menu/عربي.png')}
                     />
                   </View>
                   <View style={{marginHorizontal: 18}}>
@@ -220,7 +229,7 @@ const DrawerNavigator = (props) => {
                     onPress={() => props.navigation.closeDrawer()}>
                     <Image
                       style={{width: 35, height: 20, marginTop: 50}}
-                      source={require('../../assets/menu/arrow_right.png')}
+                      source={require('../../../assets/menu/arrow_right.png')}
                     />
                   </TouchableOpacity>
                 </View>
@@ -235,8 +244,29 @@ const DrawerNavigator = (props) => {
           options={{swipeEnabled: false}}
         />
         <Drawer.Screen
+          name="Conformation"
+          component={Conformation}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
+          name="GetCardDetail"
+          component={GetCardDetail}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
+          name="AddNewCard"
+          component={AddNewCard}
+          options={{swipeEnabled: false}}
+        />
+
+        <Drawer.Screen
           name="CartComponent"
           component={CartComponent}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
+          name="PaymentMethod"
+          component={PaymentMethod}
           options={{swipeEnabled: false}}
         />
         <Drawer.Screen

@@ -170,7 +170,6 @@ const PlanList = (props) => {
                             <TouchableOpacity
                               style={{flexDirection: 'row'}}
                               onPress={() => {
-                                console.log(JSON.stringify(item));
                                 let arrayData = item;
                                 arrayData.package_diet_package = arrayData.package_diet_package.map(
                                   function (el) {
@@ -245,11 +244,13 @@ const PlanList = (props) => {
                 <TouchableOpacity
                   style={styles.checkout}
                   onPress={() => {
-                    props.multiSub_LIST_ITEM({
-                      ...finalSelection,
-                      plan_package: selectedButton,
-                    });
-                    props.navigation.navigate('MultiMealSelection');
+                    if (selectedButton.planId !== null) {
+                      props.multiSub_LIST_ITEM({
+                        ...finalSelection,
+                        plan_package: selectedButton,
+                      });
+                      props.navigation.navigate('MultiMealSelection');
+                    }
                   }}>
                   <Text style={styles.checkoutText}>Continue</Text>
                 </TouchableOpacity>

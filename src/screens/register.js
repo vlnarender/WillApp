@@ -15,6 +15,7 @@ import Toast from 'react-native-simple-toast';
 import {ScrollView} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import {registerActions} from '../actions/registrationAction';
+import {loginActions} from '../actions/login';
 import RoundCheckbox from 'rn-round-checkbox';
 import AsyncStorage from '@react-native-community/async-storage';
 const FieldWrapper = ({children, label, formikProps, formikKey}) => (
@@ -33,6 +34,7 @@ const StyledInputName = ({label, formikProps, formikKey, icon, ...rest}) => {
     padding: 10,
     paddingTop: 10,
     paddingRight: 10,
+    elevation: 5,
     paddingBottom: 10,
     paddingLeft: 50,
     textAlign: 'left',
@@ -41,8 +43,7 @@ const StyledInputName = ({label, formikProps, formikKey, icon, ...rest}) => {
     borderWidth: 1,
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
-    elevation: 20,
+    shadowOpacity: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -90,6 +91,7 @@ const StyledInputPhone = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
+    elevation: 5,
     textAlign: 'left',
     height: 50,
     width: 300,
@@ -97,7 +99,7 @@ const StyledInputPhone = ({label, formikProps, formikKey, icon, ...rest}) => {
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 8,
-    elevation: 20,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -152,7 +154,7 @@ const StyledInput = ({label, formikProps, formikKey, icon, ...rest}) => {
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 8,
-    elevation: 20,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -207,7 +209,7 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 8,
-    elevation: 20,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -415,10 +417,17 @@ const RegisterScreen = (props) => {
                       marginBottom: 0,
                       marginTop: 0,
                     }}>
-                    <View
+                    <TouchableOpacity
                       style={{height: 50}}
                       onPress={() => {
-                        props.navigation.navigate('Login');
+                        props.logAction(
+                          {
+                            device_token: 'nnn',
+                            device_type: '2',
+                            language: 'en',
+                          },
+                          props.navigation,
+                        );
                       }}>
                       <Text
                         style={{
@@ -426,9 +435,9 @@ const RegisterScreen = (props) => {
                           color: '#f2ae88',
                           fontWeight: 'bold',
                         }}>
-                        Continue as a guest
+                        <Text> Continue as a guest</Text>
                       </Text>
-                    </View>
+                    </TouchableOpacity>
                   </View>
                   <TouchableOpacity>
                     <View
@@ -493,6 +502,7 @@ const mapStateToProps = (state) => ({
 });
 
 const actionCreators = {
+  logAction: loginActions.loginUserAction,
   registerUserAction: registerActions.registerUserAction,
 };
 

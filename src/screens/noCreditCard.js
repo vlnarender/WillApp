@@ -31,7 +31,7 @@ const NoCreditCard = () => {
           <View style={{ flex:1, alignItems:'flex-end'}}>
                 <Image
               style={{width:20, height: 20}}
-              source={require('../../assets/header/cross.png')}
+              source={CROSS}
             />
           </View>
       </View> */}

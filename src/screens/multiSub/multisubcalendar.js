@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
+import moment from 'moment';
 import {connect} from 'react-redux';
 import {ScrollView} from 'react-native-gesture-handler';
 import {CalendarList} from 'react-native-calendars';
@@ -93,7 +94,36 @@ const MultiSubCalender = (props) => {
       );
     }
   };
+  const getDisabledDates = () => {
+    const disabledDates = {};
+    const start = moment(new Date());
+    const end = moment(new Date()).add(2, 'days');
+    for (
+      let m = moment(start).add(1, 'days');
+      m.diff(end, 'days') <= 0;
+      m.add(1, 'days')
+    ) {
+      disabledDates[m.format('YYYY-MM-DD')] = {
+        textColor: '#f2ae88',
+        disabled: true,
+        disableTouchEvent: true,
+        customStyles: {
+          container: {
+            backgroundColor:
+              new Date().getDate() === new Date(m).getDate()
+                ? '#f2ae88'
+                : '#75798e',
+          },
+          text: {
+            color: '#fff',
+            fontWeight: 'bold',
+          },
+        },
+      };
+    }
 
+    return disabledDates;
+  };
   const renderCalendarWithSelectableDate = () => {
     return (
       <>
@@ -155,7 +185,7 @@ const MultiSubCalender = (props) => {
                 horizontal={true}
                 pagingEnabled={true}
                 scrollEnabled={true}
-                minDate={new Date().setDate(new Date().getDate() + 3)}
+                minDate={new Date()}
                 markingType={'period'}
                 disableAllTouchEventsForDisabledDays
                 onDayPress={onDayPress}
@@ -167,6 +197,9 @@ const MultiSubCalender = (props) => {
                   dayTextColor: 'white',
                   monthTextColor: 'white',
                   selectedDayBackgroundColor: '#333248',
+                }}
+                markedDates={{
+                  ...getDisabledDates(),
                 }}
               />
             </View>

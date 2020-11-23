@@ -1,36 +1,35 @@
 import React, {Component} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import LoginScreen from '../screens/login';
-import OtpScreen from '../screens/otp';
-import ForgotOtpScreen from '../screens/forgototp';
-import ForgotScreen from '../screens/forgot';
-import RegisterScreen from '../screens/register';
-import HomeScreen from '../screens/home';
-import EmailScreen from '../screens/email';
-import Profile from '../screens/Profile';
-import Favourite from '../screens/Favourite';
-import Offers from '../screens/Offers';
-import Subscription from '../screens/Subscription';
-import ProfileEdit from '../screens/ProfileEdit';
-import Setting from '../screens/Setting';
-import Changepassword from '../screens/changepassword';
-import Changeotp from '../screens/changeotp';
-import Changeemail from '../screens/changeemail';
-import Spalsh from '../screens/anim-screen/index';
-import MyPaymentMethod from '../screens/myPaymentMethod';
-import Dietcompanies from '../screens/dietcompanies';
-import Addresslist from '../screens/addresslist';
-import Addaddress from '../screens/addaddress';
-import Editaddress from '../screens/editaddress';
-import OneDayPlan from '../screens/oneplan';
+import LoginScreen from '../../screens/login';
+import OtpScreen from '../../screens/otp';
+import ForgotOtpScreen from '../../screens/forgototp';
+import ForgotScreen from '../../screens/forgot';
+import RegisterScreen from '../../screens/register';
+import HomeScreen from '../../screens/home';
+import EmailScreen from '../../screens/email';
+import Profile from '../../screens/Profile';
+import Favourite from '../../screens/Favourite';
+import Offers from '../../screens/Offers';
+import Subscription from '../../screens/Subscription';
+import ProfileEdit from '../../screens/ProfileEdit';
+import Setting from '../../screens/Setting';
+import Changepassword from '../../screens/changepassword';
+import Changeotp from '../../screens/changeotp';
+import Changeemail from '../../screens/changeemail';
+import Spalsh from '../../screens/anim-screen/index';
+import MyPaymentMethod from '../../screens/myPaymentMethod';
+import Dietcompanies from '../../screens/dietcompanies';
+import Addresslist from '../../screens/addresslist';
+import Addaddress from '../../screens/addaddress';
+import Editaddress from '../../screens/editaddress';
+import OneDayPlan from '../../screens/oneplan';
 
-import TermCondition from '../screens/termCondition';
-import PrivacyPolicy from '../screens/privacyPolicy';
-import FaqSupport from '../screens/faqSupport';
-import CommonCalendar from '../components/CommonCalendar';
-import CartComponent from './CartComponent';
-import ProgramsComponent from '../screens/programs/Programs';
-import PlanListProgram from '../screens/programs/PlanListProgram';
+import TermCondition from '../../screens/termCondition';
+import PrivacyPolicy from '../../screens/privacyPolicy';
+import FaqSupport from '../../screens/faqSupport';
+import CommonCalendar from '../CommonCalendar';
+import CartComponent from '../CartComponent';
+import ProgramsComponent from '../../screens/programs/Programs';
 const Stack = createStackNavigator();
 const screenOptionStyle = {
   cardStyle: {backgroundColor: '#fff', color: '#f2ae88'},
@@ -174,9 +173,9 @@ const TermConditionStackNavigator = () => {
 const CartStackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName={'Cart'}
+      initialRouteName={'CartComponent'}
       screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Cart" component={CartComponent} />
+      <Stack.Screen name="CartComponent" component={CartComponent} />
     </Stack.Navigator>
   );
 };

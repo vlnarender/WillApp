@@ -38,6 +38,8 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import {CART_DATA, DIET_COMPANY, MEAL} from '../../_helpers/globalVeriable';
+import {ADD_TO_THE_CART} from '../../util/api';
+import {cartActions} from '../../actions/cart';
 var temp_diet_company = [];
 
 const MealSelection = (props) => {
@@ -53,6 +55,7 @@ const MealSelection = (props) => {
   const [mealDataInfo, setmealDataInfo] = useState([]);
   const [daysNumber, setDaysNumber] = useState(1);
   const [MealTitle, setMealTitle] = useState([]);
+  const [MealList, setMealList] = useState([]);
   const [getPlan_packages_id, setPlan_packages_id] = useState();
   const selectItem = (index) => {};
 
@@ -95,11 +98,21 @@ const MealSelection = (props) => {
   ) => {
     let tf = true;
     setPlan_packages_id(plan_packages_id);
+    setMealList([
+      ...MealList,
+      {
+        day: daysNumber,
+        plan_diet_package_id: plan_diet_package_id,
+        meal_type: meal_type,
+        meal_id: mealId,
+      },
+    ]);
     setmealDataInfo(
       mealDataInfo.map((x, i) => {
         return index === i
           ? {
               ...x,
+              day: daysNumber % 7 === 0 ? 7 : daysNumber % 7,
               plan_diet_package_id: plan_diet_package_id,
               meal_type: meal_type,
               meal_id: mealId,
@@ -126,6 +139,7 @@ const MealSelection = (props) => {
     } else {
       if (daysNumber % 7 === 0) {
         let myArray = MealTitle;
+
         myArray = myArray.filter(function (obj) {
           return obj.day !== null && obj;
         });
@@ -134,7 +148,7 @@ const MealSelection = (props) => {
           week: daysNumber / 7,
           plan_id: Meal.plan_id,
           plan_packages_id: getPlan_packages_id,
-          meals: myArray,
+          meals: MealList,
         });
         setMealTitle([]);
         // setmealDataInfo(MEAL);
@@ -147,16 +161,18 @@ const MealSelection = (props) => {
             duration: BasicInfo.duration,
             diet_company: temp_diet_company,
             type: props.program_id,
-            geGenderIdnder: GenderId,
+            gender: GenderId,
           };
-          navigation.navigate('CartComponent', {
-            cartData: cartTemp,
+          ADD_TO_THE_CART(cartTemp, 'user/addToCart').then((data) => {
+            props.ListOfItems();
+            navigation.navigate('Cart');
           });
         }
       }
+      // console.log(JSON.stringify(mealDataInfo));
       setMealTitle([...MealTitle, mealDataInfo]);
       initializeMeal();
-      setDaysNumber(daysNumber + 1);
+      (daysNumber === week * 7) != setDaysNumber(daysNumber + 1);
     }
   };
   if (selectedPlan) {
@@ -255,7 +271,7 @@ const MealSelection = (props) => {
                                     meal_list,
                                     mealData.id,
                                     item.meal_name,
-                                    item.meal_type,
+                                    meal_list.meal_type_id,
                                     mealData.plan_diet_package_id,
                                     item.plan_packages_id,
                                     meal_list.meal_id,
@@ -477,5 +493,6 @@ const mapStateToProps = (state) => {
 };
 const mapActionToProps = {
   programPlanAction: programPlanActions.programPlanAction,
+  ListOfItems: cartActions.ListOfItems,
 };
 export default connect(mapStateToProps, mapActionToProps)(MealSelection);

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 let styleCss = require('../GlobalStyle');
+import {CROSS} from '../_helpers/ImageProvide';
 
 const Subscription = (props) => {
   const [oldpass, setOldpass] = useState('');
@@ -36,10 +37,7 @@ const Subscription = (props) => {
         <View style={styleCss.mainContainer}>
           <View style={{alignItems: 'flex-end', marginTop: 10}}>
             <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
-              <Image
-                style={{width: 16, height: 16}}
-                source={require('../../assets/header/cross.png')}
-              />
+              <Image style={{width: 16, height: 16}} source={CROSS} />
             </TouchableOpacity>
           </View>
 

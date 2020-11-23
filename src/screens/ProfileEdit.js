@@ -12,6 +12,7 @@ let styleCss = require('../GlobalStyle');
 import {profileActions} from '../actions/profile';
 import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
+import {CROSS, HEADER_unchecked} from '../_helpers/ImageProvide';
 import Toast from 'react-native-simple-toast';
 import {COOMMON_API} from '../util/api';
 const ProfileEdit = (props) => {
@@ -102,10 +103,7 @@ const ProfileEdit = (props) => {
           }}>
           <TouchableOpacity
             onPress={() => props.navigation.navigate('Profile')}>
-            <Image
-              style={{width: 20, height: 20}}
-              source={require('../../assets/header/cross.png')}
-            />
+            <Image style={{width: 20, height: 20}} source={CROSS} />
           </TouchableOpacity>
         </View>
         <View style={{paddingBottom: 30}}>
@@ -189,10 +187,7 @@ const ProfileEdit = (props) => {
                         setChecked(item.id);
                       }}
                       style={styles.radioAlign}>
-                      <Image
-                        style={styles.imgSize}
-                        source={require('../../assets/header/unchecked.png')}
-                      />
+                      <Image style={styles.imgSize} source={HEADER_unchecked} />
                       <View>
                         {checked === item.id ||
                         (checked === item.id &&

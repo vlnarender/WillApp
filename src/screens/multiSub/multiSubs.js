@@ -55,10 +55,7 @@ const MultiSubs = (props) => {
       ]);
     });
 
-    return () => {
-      // Unsubscribe for the focus Listener
-      unsubscribe;
-    };
+    return unsubscribe;
   }, []);
 
   const selectItem = (index) => {

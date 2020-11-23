@@ -280,7 +280,7 @@ const PlanListProgram = (props) => {
                                     setproductId(item.id);
                                     setMeal(item);
                                     setBasicInfo({
-                                      price: item.package_price,
+                                      plan_id: data.plan_id,
                                       plan_type: data.plan_type,
                                       relative_id: data.relative_id,
                                       duration_type: data.duration_type,
@@ -332,6 +332,7 @@ const PlanListProgram = (props) => {
                           return o;
                         },
                       );
+
                       navigation.navigate('MealSelection', {
                         BasicInfo: BasicInfo,
                         selectedPlan: props.selectedPlan,

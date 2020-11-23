@@ -44,10 +44,12 @@ const BottomTabNavigator = (props) => {
               <View>
                 {color === '#f2ae88' ? (
                   <Image
-                    source={require('../../assets/login/profileActive.png')}
+                    source={require('../../../assets/login/profileActive.png')}
                   />
                 ) : (
-                  <Image source={require('../../assets/login/profile.png')} />
+                  <Image
+                    source={require('../../../assets/login/profile.png')}
+                  />
                 )}
               </View>
             ),
@@ -62,10 +64,12 @@ const BottomTabNavigator = (props) => {
               <View>
                 {color === '#f2ae88' ? (
                   <Image
-                    source={require('../../assets/login/favoriteActive.png')}
+                    source={require('../../../assets/login/favoriteActive.png')}
                   />
                 ) : (
-                  <Image source={require('../../assets/login/favorite.png')} />
+                  <Image
+                    source={require('../../../assets/login/favorite.png')}
+                  />
                 )}
               </View>
             ),
@@ -100,10 +104,10 @@ const BottomTabNavigator = (props) => {
                 }}>
                 {color === '#f2ae88' ? (
                   <Image
-                    source={require('../../assets/login/homeActive.png')}
+                    source={require('../../../assets/login/homeActive.png')}
                   />
                 ) : (
-                  <Image source={require('../../assets/login/home.png')} />
+                  <Image source={require('../../../assets/login/home.png')} />
                 )}
               </View>
             ),
@@ -118,10 +122,10 @@ const BottomTabNavigator = (props) => {
               <View>
                 {color === '#f2ae88' ? (
                   <Image
-                    source={require('../../assets/login/offerActive.png')}
+                    source={require('../../../assets/login/offerActive.png')}
                   />
                 ) : (
-                  <Image source={require('../../assets/login/offer.png')} />
+                  <Image source={require('../../../assets/login/offer.png')} />
                 )}
               </View>
             ),
@@ -137,11 +141,11 @@ const BottomTabNavigator = (props) => {
               <View>
                 {color === '#f2ae88' ? (
                   <Image
-                    source={require('../../assets/login/subscriptionActive.png')}
+                    source={require('../../../assets/login/subscriptionActive.png')}
                   />
                 ) : (
                   <Image
-                    source={require('../../assets/login/subscription.png')}
+                    source={require('../../../assets/login/subscription.png')}
                   />
                 )}
               </View>

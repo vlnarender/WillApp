@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 let styleCss = require('../GlobalStyle');
 import {connect} from 'react-redux';
+import {CROSS} from '../_helpers/ImageProvide';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-simple-toast';
@@ -102,10 +103,7 @@ const ChangePassword = (props) => {
             <View style={{alignItems: 'flex-end', marginTop: 10}}>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate('Setting')}>
-                <Image
-                  style={{width: 16, height: 16}}
-                  source={require('../../assets/header/cross.png')}
-                />
+                <Image style={{width: 16, height: 16}} source={CROSS} />
               </TouchableOpacity>
             </View>
 

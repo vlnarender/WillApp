@@ -16,18 +16,16 @@ export const loginActions = {
 function loginUserAction(data, navigation) {
   return (dispatch) => {
     dispatch(request());
-
-    USER_API(data, 'login').then(
+    AsyncStorage.setItem(
+      'UserType',
+      parseInt(data.device_type) === 1 ? 'User' : 'Guest',
+    );
+    let path = parseInt(data.device_type) === 1 ? 'login' : 'guest/login';
+    USER_API(data, path).then(
       (data) => {
+        console.log(JSON.stringify(data));
         if (data.success) {
           //getValue()
-          if (data.data.is_verified == 1) {
-            dispatch(success(data));
-            AsyncStorage.setItem('token', data.data.authorization_token);
-            AsyncStorage.setItem('email', data.data.userdetails.email);
-            AsyncStorage.setItem('verify', 'yes');
-            navigation.navigate('Drawer');
-          }
           if (data.data.is_verified == 0) {
             dispatch(success_verify(data));
             const id = data.data.userdetails.id;
@@ -39,6 +37,12 @@ function loginUserAction(data, navigation) {
             AsyncStorage.setItem('userid', id.toString());
             AsyncStorage.setItem('email', email);
             navigation.navigate('Otp');
+          } else {
+            dispatch(success(data));
+            AsyncStorage.setItem('token', data.data.authorization_token);
+            AsyncStorage.setItem('email', data.data.userdetails.email);
+            AsyncStorage.setItem('verify', 'yes');
+            navigation.navigate('Drawer');
           }
         } else {
           dispatch(failure(data));
