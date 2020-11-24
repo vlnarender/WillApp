@@ -4,10 +4,12 @@
  * @Owner Will
  */
 
+export const PINMARKER = require('../../assets/pinmarker.png');
 export const DELETE_ICON = require('../../assets/delete.png');
 export const CONGRATULATION = require('../../assets/congratulation.png');
 export const ARROW_LEFT = require('../../assets/header/arrowLeft.png');
 export const COMMON_ARROW_LEFT = require('../../assets/arrowLeft.png');
+export const COMMON_ARROW_RIGHT = require('../../assets/arrowRight.png');
 export const ARROW_RIGHT = require('../../assets/header/arrowRight.png');
 export const CAMERA_WHITE = require('../../assets/header/cameraWhite.png');
 export const CART = require('../../assets/header/cart.png');

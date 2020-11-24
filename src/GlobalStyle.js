@@ -45,7 +45,7 @@ module.exports = StyleSheet.create({
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 8,
-    elevation: 20,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -92,6 +92,8 @@ module.exports = StyleSheet.create({
   header: {
     width: '100%',
     flexDirection: 'row',
+    borderBottomColor: 'rgba(240,240,240,0.9)',
+    borderBottomWidth: 1,
   },
 
   bmiInput: {
@@ -171,7 +173,7 @@ module.exports = StyleSheet.create({
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 8,
-    elevation: 20,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -188,7 +190,7 @@ module.exports = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
     shadowColor: '#f2ae88',
     shadowOpacity: 0.6,
-    elevation: 8,
+    elevation: 5,
     borderRadius: 16,
     backgroundColor: '#f2ae88',
     marginTop: 30,
@@ -421,7 +423,7 @@ module.exports = StyleSheet.create({
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 8,
-    elevation: 20,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -457,7 +459,7 @@ module.exports = StyleSheet.create({
     shadowOffset: {width: 20, height: 20},
     shadowColor: 'black',
     shadowOpacity: 8,
-    elevation: 6,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 10,
     backgroundColor: '#fff',

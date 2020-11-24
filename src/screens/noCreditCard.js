@@ -14,28 +14,6 @@ const NoCreditCard = () => {
   return (
     <ScrollView style={{backgroundColor: 'white'}}>
       <View style={styleCss.mainContainer}>
-        {/*  <View style={styleCss.creditHeader}>
-          <View style={{ flex:1}}>
-          <Image
-              style={{width:35, height: 14}}
-              source={PAYMENT_noCredit}
-            />
-           
-          </View>
-          <View style={{flex:1, alignItems:'center'}}>
-          <Image
-              style={{width:50, height: 40}}
-              source={require('../../assets/header/logo.png')}
-            />
-          </View>
-          <View style={{ flex:1, alignItems:'flex-end'}}>
-                <Image
-              style={{width:20, height: 20}}
-              source={CROSS}
-            />
-          </View>
-      </View> */}
-
         <View
           style={{
             flex: 1,

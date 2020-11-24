@@ -4,7 +4,10 @@ import {verticleScale, scale} from './helper';
 const {height, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
-  container: {height, width},
+  container: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: 'center',
+  },
   bgImage: {height: `100%`},
   blackShade: {
     position: 'absolute',
@@ -24,15 +27,14 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   whiteAbsoluteCenterAlignView: {
-    height,
-    width,
+    ...StyleSheet.absoluteFill,
     position: 'absolute',
     backgroundColor: '#fff',
     alignItems: 'center',
   },
   swiperView: {
-    height,
-    width,
+    ...StyleSheet.absoluteFill,
+    justifyContent: 'center',
     position: 'absolute',
     backgroundColor: '#fff',
   },

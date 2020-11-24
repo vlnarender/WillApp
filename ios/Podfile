@@ -8,6 +8,8 @@ target 'will' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'react-native-restart', :path => '../node_modules/react-native-restart'
+
   target 'willTests' do
     inherit! :complete
     # Pods for testing

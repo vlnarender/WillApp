@@ -30,6 +30,7 @@ import {
   ProgramsStackNavigator,
   CommonCalendarStackNavigator,
 } from './stackNavigator';
+import HomeScreen from '../../screens/home';
 import BottomTabNavigator from './navigation';
 import OneDayCalender from '../../screens/calendar';
 import MultiSubs from '../../screens/multiSub/multiSubs';
@@ -37,6 +38,7 @@ import PlanList from '../../screens/multiSub/PlanList';
 import PlanListProgram from '../../screens/programs/PlanListProgram';
 import MultiSubCalendar from '../../screens/multiSub/multisubcalendar';
 import OneDayPlanMealListing from '../../screens/onedayplanmeallisting';
+import LocationPicker from '../../screens/Address/LocationPicker';
 import MealSelection from '../../screens/programs/MealSelection';
 import CartComponent from '../../screens/Cart';
 import MultiMealSelection from '../../screens/multiSub/MultiMealSelection';
@@ -172,71 +174,68 @@ const DrawerNavigator = (props) => {
           props.navigation.navigate(navigation);
       }
     };
+    const drowerView = (props) => {
+      return (
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingVertical: '15%',
+            ...StyleSheet.absoluteFill,
+            backgroundColor: '#f2ae88',
+          }}>
+          <View style={{flex: 3, marginVertical: 5}}>
+            {drowerList.map((data, index) => {
+              return (
+                <DrawerItem
+                  key={index}
+                  labelStyle={{color: 'white', fontWeight: '600'}}
+                  icon={() => <Image resizeMode="cover" source={data.image} />}
+                  label={data.lable}
+                  onPress={() => navigationAction(data.navigation)}
+                />
+              );
+            })}
+
+            <View style={{marginVertical: 20}}>
+              <Image
+                style={{
+                  width: 60,
+                  height: 30,
+                  marginLeft: 70,
+                  marginBottom: 20,
+                }}
+                source={require('../../../assets/menu/عربي.png')}
+              />
+            </View>
+            <View style={{marginHorizontal: 18}}>
+              {TPF.map((data, index) => {
+                return (
+                  <Text
+                    key={index}
+                    style={styles.footerText}
+                    onPress={() => navigationAction(data.navigation)}>
+                    {data.name}
+                  </Text>
+                );
+              })}
+            </View>
+          </View>
+          <View style={styleCss.menuWhiteStrip}>
+            <TouchableOpacity onPress={() => props.navigation.closeDrawer()}>
+              <Image
+                style={{width: 35, height: 20, marginTop: 50}}
+                source={require('../../../assets/menu/arrow_right.png')}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    };
     return (
       <Drawer.Navigator
         drawerPosition={'right'}
         initialRouteName={'Home'}
-        drawerContent={(props) => {
-          return (
-            <>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  paddingVertical: '15%',
-                  backgroundColor: '#f2ae88',
-                }}>
-                <View style={{flex: 3, marginVertical: 5}}>
-                  {drowerList.map((data, index) => {
-                    return (
-                      <DrawerItem
-                        key={index}
-                        labelStyle={{color: 'white', fontWeight: '600'}}
-                        icon={() => (
-                          <Image resizeMode="cover" source={data.image} />
-                        )}
-                        label={data.lable}
-                        onPress={() => navigationAction(data.navigation)}
-                      />
-                    );
-                  })}
-
-                  <View style={{marginVertical: 20}}>
-                    <Image
-                      style={{
-                        width: 60,
-                        height: 30,
-                        marginLeft: 70,
-                        marginBottom: 20,
-                      }}
-                      source={require('../../../assets/menu/عربي.png')}
-                    />
-                  </View>
-                  <View style={{marginHorizontal: 18}}>
-                    {TPF.map((data, index) => {
-                      return (
-                        <Text
-                          key={index}
-                          style={styles.footerText}
-                          onPress={() => navigationAction(data.navigation)}>
-                          {data.name}
-                        </Text>
-                      );
-                    })}
-                  </View>
-                </View>
-                <View style={styleCss.menuWhiteStrip}>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.closeDrawer()}>
-                    <Image
-                      style={{width: 35, height: 20, marginTop: 50}}
-                      source={require('../../../assets/menu/arrow_right.png')}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </>
-          );
-        }}
+        drawerContent={(props) => drowerView(props)}
         drawerStyle={{width: '100%'}}>
         <Drawer.Screen
           name="MealSelection"
@@ -244,8 +243,18 @@ const DrawerNavigator = (props) => {
           options={{swipeEnabled: false}}
         />
         <Drawer.Screen
+          name="HomeScreen"
+          component={HomeScreen}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
           name="Conformation"
           component={Conformation}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
+          name="LocationPicker"
+          component={LocationPicker}
           options={{swipeEnabled: false}}
         />
         <Drawer.Screen

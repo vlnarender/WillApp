@@ -4,6 +4,7 @@
  * @Owner Will
  */
 
+export const GOOGLE_API_KEY = 'AIzaSyCf17TBUxZoAdZdPmL_8WtoJCoARQeco7M';
 export const WEEK_LIST = [
   {
     key: 1,

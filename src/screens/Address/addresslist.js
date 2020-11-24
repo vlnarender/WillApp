@@ -8,12 +8,18 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-let styleCss = require('../GlobalStyle');
-import {addressListActions} from '../actions/addresslist';
-import {addressSetActions} from '../actions/addressset';
+let styleCss = require('../../GlobalStyle');
+import {addressListActions} from '../../actions/addresslist';
+import {addressSetActions} from '../../actions/addressset';
 import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
-import {CROSS, HEADER_unchecked} from '../_helpers/ImageProvide';
+import {
+  CROSS,
+  HEADER_unchecked,
+  PAYMENT_noCredit,
+  LOGO,
+  CHECKED,
+} from '../../_helpers/ImageProvide';
 
 const Addresslist = (props) => {
   const [checked, setChecked] = useState(0);
@@ -74,10 +80,7 @@ const Addresslist = (props) => {
                     alignItems: 'center',
                     marginTop: 30,
                   }}>
-                  <Image
-                    style={{width: 50, height: 40}}
-                    source={require('../../assets/header/logo.png')}
-                  />
+                  <Image style={{width: 50, height: 40}} source={LOGO} />
                 </View>
                 <View style={{flex: 1, alignItems: 'flex-end', marginTop: 20}}>
                   <TouchableOpacity
@@ -100,10 +103,7 @@ const Addresslist = (props) => {
                       }}>
                       {item.is_default_address === 1 ? (
                         <TouchableOpacity style={styles.radioAlign}>
-                          <Image
-                            style={styles.imgSize}
-                            source={require('../../assets/header/checked.png')}
-                          />
+                          <Image style={styles.imgSize} source={CHECKED} />
                           <View>
                             {item.is_default_address === 1 ? (
                               <Text style={styles.radioTextHeading}>
@@ -180,16 +180,18 @@ const Addresslist = (props) => {
       );
     } else {
       return (
-        <>
-          <ScrollView style={{backgroundColor: 'white'}}>
+        <View
+          style={{
+            backgroundColor: 'white',
+            justifyContent: 'center',
+            paddingHorizontal: 20,
+          }}>
+          <ScrollView>
             <View style={styleCss.mainContainer}>
               <View style={styleCss.creditHeader}>
                 <View style={{flex: 1}}></View>
                 <View style={{flex: 1, alignItems: 'center'}}>
-                  <Image
-                    style={{width: 50, height: 40}}
-                    source={require('../../assets/header/logo.png')}
-                  />
+                  <Image style={{width: 50, height: 40}} source={LOGO} />
                 </View>
                 <View style={{flex: 1, alignItems: 'flex-end'}}>
                   <TouchableOpacity
@@ -211,7 +213,7 @@ const Addresslist = (props) => {
                 }}>
                 <Image
                   style={{width: 150, height: 120}}
-                  source={require('../../assets/payment/noCredit.png')}
+                  source={PAYMENT_noCredit}
                 />
 
                 <Text style={styleCss.creditCardHeading}>
@@ -223,20 +225,15 @@ const Addresslist = (props) => {
               </View>
             </View>
           </ScrollView>
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: 'white',
-              paddingLeft: 15,
-              paddingRight: 15,
+
+          <TouchableOpacity
+            style={[styleCss.btnButton, styleCss.mrTop]}
+            onPress={() => {
+              props.navigation.navigate('LocationPicker');
             }}>
-            <TouchableOpacity
-              style={[styleCss.btnButton, styleCss.mrTop]}
-              onPress={() => props.navigation.navigate('Addaddress')}>
-              <Text style={styles.text}>Add another address</Text>
-            </TouchableOpacity>
-          </View>
-        </>
+            <Text style={styles.text}>Add another address</Text>
+          </TouchableOpacity>
+        </View>
       );
     }
   } else {
@@ -252,6 +249,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
+    fontWeight: 'bold',
   },
   radioAlign: {
     flexDirection: 'row',

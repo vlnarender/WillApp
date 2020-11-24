@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Text,
   Dimensions,
+  I18nManager,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
@@ -20,6 +21,10 @@ import {calenderActions} from '../../actions/Calender';
 import {cartActions} from '../../actions/cart';
 import {ScrollView} from 'react-native-gesture-handler';
 const {height, width} = Dimensions.get('window');
+import {
+  COMMON_ARROW_LEFT,
+  COMMON_ARROW_RIGHT,
+} from '../../_helpers/ImageProvide';
 let styleCss = require('../../GlobalStyle');
 const ProgramsComponent = (props) => {
   const navigation = useNavigation();
@@ -47,7 +52,9 @@ const ProgramsComponent = (props) => {
                 onPress={() => navigation.navigate('Home')}>
                 <Image
                   style={{width: 30, height: 20}}
-                  source={require('../../../assets/arrowLeft.png')}
+                  source={
+                    I18nManager.isRTL ? COMMON_ARROW_RIGHT : COMMON_ARROW_LEFT
+                  }
                 />
               </TouchableOpacity>
               <View style={styleCss.programBox}>

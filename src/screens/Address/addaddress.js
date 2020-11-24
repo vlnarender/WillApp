@@ -1,33 +1,24 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
-import FloatingLabelInput from '../components/FloatingLabelInput';
+import FloatingLabelInput from '../../components/FloatingLabelInput';
 import {ScrollView} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import Toast from 'react-native-simple-toast';
-import {addressListActions} from '../actions/addresslist';
-import {addAddressActions} from '../actions/addaddress';
-import AsyncStorage from '@react-native-community/async-storage';
-let styleCss = require('../GlobalStyle');
-import {ARROW_LEFT, HEADER_unchecked, LOGO} from '../_helpers/ImageProvide';
+import {addressListActions} from '../../actions/addresslist';
+import {addAddressActions} from '../../actions/addaddress';
+let styleCss = require('../../GlobalStyle');
+import {
+  ARROW_LEFT,
+  CHECKED,
+  HEADER_unchecked,
+  LOGO,
+} from '../../_helpers/ImageProvide';
 const Addaddress = (props) => {
   const [basic, setBasic] = useState('');
   const [complete, setComplete] = useState('');
   const [type, setType] = useState('');
   const [checked, setChecked] = useState(false);
-  useEffect(() => {
-    getValue();
-  }, []);
-  const getValue = async () => {
-    try {
-      const Token = await AsyncStorage.getItem('token');
-      const language = await AsyncStorage.getItem('language');
-      setToken(Token);
-      setLanguage(language);
-    } catch (e) {
-      //  error
-      console.error(e);
-    }
-  };
+
   const handleBasicChange = (newText) => setBasic(newText);
   const handleCompleteChange = (newText) => setComplete(newText);
   const handleTypeChange = (newText) => setType(newText);
@@ -104,10 +95,7 @@ const Addaddress = (props) => {
                     setChecked(!checked);
                   }}
                   style={styles.radioAlign}>
-                  <Image
-                    style={styles.imgSize}
-                    source={require('../../assets/header/checked.png')}
-                  />
+                  <Image style={styles.imgSize} source={CHECKED} />
                   <View>
                     <Text numberOfLines={1} style={styles.radioText}>
                       Make this my default address?

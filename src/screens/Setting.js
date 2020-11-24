@@ -9,6 +9,7 @@ import {profileActions} from '../actions/profile';
 import {labelActions} from '../actions/label';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Headers from '../components/Header';
+import {languageRestart} from '../components/LanguageRestart';
 const Setting = (props) => {
   const [LocalLanguage, setLocalLanguage] = useState('');
   useEffect(() => {
@@ -21,9 +22,11 @@ const Setting = (props) => {
       console.error(e);
     }
   };
+
   const languageChange = (isOn) => {
     AsyncStorage.setItem('language', isOn ? 'en' : 'ar');
     props.labelAction();
+    languageRestart(isOn);
     setLocalLanguage(isOn ? 'en' : 'ar');
   };
   if (props.settingStatus && props.labelStatus) {

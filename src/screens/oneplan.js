@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
@@ -129,15 +129,6 @@ const OneDayPlan = (props) => {
   }
 };
 
-const styles = StyleSheet.create({
-  gridView: {
-    flex: 1,
-  },
-  texStyle: {
-    fontSize: 10,
-  },
-});
-//export default OneDayPlan;
 const mapStateToProps = (state) => {
   return {
     onedayplanStatus: state.onedayplanReducer.onedayplanStatus,

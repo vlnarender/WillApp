@@ -7,20 +7,20 @@ import {
   Button,
   StyleSheet,
 } from 'react-native';
-import FloatingLabelInput from '../components/FloatingLabelInput';
+import FloatingLabelInput from '../../components/FloatingLabelInput';
 import {ScrollView} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import Toast from 'react-native-simple-toast';
-import {addressListActions} from '../actions/addresslist';
-import {editAddressActions} from '../actions/editaddress';
+import {addressListActions} from '../../actions/addresslist';
+import {editAddressActions} from '../../actions/editaddress';
 import AsyncStorage from '@react-native-community/async-storage';
-let styleCss = require('../GlobalStyle');
+let styleCss = require('../../GlobalStyle');
 import {
   LOGO,
   ARROW_LEFT,
   CHECKED,
   HEADER_unchecked,
-} from '../_helpers/ImageProvide';
+} from '../../_helpers/ImageProvide';
 const Editaddress = (props) => {
   const {itemId} = props.route.params;
   const [basic, setBasic] = useState('');

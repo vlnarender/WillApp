@@ -19,9 +19,9 @@ import Changeemail from '../../screens/changeemail';
 import Spalsh from '../../screens/anim-screen/index';
 import MyPaymentMethod from '../../screens/myPaymentMethod';
 import Dietcompanies from '../../screens/dietcompanies';
-import Addresslist from '../../screens/addresslist';
-import Addaddress from '../../screens/addaddress';
-import Editaddress from '../../screens/editaddress';
+import Addresslist from '../../screens/Address/addresslist';
+import Addaddress from '../../screens/Address/addaddress';
+import Editaddress from '../../screens/Address/editaddress';
 import OneDayPlan from '../../screens/oneplan';
 
 import TermCondition from '../../screens/termCondition';

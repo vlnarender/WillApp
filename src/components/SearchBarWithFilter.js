@@ -6,7 +6,7 @@ let styleCss = require('../GlobalStyle');
 const SearchbarFilter = () => {
   const [value, onChangeText] = useState();
   return (
-    <View style={{marginTop: 40}}>
+    <View style={{marginTop: 10}}>
       <View style={styleCss.inputArea}>
         <View style={{flex: 1}}>
           <Image style={{width: 20, height: 20}} source={HOME_FILTER} />

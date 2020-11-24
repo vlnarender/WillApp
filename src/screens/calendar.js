@@ -141,8 +141,8 @@ const OneDayCalender = (props) => {
               <View style={styles.arrow}>
                 <TouchableOpacity
                   onPress={() => {
-                    props.navigation.navigate('Home');
-                    setSelect(false);
+                    setSelect(true);
+                    props.navigation.goBack();
                   }}>
                   <Image style={styles.arrowImg} source={CROSS} />
                 </TouchableOpacity>

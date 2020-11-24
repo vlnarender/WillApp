@@ -122,7 +122,7 @@ const CommonCalendar = (props) => {
     return (
       <View style={styles.container}>
         <View style={styles.close}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <Image style={{width: 20, height: 20}} source={CROSS} />
           </TouchableOpacity>
         </View>
