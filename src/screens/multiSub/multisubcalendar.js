@@ -22,6 +22,7 @@ import {multiSubActions} from '../../actions/multiSub';
 import {useNavigation} from '@react-navigation/native';
 import {CALANDER_CONFIG, WEEK_LIST} from '../../_helpers/globalVeriable';
 import AsyncStorage from '@react-native-community/async-storage';
+import Loader from '../../components/Loader';
 const {width} = Dimensions.get('window');
 const MultiSubCalender = (props) => {
   const navigation = useNavigation();
@@ -29,15 +30,16 @@ const MultiSubCalender = (props) => {
   const [visible, setVisible] = useState(false);
   const [valueone, setValueone] = useState(null);
   const [selectWeek, setSelectWeek] = useState('Select');
-  const [PROP_ONE, SET_PROP_ONE] = useState(WEEK_LIST['en']);
+  const [PROP_ONE, SET_PROP_ONE] = useState();
   const [LocalLanguage, setLocalLanguage] = useState('en');
   LocaleConfig.locales['ar'] = CALANDER_CONFIG['ar'];
   LocaleConfig.locales['en'] = CALANDER_CONFIG['en'];
   useEffect(() => {
     const lc = async () => {
-      setLocalLanguage(await AsyncStorage.getItem('language'));
-      LocaleConfig.defaultLocale = LocalLanguage;
-      SET_PROP_ONE(WEEK_LIST[LocalLanguage]);
+      const lan = await AsyncStorage.getItem('language');
+      setLocalLanguage(lan);
+      LocaleConfig.defaultLocale = lan;
+      SET_PROP_ONE(WEEK_LIST[lan]);
     };
     lc();
     const unsubscribe = navigation.addListener('focus', () => {
@@ -101,155 +103,159 @@ const MultiSubCalender = (props) => {
     return disabledDates;
   };
   const renderCalendarWithSelectableDate = () => {
-    return (
-      <>
-        <View style={styles.calendarbg}>
-          <ScrollView>
-            <View style={styles.topBg}>
-              <View style={styles.arrow}>
-                <TouchableOpacity
-                  onPress={() => {
-                    props.navigation.goBack('Home');
-                  }}>
-                  <Image
-                    style={styles.arrowImg}
-                    source={require('../../../assets/header/cross.png')}
-                  />
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.roundShap}>
-                <View style={styles.innerroundShap}>
+    if (PROP_ONE) {
+      return (
+        <>
+          <View style={styles.calendarbg}>
+            <ScrollView>
+              <View style={styles.topBg}>
+                <View style={styles.arrow}>
                   <TouchableOpacity
-                    onPress={() => setVisible(true)}
-                    style={{
-                      marginTop: 20,
+                    onPress={() => {
+                      props.navigation.goBack('Home');
                     }}>
-                    <View
-                      style={{
-                        paddingVertical: 5,
-                        paddingHorizontal: 12,
-                        backgroundColor: '#F2AE88',
-                        fontWeight: 'bold',
-                        borderRadius: 5,
-                        flexDirection: 'row',
-                      }}>
-                      <Text
-                        style={{
-                          color: '#fff',
-                          fontSize: 18,
-                          paddingRight: 10,
-                        }}>
-                        {selectWeek}
-                      </Text>
-                      <Image
-                        style={{width: 15, height: 15, marginTop: 5}}
-                        source={require('../../../assets/ud_arrow.png')}
-                      />
-                    </View>
+                    <Image
+                      style={styles.arrowImg}
+                      source={require('../../../assets/header/cross.png')}
+                    />
                   </TouchableOpacity>
-                  <Text
-                    style={{color: '#fff', fontWeight: 'bold', fontSize: 18}}>
-                    Week
-                  </Text>
                 </View>
-              </View>
-            </View>
 
-            <View style={styles.calendarArea}>
-              <CalendarList
-                horizontal={true}
-                pagingEnabled={true}
-                scrollEnabled={true}
-                minDate={new Date()}
-                markingType={'period'}
-                disableAllTouchEventsForDisabledDays
-                onDayPress={onDayPress}
-                theme={{
-                  calendarBackground: '#343739',
-                  todayTextColor: '#ffffff',
-                  todayBackgroundColor: '#f2ae88',
-                  textDisabledColor: '#6a6e7f',
-                  dayTextColor: '#ffffff',
-                  monthTextColor: '#ffffff',
-                  selectedDayBackgroundColor: '#333248',
-                }}
-                markedDates={{
-                  ...getDisabledDates(),
-                }}
-              />
-            </View>
-
-            <View style={styles.seleceted}>
-              <View style={styles.rowSpace}>
-                <View style={styles.colorBox1}></View>
-                <View>
-                  <Text style={styles.textColor}>Selected days</Text>
-                </View>
-              </View>
-              <View>
-                <View style={styles.rowSpace}>
-                  <View style={styles.colorBox2}></View>
-                  <View>
-                    <Text style={styles.textColor}>Not Selected</Text>
+                <View style={styles.roundShap}>
+                  <View style={styles.innerroundShap}>
+                    <TouchableOpacity
+                      onPress={() => setVisible(true)}
+                      style={{
+                        marginTop: 20,
+                      }}>
+                      <View
+                        style={{
+                          paddingVertical: 5,
+                          paddingHorizontal: 12,
+                          backgroundColor: '#F2AE88',
+                          fontWeight: 'bold',
+                          borderRadius: 5,
+                          flexDirection: 'row',
+                        }}>
+                        <Text
+                          style={{
+                            color: '#fff',
+                            fontSize: 18,
+                            paddingRight: 10,
+                          }}>
+                          {selectWeek}
+                        </Text>
+                        <Image
+                          style={{width: 15, height: 15, marginTop: 5}}
+                          source={require('../../../assets/ud_arrow.png')}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                    <Text
+                      style={{color: '#fff', fontWeight: 'bold', fontSize: 18}}>
+                      Week
+                    </Text>
                   </View>
                 </View>
               </View>
-            </View>
-            <View style={styles.rowTwo}>
-              <View style={styles.rowSpace}>
-                <View style={styles.colorBox3}></View>
-                <Text style={styles.textColor}>Unavailable for Selected</Text>
+
+              <View style={styles.calendarArea}>
+                <CalendarList
+                  horizontal={true}
+                  pagingEnabled={true}
+                  scrollEnabled={true}
+                  minDate={new Date()}
+                  markingType={'period'}
+                  disableAllTouchEventsForDisabledDays
+                  onDayPress={onDayPress}
+                  theme={{
+                    calendarBackground: '#343739',
+                    todayTextColor: '#ffffff',
+                    todayBackgroundColor: '#f2ae88',
+                    textDisabledColor: '#6a6e7f',
+                    dayTextColor: '#ffffff',
+                    monthTextColor: '#ffffff',
+                    selectedDayBackgroundColor: '#333248',
+                  }}
+                  markedDates={{
+                    ...getDisabledDates(),
+                  }}
+                />
               </View>
-            </View>
-          </ScrollView>
-          <Modal
-            isVisible={visible}
-            backdropColor="#fff"
-            backdropOpacity={0.1}
-            onBackdropPress={() => setVisible(false)}>
-            <View
-              style={{
-                backgroundColor: '#ffffff',
-                borderRadius: 10,
-              }}>
-              <Text
+
+              <View style={styles.seleceted}>
+                <View style={styles.rowSpace}>
+                  <View style={styles.colorBox1}></View>
+                  <View>
+                    <Text style={styles.textColor}>Selected days</Text>
+                  </View>
+                </View>
+                <View>
+                  <View style={styles.rowSpace}>
+                    <View style={styles.colorBox2}></View>
+                    <View>
+                      <Text style={styles.textColor}>Not Selected</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.rowTwo}>
+                <View style={styles.rowSpace}>
+                  <View style={styles.colorBox3}></View>
+                  <Text style={styles.textColor}>Unavailable for Selected</Text>
+                </View>
+              </View>
+            </ScrollView>
+            <Modal
+              isVisible={visible}
+              backdropColor="#fff"
+              backdropOpacity={0.1}
+              onBackdropPress={() => setVisible(false)}>
+              <View
                 style={{
-                  textAlign: 'center',
-                  paddingVertical: 15,
-                  fontWeight: '700',
+                  backgroundColor: '#ffffff',
+                  borderRadius: 10,
                 }}>
-                Select Your Week
-              </Text>
-              <View style={styles.container}>
-                {PROP_ONE.map((res, index) => {
-                  return (
-                    <TouchableOpacity
-                      onPress={() => {
-                        setValueone(res.key);
-                        setSelectWeek(res.text);
-                        setVisible(false);
-                        props.multiSubWeek(res.key);
-                      }}
-                      key={res.key}
-                      style={styles.first}>
-                      <View style={{flexDirection: 'row'}}>
-                        <Text style={styles.radioText}>{res.text}</Text>
-                        <View style={styles.radioCircle}>
-                          {valueone === res.key && (
-                            <View style={styles.selectedRb} />
-                          )}
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    paddingVertical: 15,
+                    fontWeight: '700',
+                  }}>
+                  Select Your Week
+                </Text>
+                <View style={styles.container}>
+                  {PROP_ONE.map((res, index) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => {
+                          setValueone(res.key);
+                          setSelectWeek(res.text);
+                          setVisible(false);
+                          props.multiSubWeek(res.key);
+                        }}
+                        key={res.key}
+                        style={styles.first}>
+                        <View style={{flexDirection: 'row'}}>
+                          <Text style={styles.radioText}>{res.text}</Text>
+                          <View style={styles.radioCircle}>
+                            {valueone === res.key && (
+                              <View style={styles.selectedRb} />
+                            )}
+                          </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
-                  );
-                })}
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
               </View>
-            </View>
-          </Modal>
-        </View>
-      </>
-    );
+            </Modal>
+          </View>
+        </>
+      );
+    } else {
+      return <Loader />;
+    }
   };
   return <>{renderCalendarWithSelectableDate()}</>;
 };
