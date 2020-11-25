@@ -4,7 +4,14 @@
  * @Owner Will
  */
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Dimensions,
+  I18nManager,
+} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import {multiSubActions} from '../../actions/multiSub';
@@ -24,6 +31,8 @@ import {
   REC_SELECTED,
   CHECK_GREEN,
   PLUS_ORANGE,
+  COMMON_ARROW_LEFT,
+  COMMON_ARROW_RIGHT,
 } from '../../_helpers/ImageProvide';
 import {useNavigation} from '@react-navigation/native';
 const MultiSubs = (props) => {
@@ -85,7 +94,9 @@ const MultiSubs = (props) => {
                   onPress={() => props.navigation.navigate('Home')}>
                   <Image
                     style={{width: 30, height: 19}}
-                    source={require('../../../assets/arrowLeft.png')}
+                    source={
+                      I18nManager.isRTL ? COMMON_ARROW_RIGHT : COMMON_ARROW_LEFT
+                    }
                   />
                 </TouchableOpacity>
               </View>

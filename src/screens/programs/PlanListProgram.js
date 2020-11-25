@@ -13,6 +13,7 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  I18nManager,
 } from 'react-native';
 const {height, width} = Dimensions.get('window');
 import {
@@ -20,6 +21,8 @@ import {
   REC_SELECTED,
   CHECK_GREEN,
   PLUS_ORANGE,
+  PLAN_ARROW_LEFT,
+  PLAN_ARROW_RIGHT,
 } from '../../_helpers/ImageProvide';
 let styleCss = require('../../GlobalStyle');
 
@@ -176,39 +179,41 @@ const PlanListProgram = (props) => {
             }}>
             <TouchableOpacity onPress={() => scrollTo('right')}>
               <Image
-                source={require('../../../assets/left_arrow.png')}
+                source={I18nManager.isRTL ? PLAN_ARROW_RIGHT : PLAN_ARROW_LEFT}
                 style={{marginRight: 5}}
               />
             </TouchableOpacity>
-            <ScrollView
-              horizontal={true}
-              ref={scrollViewRef}
-              onContentSizeChange={(w, h) => setScrollViewWidth(w)}>
-              {programData.duration.map((item, index) => {
-                return (
-                  <TouchableOpacity
-                    style={{flexDirection: 'row'}}
-                    onPress={() => selectPlanList(item)}
-                    key={index}>
-                    <Image
-                      source={item.is_selected ? REC_SELECTED : REC}
-                      style={{
-                        marginRight: 5,
-                        marginLeft: 20,
-                        width: 10,
-                        height: 10,
-                        marginTop: 5,
-                      }}
-                    />
-                    <Text>{item.Week}</Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </ScrollView>
+            <View style={{alignSelf: 'flex-start'}}>
+              <ScrollView
+                horizontal={true}
+                ref={scrollViewRef}
+                onContentSizeChange={(w, h) => setScrollViewWidth(w)}>
+                {programData.duration.map((item, index) => {
+                  return (
+                    <TouchableOpacity
+                      style={{flexDirection: 'row'}}
+                      onPress={() => selectPlanList(item)}
+                      key={index}>
+                      <Image
+                        source={item.is_selected ? REC_SELECTED : REC}
+                        style={{
+                          marginRight: 5,
+                          marginLeft: 20,
+                          width: 10,
+                          height: 10,
+                          marginTop: 5,
+                        }}
+                      />
+                      <Text>{item.Week}</Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
+            </View>
             <TouchableOpacity onPress={() => scrollTo('left')}>
               <Image
                 style={{marginLeft: 5}}
-                source={require('../../../assets/right_arrow.png')}
+                source={I18nManager.isRTL ? PLAN_ARROW_LEFT : PLAN_ARROW_RIGHT}
               />
             </TouchableOpacity>
           </View>

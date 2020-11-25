@@ -8,9 +8,12 @@ export const PINMARKER = require('../../assets/pinmarker.png');
 export const DELETE_ICON = require('../../assets/delete.png');
 export const CONGRATULATION = require('../../assets/congratulation.png');
 export const ARROW_LEFT = require('../../assets/header/arrowLeft.png');
+export const ARROW_RIGHT = require('../../assets/header/arrowRight.png');
 export const COMMON_ARROW_LEFT = require('../../assets/arrowLeft.png');
 export const COMMON_ARROW_RIGHT = require('../../assets/arrowRight.png');
-export const ARROW_RIGHT = require('../../assets/header/arrowRight.png');
+export const PLAN_ARROW_LEFT = require('../../assets/left_arrow.png');
+export const PLAN_ARROW_RIGHT = require('../../assets/right_arrow.png');
+
 export const CAMERA_WHITE = require('../../assets/header/cameraWhite.png');
 export const CART = require('../../assets/header/cart.png');
 export const CHECKED = require('../../assets/header/checked.png');

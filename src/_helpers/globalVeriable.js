@@ -5,40 +5,170 @@
  */
 
 export const GOOGLE_API_KEY = 'AIzaSyCf17TBUxZoAdZdPmL_8WtoJCoARQeco7M';
-export const WEEK_LIST = [
-  {
-    key: 1,
-    text: 'Week 1',
+
+export const CALANDER_CONFIG = {
+  en: {
+    monthNames: [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ],
+    monthNamesShort: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'Mar',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
+    dayNames: [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ],
+    dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    today: 'Today',
   },
-  {
-    key: 2,
-    text: 'Week 2',
+  ar: {
+    monthNames: [
+      'كانون الثاني',
+      'شهر فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'اكتوبر',
+      'شهر نوفمبر',
+      'ديسمبر',
+    ],
+    monthNamesShort: [
+      'كانون الثاني',
+      'شهر فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'اكتوبر',
+      'شهر نوفمبر',
+      'ديسمبر',
+    ],
+    dayNames: [
+      'الأحد',
+      'الإثنين',
+      'الثلاثاء',
+      'الأربعاء',
+      'الخميس',
+      'الجمعة',
+      'السبت',
+    ],
+    dayNamesShort: [
+      'الأحد',
+      'الإثنين',
+      'الثلاثاء',
+      'الأربعاء',
+      'الخميس',
+      'الجمعة',
+      'السبت',
+    ],
+    today: 'اليوم',
   },
-  {
-    key: 3,
-    text: 'Week 3',
-  },
-  {
-    key: 4,
-    text: 'Week 4',
-  },
-  {
-    key: 5,
-    text: 'Week 5',
-  },
-  {
-    key: 6,
-    text: 'Week 6',
-  },
-  {
-    key: 7,
-    text: 'Week 7',
-  },
-  {
-    key: 8,
-    text: 'Week 8',
-  },
-];
+};
+export const WEEK_LIST = {
+  en: [
+    {
+      key: 1,
+      text: 'Week 1',
+    },
+    {
+      key: 2,
+      text: 'Week 2',
+    },
+    {
+      key: 3,
+      text: 'Week 3',
+    },
+    {
+      key: 4,
+      text: 'Week 4',
+    },
+    {
+      key: 5,
+      text: 'Week 5',
+    },
+    {
+      key: 6,
+      text: 'Week 6',
+    },
+    {
+      key: 7,
+      text: 'Week 7',
+    },
+    {
+      key: 8,
+      text: 'Week 8',
+    },
+  ],
+  ar: [
+    {
+      key: 1,
+      text: 'أسبوع ٠',
+    },
+    {
+      key: 2,
+      text: 'أسبوع ١',
+    },
+    {
+      key: 3,
+      text: 'أسبوع ٢',
+    },
+    {
+      key: 4,
+      text: 'أسبوع ٣',
+    },
+    {
+      key: 5,
+      text: 'أسبوع ٤',
+    },
+    {
+      key: 6,
+      text: 'أسبوع ٥',
+    },
+    {
+      key: 7,
+      text: 'أسبوع ٦',
+    },
+    {
+      key: 8,
+      text: 'أسبوع ٧',
+    },
+  ],
+};
+
 export const MEAL = {
   day: null,
   plan_diet_package_id: null,

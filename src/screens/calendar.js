@@ -1,17 +1,26 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {CROSS} from '../_helpers/ImageProvide';
 
 import {useFocusEffect} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {CalendarList} from 'react-native-calendars';
+import {CalendarList, LocaleConfig} from 'react-native-calendars';
 import {ADD_AND_UPDATE_API} from '../util/api';
 import Toast from 'react-native-simple-toast';
 import {mealListActions} from '../actions/mealList';
 import moment from 'moment';
 import {connect} from 'react-redux';
 import Loader from '../components/Loader';
+import {CALANDER_CONFIG} from '../_helpers/globalVeriable';
+import AsyncStorage from '@react-native-community/async-storage';
 const OneDayCalender = (props) => {
+  LocaleConfig.locales['ar'] = CALANDER_CONFIG['ar'];
+  LocaleConfig.locales['en'] = CALANDER_CONFIG['en'];
+  useEffect(() => {
+    const lC = async () =>
+      (LocaleConfig.defaultLocale = await AsyncStorage.getItem('language'));
+    lC();
+  }, []);
   const {itemId, featureId} = props.route.params;
   const [select, setSelect] = useState(false);
   const [value, setValue] = useState([]);
@@ -86,12 +95,12 @@ const OneDayCalender = (props) => {
     const end = moment(new Date()).add(2, 'days');
 
     for (
-      let m = moment(start).add(1, 'days');
+      let m = moment(start).add(0, 'days');
       m.diff(end, 'days') <= 0;
       m.add(1, 'days')
     ) {
+      console.log(m.format('YYYY-MM-DD'));
       disabledDates[m.format('YYYY-MM-DD')] = {
-        textColor: '#f2ae88',
         disabled: true,
         disableTouchEvent: true,
         customStyles: {
@@ -103,7 +112,6 @@ const OneDayCalender = (props) => {
           },
           text: {
             color: '#fff',
-            fontWeight: 'bold',
           },
         },
       };
@@ -119,7 +127,6 @@ const OneDayCalender = (props) => {
           },
           text: {
             color: '#ccc',
-            fontWeight: 'bold',
           },
         },
       };
@@ -182,7 +189,6 @@ const OneDayCalender = (props) => {
                 }}
               />
             </View>
-
             <View style={styles.seleceted}>
               <View style={styles.rowSpace}>
                 <View style={styles.colorBox1}></View>

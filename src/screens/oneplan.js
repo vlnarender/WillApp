@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet, I18nManager} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import {onedayplanActions} from '../actions/oneplan';
 import Header from '../components/Header';
+import {COMMON_ARROW_LEFT, COMMON_ARROW_RIGHT} from '../_helpers/ImageProvide';
 let styleCss = require('../GlobalStyle');
 const OneDayPlan = (props) => {
   const {featureId} = props.route.params;
@@ -19,7 +20,9 @@ const OneDayPlan = (props) => {
                   onPress={() => props.navigation.navigate('Home')}>
                   <Image
                     style={{width: 30, height: 19}}
-                    source={require('../../assets/arrowLeft.png')}
+                    source={
+                      I18nManager.isRTL ? COMMON_ARROW_RIGHT : COMMON_ARROW_LEFT
+                    }
                   />
                 </TouchableOpacity>
               </View>

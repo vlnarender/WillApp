@@ -15,11 +15,13 @@ import {
 import moment from 'moment';
 import {connect} from 'react-redux';
 import {ScrollView} from 'react-native-gesture-handler';
-import {CalendarList} from 'react-native-calendars';
+import {CalendarList, LocaleConfig} from 'react-native-calendars';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-simple-toast';
 import {multiSubActions} from '../../actions/multiSub';
 import {useNavigation} from '@react-navigation/native';
+import {CALANDER_CONFIG, WEEK_LIST} from '../../_helpers/globalVeriable';
+import AsyncStorage from '@react-native-community/async-storage';
 const {width} = Dimensions.get('window');
 const MultiSubCalender = (props) => {
   const navigation = useNavigation();
@@ -27,41 +29,17 @@ const MultiSubCalender = (props) => {
   const [visible, setVisible] = useState(false);
   const [valueone, setValueone] = useState(null);
   const [selectWeek, setSelectWeek] = useState('Select');
-  const PROP_ONE = [
-    {
-      key: 1,
-      text: 'week 1',
-    },
-    {
-      key: 2,
-      text: 'week 2',
-    },
-    {
-      key: 3,
-      text: 'week 3',
-    },
-    {
-      key: 4,
-      text: 'week 4',
-    },
-    {
-      key: 5,
-      text: 'week 5',
-    },
-    {
-      key: 6,
-      text: 'week 6',
-    },
-    {
-      key: 7,
-      text: 'week 7',
-    },
-    {
-      key: 8,
-      text: 'week 8',
-    },
-  ];
+  const [PROP_ONE, SET_PROP_ONE] = useState(WEEK_LIST['en']);
+  const [LocalLanguage, setLocalLanguage] = useState('en');
+  LocaleConfig.locales['ar'] = CALANDER_CONFIG['ar'];
+  LocaleConfig.locales['en'] = CALANDER_CONFIG['en'];
   useEffect(() => {
+    const lc = async () => {
+      setLocalLanguage(await AsyncStorage.getItem('language'));
+      LocaleConfig.defaultLocale = LocalLanguage;
+      SET_PROP_ONE(WEEK_LIST[LocalLanguage]);
+    };
+    lc();
     const unsubscribe = navigation.addListener('focus', () => {
       setVisible(false);
       setValueone(null);
@@ -99,12 +77,11 @@ const MultiSubCalender = (props) => {
     const start = moment(new Date());
     const end = moment(new Date()).add(2, 'days');
     for (
-      let m = moment(start).add(1, 'days');
+      let m = moment(start).add(0, 'days');
       m.diff(end, 'days') <= 0;
       m.add(1, 'days')
     ) {
       disabledDates[m.format('YYYY-MM-DD')] = {
-        textColor: '#f2ae88',
         disabled: true,
         disableTouchEvent: true,
         customStyles: {
@@ -116,7 +93,6 @@ const MultiSubCalender = (props) => {
           },
           text: {
             color: '#fff',
-            fontWeight: 'bold',
           },
         },
       };
@@ -191,11 +167,11 @@ const MultiSubCalender = (props) => {
                 onDayPress={onDayPress}
                 theme={{
                   calendarBackground: '#343739',
-                  todayTextColor: 'white',
+                  todayTextColor: '#ffffff',
                   todayBackgroundColor: '#f2ae88',
                   textDisabledColor: '#6a6e7f',
-                  dayTextColor: 'white',
-                  monthTextColor: 'white',
+                  dayTextColor: '#ffffff',
+                  monthTextColor: '#ffffff',
                   selectedDayBackgroundColor: '#333248',
                 }}
                 markedDates={{
@@ -234,7 +210,7 @@ const MultiSubCalender = (props) => {
             onBackdropPress={() => setVisible(false)}>
             <View
               style={{
-                backgroundColor: 'white',
+                backgroundColor: '#ffffff',
                 borderRadius: 10,
               }}>
               <Text
@@ -337,7 +313,7 @@ const styles = StyleSheet.create({
 
   todayDate: {
     fontSize: 26,
-    color: 'white',
+    color: '#ffffff',
   },
 
   todayMonth: {
@@ -402,7 +378,7 @@ const styles = StyleSheet.create({
 
   heading: {
     fontSize: 28,
-    color: 'white',
+    color: '#ffffff',
   },
 
   selectHeading: {

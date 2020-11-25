@@ -3,7 +3,7 @@
  * @email surajknkumar@gmail.com
  * @Owner Will
  */
-import React from 'react';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {
   View,
@@ -13,16 +13,26 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {useNavigation} from '@react-navigation/native';
 import {programPlanActions} from '../actions/programPlan';
 import {dietCompanyPlanActions} from '../actions/dietPlan';
 import {cartActions} from '../actions/cart';
 import {CROSS} from '../_helpers/ImageProvide';
 const {height, width} = Dimensions.get('window');
+import {CALANDER_CONFIG} from '../_helpers/globalVeriable';
 import moment from 'moment';
 import Loader from './Loader';
+import AsyncStorage from '@react-native-community/async-storage';
 const CommonCalendar = (props) => {
+  LocaleConfig.locales['ar'] = CALANDER_CONFIG['ar'];
+  LocaleConfig.locales['en'] = CALANDER_CONFIG['en'];
+  useEffect(() => {
+    const lc = async () => {
+      LocaleConfig.defaultLocale = await AsyncStorage.getItem('language');
+    };
+    lc();
+  }, []);
   const navigation = useNavigation();
   const monthName = () => {
     const months = [
@@ -44,7 +54,7 @@ const CommonCalendar = (props) => {
   var today = new Date();
 
   const dietCompanyPlannavigation = (day) => {
-    rprops
+    props
       .dietCompanyPlanAction({
         program_id: props.program_id,
         restaurant_id: props.restaurant_id,
@@ -69,17 +79,16 @@ const CommonCalendar = (props) => {
   };
 
   // var priorDate = new Date().setDate(today.getDate() + 3);
-  const getDisabledDates = (calenderDate) => {
+  const getDisabledDates = () => {
     const disabledDates = {};
     const start = moment(new Date());
     const end = moment(new Date()).add(2, 'days');
     for (
-      let m = moment(start).add(1, 'days');
+      let m = moment(start).add(0, 'days');
       m.diff(end, 'days') <= 0;
       m.add(1, 'days')
     ) {
       disabledDates[m.format('YYYY-MM-DD')] = {
-        textColor: '#f2ae88',
         disabled: true,
         disableTouchEvent: true,
         customStyles: {
@@ -91,7 +100,6 @@ const CommonCalendar = (props) => {
           },
           text: {
             color: '#fff',
-            fontWeight: 'bold',
           },
         },
       };
@@ -108,7 +116,6 @@ const CommonCalendar = (props) => {
             },
             text: {
               color: '#ccc',
-              fontWeight: 'bold',
             },
           },
         };
@@ -137,6 +144,7 @@ const CommonCalendar = (props) => {
           <Calendar
             horizontal={true}
             pagingEnabled={true}
+            scrollEnabled={true}
             minDate={new Date()}
             scrollEnabled={true}
             markingType={'period'}
@@ -144,11 +152,11 @@ const CommonCalendar = (props) => {
             rowHeight={5}
             theme={{
               calendarBackground: '#343739',
+              todayTextColor: '#ffffff',
               todayBackgroundColor: '#f2ae88',
               textDisabledColor: '#6a6e7f',
               dayTextColor: '#ffffff',
               monthTextColor: '#ffffff',
-              todayTextColor: '#ffffff',
               selectedDayBackgroundColor: '#333248',
             }}
             onDayPress={(day) => {

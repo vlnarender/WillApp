@@ -29,8 +29,13 @@ const PlanList = (props) => {
   const [selectedIndex, setSelectedIndex] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState('Select First');
   const [selectedIndexRestaurent, setSelectedIndexRestaurent] = useState([]);
-
+  const [LOCAL_WEEK_LIST, setLOCAL_WEEK_LIST] = useState(WEEK_LIST['en']);
   useEffect(() => {
+    const lC = async () => {
+      const lan = await AsyncStorage.getItem('language');
+      setLOCAL_WEEK_LIST(WEEK_LIST[lan]);
+    };
+    lC();
     const unsubscribe = navigation.addListener('focus', () => {
       setSelectedPrice('Select First');
       setFinalSelection();
@@ -120,7 +125,7 @@ const PlanList = (props) => {
               Plans
             </Text>
             <View style={{flexDirection: 'row', paddingBottom: 5}}>
-              {WEEK_LIST.map((item, index) => {
+              {LOCAL_WEEK_LIST.map((item, index) => {
                 if (index + 1 === props.selectedWeek) {
                   return (
                     <View style={{flexDirection: 'row'}} key={index}>
