@@ -3,7 +3,7 @@
  * @email surajknkumar@gmail.com
  * @Owner Will
  */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {
   View,
@@ -27,28 +27,19 @@ import AsyncStorage from '@react-native-community/async-storage';
 const CommonCalendar = (props) => {
   LocaleConfig.locales['ar'] = CALANDER_CONFIG['ar'];
   LocaleConfig.locales['en'] = CALANDER_CONFIG['en'];
+  const [localLang, setLocalLang] = useState('en');
+
   useEffect(() => {
     const lc = async () => {
-      LocaleConfig.defaultLocale = await AsyncStorage.getItem('language');
+      let lan = await AsyncStorage.getItem('language');
+      LocaleConfig.defaultLocale = lan;
+      setLocalLang(lan);
     };
     lc();
   }, []);
   const navigation = useNavigation();
   const monthName = () => {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
+    const months = CALANDER_CONFIG[localLang].monthNames;
     return months[new Date().getMonth()];
   };
   var today = new Date();

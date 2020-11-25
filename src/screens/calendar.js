@@ -17,10 +17,14 @@ const OneDayCalender = (props) => {
   LocaleConfig.locales['ar'] = CALANDER_CONFIG['ar'];
   LocaleConfig.locales['en'] = CALANDER_CONFIG['en'];
   useEffect(() => {
-    const lC = async () =>
-      (LocaleConfig.defaultLocale = await AsyncStorage.getItem('language'));
+    const lC = async () => {
+      let lan = await AsyncStorage.getItem('language');
+      LocaleConfig.defaultLocale = lan;
+      setLocalLang(lan);
+    };
     lC();
   }, []);
+  const [localLang, setLocalLang] = useState('en');
   const {itemId, featureId} = props.route.params;
   const [select, setSelect] = useState(false);
   const [value, setValue] = useState([]);
@@ -72,20 +76,7 @@ const OneDayCalender = (props) => {
       });
   };
   const monthName = () => {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
+    const months = CALANDER_CONFIG[localLang].monthNames;
     const d = new Date();
     return months[d.getMonth()];
   };
@@ -99,7 +90,6 @@ const OneDayCalender = (props) => {
       m.diff(end, 'days') <= 0;
       m.add(1, 'days')
     ) {
-      console.log(m.format('YYYY-MM-DD'));
       disabledDates[m.format('YYYY-MM-DD')] = {
         disabled: true,
         disableTouchEvent: true,
