@@ -16,7 +16,6 @@ import {
   I18nManager,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-const {height, width} = Dimensions.get('window');
 import {
   REC,
   REC_SELECTED,
@@ -241,101 +240,103 @@ const PlanListProgram = (props) => {
               </Text>
             ) : (
               <>
-              <View style={[{marginTop: 10}, styleCss.mainContainer]}>
-                <View style={styles.cardBox}>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      alignSelf: 'flex-end',
-                      color: '#ccc',
-                    }}>
-                    Price : {SelectedPrice}
-                  </Text>
-                  {programData.plan.map((data, index) => {
-                    return (
-                      <View
-                        style={{
-                          paddingVertical: 10,
-                          borderBottomWidth: 1,
-                          borderBottomColor: '#ddd',
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                        }}
-                        key={index}>
-                        <View style={{flexDirection: 'row'}}>
-                          <View style={styles.imgBox}>
-                            <Image
+                <View style={[{marginTop: 10}, styleCss.mainContainer]}>
+                  <View style={styles.cardBox}>
+                    <Text
+                      style={{
+                        fontSize: 10,
+                        alignSelf: 'flex-end',
+                        color: '#ccc',
+                      }}>
+                      Price : {SelectedPrice}
+                    </Text>
+                    {programData.plan.map((data, index) => {
+                      return (
+                        <View
+                          style={{
+                            paddingVertical: 10,
+                            borderBottomWidth: 1,
+                            borderBottomColor: '#ddd',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}
+                          key={index}>
+                          <View style={{flexDirection: 'row'}}>
+                            <View style={styles.imgBox}>
+                              <Image
+                                style={{
+                                  width: 63,
+                                  height: 70,
+                                  borderRadius: 10,
+                                }}
+                                source={{
+                                  uri: IMAGE_CDN + data.image,
+                                }}
+                              />
+                            </View>
+                            <View
                               style={{
-                                width: 63,
-                                height: 70,
-                                borderRadius: 10,
-                              }}
-                              source={{
-                                uri: IMAGE_CDN + data.image,
-                              }}
+                                flexDirection: 'column',
+                                paddingLeft: 10,
+                              }}>
+                              <Text style={{fontWeight: 'bold'}}>
+                                {data.program_name}
+                              </Text>
+                              {data.plan_package.map((item, i) => {
+                                return (
+                                  <TouchableOpacity
+                                    style={{flexDirection: 'row'}}
+                                    key={i}
+                                    onPress={() => {
+                                      setSelectedPrice(item.package_price);
+                                      setplanId(data.plan_id);
+                                      setproductId(item.id);
+                                      setMeal(item);
+                                      setBasicInfo({
+                                        plan_id: data.plan_id,
+                                        plan_type: data.plan_type,
+                                        relative_id: data.relative_id,
+                                        duration_type: data.duration_type,
+                                        duration: data.duration,
+                                      });
+                                    }}>
+                                    <Image
+                                      source={
+                                        productId === item.id &&
+                                        data.plan_id === planId
+                                          ? REC_SELECTED
+                                          : REC
+                                      }
+                                      style={{
+                                        marginRight: 5,
+                                        width: 12,
+                                        height: 12,
+                                        marginTop: 5,
+                                      }}
+                                    />
+                                    <Text>{item.package_name}</Text>
+                                  </TouchableOpacity>
+                                );
+                              })}
+                            </View>
+                          </View>
+                          <View>
+                            <Image
+                              style={{width: 22, height: 23}}
+                              source={
+                                data.plan_id === planId
+                                  ? CHECK_GREEN
+                                  : PLUS_ORANGE
+                              }
                             />
                           </View>
-                          <View
-                            style={{flexDirection: 'column', paddingLeft: 10}}>
-                            <Text style={{fontWeight: 'bold'}}>
-                              {data.program_name}
-                            </Text>
-                            {data.plan_package.map((item, i) => {
-                              return (
-                                <TouchableOpacity
-                                  style={{flexDirection: 'row'}}
-                                  key={i}
-                                  onPress={() => {
-                                    setSelectedPrice(item.package_price);
-                                    setplanId(data.plan_id);
-                                    setproductId(item.id);
-                                    setMeal(item);
-                                    setBasicInfo({
-                                      plan_id: data.plan_id,
-                                      plan_type: data.plan_type,
-                                      relative_id: data.relative_id,
-                                      duration_type: data.duration_type,
-                                      duration: data.duration,
-                                    });
-                                  }}>
-                                  <Image
-                                    source={
-                                      productId === item.id &&
-                                      data.plan_id === planId
-                                        ? REC_SELECTED
-                                        : REC
-                                    }
-                                    style={{
-                                      marginRight: 5,
-                                      width: 12,
-                                      height: 12,
-                                      marginTop: 5,
-                                    }}
-                                  />
-                                  <Text>{item.package_name}</Text>
-                                </TouchableOpacity>
-                              );
-                            })}
-                          </View>
                         </View>
-                        <View>
-                          <Image
-                            style={{width: 22, height: 23}}
-                            source={
-                              data.plan_id === planId
-                                ? CHECK_GREEN
-                                : PLUS_ORANGE
-                            }
-                          />
-                        </View>
-                      </View>
-                    );
-                  })}
-                  
-                </View>
-                
-                <TouchableOpacity
-                  style={[{marginBottom: 20},styleCss.btnButton]}
+                      );
+                    })}
+                  </View>
+
+                  <TouchableOpacity
+                    style={[{marginBottom: 20}, styleCss.btnButton]}
                     onPress={() => {
                       if (meal) {
                         let arrayData = meal;
@@ -366,8 +367,7 @@ const PlanListProgram = (props) => {
                           Toast.CENTER,
                         );
                       }
-                    }}
-                    >
+                    }}>
                     <Text
                       style={{
                         alignSelf: 'center',
@@ -377,12 +377,10 @@ const PlanListProgram = (props) => {
                       Continue
                     </Text>
                   </TouchableOpacity>
-                  </View>
+                </View>
               </>
-              
             )}
           </View>
-          
         </ScrollView>
       </>
     );

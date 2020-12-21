@@ -264,7 +264,20 @@ const LocationPicker = (props) => {
           </View>
           <TouchableOpacity
             onPress={() => {
-              props.navigation.navigate('Addaddress', {address});
+              props.navigation.navigate('Addaddress', {
+                formData: {
+                  address_type: '',
+                  area: address,
+                  block: '',
+                  street: '',
+                  building: '',
+                  floor: '',
+                  apartment_number: '',
+                  name: '',
+                  additional_direction: '',
+                  is_default_address: '',
+                },
+              });
             }}
             style={{
               width: '90%',

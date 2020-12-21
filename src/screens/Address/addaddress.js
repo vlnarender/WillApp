@@ -88,7 +88,6 @@ const StyledInputName = ({
       />
       <TextInput
         style={inputStyles}
-        inlineImageLeft="email"
         onChangeText={formikProps.handleChange(formikKey)}
         onBlur={formikProps.handleBlur(formikKey)}
         value={value}
@@ -98,23 +97,6 @@ const StyledInputName = ({
     </FieldWrapper>
   );
 };
-
-const validationSchema = yup.object().shape({
-  name: yup.string().required('Please enter first name'),
-  block: yup.string().required('Please enter block'),
-  street: yup.string().required('Please enter street'),
-  building: yup.string().required('Please enter building'),
-  floor: yup
-    .number()
-    .typeError('Please enter a valid floor number')
-    .required('Please enter floor'),
-  apartment_number: yup
-    .number()
-    .typeError('Please enter a valid apartment number')
-    .required('Please enter apartment number'),
-  area: yup.string(),
-  additional_direction: yup.string(),
-});
 
 const Addaddress = (props) => {
   const [checked, setChecked] = useState(false);
@@ -131,6 +113,31 @@ const Addaddress = (props) => {
     additional_direction: '',
     is_default_address: '',
   });
+  const validationSchema = yup.object().shape({
+    area: yup.string().required('Please enter area').default(formData.area),
+    name: yup.string().required('Please enter name').default(formData.name),
+    block: yup.string().required('Please enter block').default(formData.block),
+    additional_direction: yup.string().default(formData.additional_direction),
+    street: yup
+      .string()
+      .required('Please enter street')
+      .default(formData.street),
+    building: yup
+      .string()
+      .required('Please enter building')
+      .default(formData.building),
+    floor: yup
+      .number()
+      .typeError('Please enter a valid floor number')
+      .required('Please enter floor')
+      .default(parseInt(formData.floor)),
+    apartment_number: yup
+      .number()
+      .typeError('Please enter a valid apartment number')
+      .required('Please enter apartment number')
+      .default(parseInt(formData.apartment_number)),
+  });
+
   if (props.addaddressMessage) {
     Toast.showWithGravity(props.addaddressMessage, Toast.SHORT, Toast.CENTER);
   }
@@ -172,20 +179,11 @@ const Addaddress = (props) => {
             }}
             onSubmit={(values, actions) => {
               Keyboard.dismiss();
+              const data = formData;
+              data.address_type = selectedValue;
+              data.is_default_address = checked ? 1 : 0;
 
-              const data = {
-                address_type: selectedValue,
-                area: props.route.params.area,
-                block: values.block,
-                street: values.street,
-                building: values.building,
-                floor: values.floor,
-                apartment_number: values.apartment_number,
-                name: values.name,
-                additional_direction: values.additional_direction,
-                is_default_address: checked ? 1 : 0,
-              };
-              ADD_AND_UPDATE_API(data, 'add-address').then((data) => {
+              ADD_AND_UPDATE_API(formData, 'add-address').then((data) => {
                 actions.setSubmitting(true);
                 if (data.success) {
                   Toast.showWithGravity(data.message, Toast.LONG, Toast.CENTER);
@@ -205,18 +203,27 @@ const Addaddress = (props) => {
                   formikKey="name"
                   placeholder="Name"
                   value={formData.name ? formData.name : ''}
+                  onChangeText={(e) => {
+                    setformData({...formData, name: e});
+                  }}
                 />
                 <StyledInputName
                   formikProps={formikProps}
                   formikKey="floor"
                   placeholder="Floor"
                   value={formData.floor ? formData.floor : ''}
+                  onChangeText={(e) => {
+                    setformData({...formData, floor: e});
+                  }}
                 />
                 <StyledInputName
                   formikProps={formikProps}
                   formikKey="block"
                   placeholder="Block"
                   value={formData.block ? formData.block : ''}
+                  onChangeText={(e) => {
+                    setformData({...formData, block: e});
+                  }}
                 />
                 <StyledInputName
                   formikProps={formikProps}
@@ -225,24 +232,36 @@ const Addaddress = (props) => {
                   value={
                     formData.apartment_number ? formData.apartment_number : ''
                   }
+                  onChangeText={(e) => {
+                    setformData({...formData, apartment_number: e});
+                  }}
                 />
                 <StyledInputName
                   formikProps={formikProps}
                   formikKey="street"
                   placeholder="Street"
                   value={formData.street ? formData.street : ''}
+                  onChangeText={(e) => {
+                    setformData({...formData, street: e});
+                  }}
                 />
                 <StyledInputName
                   formikProps={formikProps}
                   formikKey="building"
                   placeholder="Building"
                   value={formData.building ? formData.building : ''}
+                  onChangeText={(e) => {
+                    setformData({...formData, building: e});
+                  }}
                 />
                 <StyledInputName
                   formikProps={formikProps}
                   formikKey="area"
                   placeholder="Area"
                   value={formData.area ? formData.area : ''}
+                  onChangeText={(e) => {
+                    setformData({...formData, area: e});
+                  }}
                 />
                 <View style={[styles.inputStyles]}>
                   <Image
@@ -271,6 +290,9 @@ const Addaddress = (props) => {
                       ? formData.additional_direction
                       : ''
                   }
+                  onChangeText={(e) => {
+                    setformData({...formData, additional_direction: e});
+                  }}
                 />
 
                 <TouchableOpacity
