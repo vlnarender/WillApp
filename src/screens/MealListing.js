@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
 const {height, width} = Dimensions.get('window');
-
+import Toast from 'react-native-simple-toast';
+import {ADD_TO_THE_CART, GET_MY_CART} from '../util/api';
 import {
   Collapse,
   CollapseHeader,
@@ -13,13 +14,19 @@ import {
   PLUS_ORANGE,
   UP_ICON,
   IN_ICON,
+  IMAGE_CDN,
 } from '../_helpers/ImageProvide';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+import {cartActions} from '../actions/cart';
+import {set} from 'lodash';
 let styleCss = require('../GlobalStyle');
 const MealListing = (props) => {
+  const navigation = useNavigation();
   const [selectedIndex, setSelectedIndex] = useState([]);
   const [selectedIndexRestaurent, setSelectedIndexRestaurent] = useState([]);
-  const [planList, setPlanList] = useState(false);
+  const [mealList, setMealList] = useState([]);
+  const [mealType, setMealType] = useState([]);
   const selectItem = (index) => {
     if (selectedIndex.indexOf(index) > -1) {
       let newArray = selectedIndex.filter((indexObject) => {
@@ -33,17 +40,62 @@ const MealListing = (props) => {
       setSelectedIndex([...selectedIndex, index]);
     }
   };
-  const selectItemRestaurent = (index1, index2, index) => {
-    if (selectedIndexRestaurent.indexOf(index) > -1) {
-      let newArray = selectedIndexRestaurent.filter((indexObject) => {
-        if (indexObject == index) {
+  const selectItemRestaurent = (
+    index,
+    meal_id,
+    meal_type_id,
+    meal,
+    plan_diet_package_id,
+  ) => {
+    let tf = true;
+    if (selectedIndexRestaurent.indexOf(meal_id) > -1) {
+      let newArray = selectedIndexRestaurent.filter((indexObject, i) => {
+        if (indexObject == meal_id) {
           return false;
         }
         return true;
       });
+
       setSelectedIndexRestaurent(newArray);
     } else {
-      setSelectedIndexRestaurent([...selectedIndexRestaurent, index]);
+      if (mealType.indexOf(meal_type_id) > -1) {
+        let tmp = selectedIndexRestaurent;
+        mealType.map((e, i) => {
+          if (e === meal_type_id) {
+            tmp[i] = meal_id;
+          }
+        });
+      } else {
+        setMealType([...mealType, meal_type_id]);
+        setSelectedIndexRestaurent([...selectedIndexRestaurent, meal_id]);
+      }
+    }
+    if (mealList.length !== 0) {
+      setMealList(
+        mealList.map((x, i) => {
+          if (x.meal_type === meal.meal_type_id) {
+            tf = false;
+          }
+          return x.meal_type === meal.meal_type_id
+            ? {
+                ...x,
+                meal_id: meal.meal_id,
+                plan_diet_package_id: plan_diet_package_id,
+              }
+            : x;
+        }),
+      );
+    }
+    if (tf) {
+      setMealList([
+        ...mealList,
+        {
+          day: 1,
+          meal_id: meal.meal_id,
+          meal_type: meal.meal_type_id,
+          plan_diet_package_id: plan_diet_package_id,
+        },
+      ]);
     }
   };
   if (props.mealListData) {
@@ -52,7 +104,44 @@ const MealListing = (props) => {
         ? props.mealListData.data[0].plan_package.package_diet_package
         : props.mealListData.data[0].plan_package[0].package_diet_package;
 
-    const checkoutList = () => {};
+    const checkoutList = () => {
+      if (
+        selectedIndexRestaurent.length ===
+        props.mealListData.data[0].plan_package.package_diet_package.length
+      ) {
+        const data = props.mealListData.data[0];
+        let assumblingData = {
+          type: parseInt(data.type),
+          start_date: props.day,
+          duration_type: parseInt(data.duration_type),
+          duration: data.duration,
+          relative_id: data.relative_id,
+          diet_company: [
+            {
+              restaurant_id: data.restaurant_id,
+              week: 1,
+              plan_id: data.plan_id,
+              plan_packages_id: props.mealListData.data[0].plan_package.id,
+              meals: mealList,
+            },
+          ],
+        };
+        ADD_TO_THE_CART(assumblingData, 'user/addToCart').then((data) => {
+          if (data.success) {
+            props.ListOfItems();
+            navigation.navigate('Cart');
+          } else {
+            Toast.showWithGravity(data.message, Toast.SHORT, Toast.CENTER);
+          }
+        });
+      } else {
+        Toast.showWithGravity(
+          'Please select all the meal listed',
+          Toast.SHORT,
+          Toast.CENTER,
+        );
+      }
+    };
     return (
       <>
         <View style={[{marginTop: 10}, styleCss.mainContainer]}>
@@ -91,9 +180,11 @@ const MealListing = (props) => {
                                     <TouchableOpacity
                                       onPress={() =>
                                         selectItemRestaurent(
-                                          i,
-                                          ind,
+                                          index,
                                           meal.meal_id,
+                                          meal.meal_type_id,
+                                          meal,
+                                          list.plan_diet_package_id,
                                         )
                                       }>
                                       <Text style={styles.kd}>
@@ -104,14 +195,12 @@ const MealListing = (props) => {
                                           <View style={styles.imgBox}>
                                             <Image
                                               style={{
-                                                width: 60,
-                                                height: 100,
+                                                width: 63,
+                                                height: 70,
                                                 borderRadius: 10,
                                               }}
                                               source={{
-                                                uri:
-                                                  'https://will-app.s3.ap-south-1.amazonaws.com/' +
-                                                  meal.image,
+                                                uri: IMAGE_CDN + meal.image,
                                               }}
                                             />
                                           </View>
@@ -155,10 +244,10 @@ const MealListing = (props) => {
                                             <View
                                               style={{flexDirection: 'row'}}>
                                               <Text style={styles.itemText}>
-                                                P {meal.protein}g
+                                                P {Math.round(meal.protein)}g
                                               </Text>
                                               <Text style={styles.itemText}>
-                                                Ca {meal.calorie}
+                                                Ca {Math.round(meal.calorie)}
                                               </Text>
                                             </View>
                                             <View
@@ -167,10 +256,11 @@ const MealListing = (props) => {
                                                 marginTop: 10,
                                               }}>
                                               <Text style={styles.itemText}>
-                                                C {meal.carbohydrate}g
+                                                C{' '}
+                                                {Math.round(meal.carbohydrate)}g
                                               </Text>
                                               <Text style={styles.itemText}>
-                                                F {meal.fat}g
+                                                F {Math.round(meal.fat)}g
                                               </Text>
                                             </View>
                                           </View>
@@ -248,8 +338,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#dddddd',
-    padding: 8,
-    width: 78,
+    padding: 5,
+    width: 75,
   },
   headingText: {
     fontSize: 10.5,
@@ -313,4 +403,7 @@ const mapStateToProps = (state) => {
     mealListData: state.mealListReducer.mealListData,
   };
 };
-export default connect(mapStateToProps, null)(MealListing);
+const actionProps = {
+  ListOfItems: cartActions.ListOfItems,
+};
+export default connect(mapStateToProps, actionProps)(MealListing);

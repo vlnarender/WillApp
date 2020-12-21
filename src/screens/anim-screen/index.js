@@ -16,14 +16,14 @@ const {IMG, DURATION, STEP3, STEP4, STEP5, COLOR} = CONSTANTS;
 const {width, height} = Dimensions.get('window');
 import {connect} from 'react-redux';
 import {labelActions} from '../../actions/label';
-
+import {cartActions} from '../../actions/cart';
 const logoWidth = (3 / 4) * width;
 
 class Main extends React.Component {
   constructor(props) {
     super(props);
     props.labelAction();
-
+    props.ListOfItems();
     this.state = {
       scale: new Animated.Value(1),
       top: new Animated.Value(-1 * logoWidth),
@@ -48,7 +48,6 @@ class Main extends React.Component {
       const token = await AsyncStorage.getItem('token');
       if (
         verify == 'yes' &&
-        remember == 'yes' &&
         (token != null || token != '' || token != undefined)
       ) {
         this._isMounted && this.setState({login: true});
@@ -530,5 +529,6 @@ const Btn = ({
 
 const actionCreators = {
   labelAction: labelActions.labelAction,
+  ListOfItems: cartActions.ListOfItems,
 };
 export default connect(null, actionCreators)(Main);

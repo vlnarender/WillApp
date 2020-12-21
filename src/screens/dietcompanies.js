@@ -14,39 +14,39 @@ import {labelActions} from '../actions/label';
 import {homeActions} from '../actions/home';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import {HEADER_MENU_ICON, HEADER_SMALL_LOGO} from '../_helpers/ImageProvide';
+import {cartActions} from '../actions/cart';
 let styleCss = require('../GlobalStyle');
 
 const DATA3 = [
   {
     id: '1',
     title: 'Diet Plans',
-    imageUrl: require('../../assets/home/photo.jpeg'),
+    imageUrl: require('../../assets/image/home/photo.jpeg'),
     description: 'All monthly deals',
   },
   {
     id: '2',
     title: 'Resturants',
-    imageUrl: require('../../assets/home/photo.jpeg'),
+    imageUrl: require('../../assets/image/home/photo.jpeg'),
     description: 'Grab a quick meals',
   },
   {
     id: '3',
     title: 'Resturants',
-    imageUrl: require('../../assets/home/photo.jpeg'),
+    imageUrl: require('../../assets/image/home/photo.jpeg'),
     description: 'Grab a quick meals',
   },
   {
     id: '4',
     title: 'Resturants',
-    imageUrl: require('../../assets/home/photo.jpeg'),
+    imageUrl: require('../../assets/image/home/photo.jpeg'),
     description: 'Grab a quick meals',
   },
 ];
 
 const Dietcompanies = (props) => {
   const navigation = useNavigation();
-  const [token, setToken] = useState('');
-  const [lan_guage, setLanguage] = useState('en');
   useEffect(() => {
     getValue();
   }, []);
@@ -85,7 +85,7 @@ const Dietcompanies = (props) => {
                 <TouchableOpacity onPress={() => navigation.openDrawer()}>
                   <Image
                     style={{width: 20, height: 15}}
-                    source={require('../../assets/header/menuIcon.png')}
+                    source={HEADER_MENU_ICON}
                   />
                 </TouchableOpacity>
               </View>
@@ -93,7 +93,7 @@ const Dietcompanies = (props) => {
                 style={{flex: 4, alignItems: 'center', alignSelf: 'center'}}>
                 <Image
                   style={{width: 50, height: 50}}
-                  source={require('../../assets/header/smallLogo.png')}
+                  source={HEADER_SMALL_LOGO}
                 />
               </View>
               <View style={{flex: 1}}></View>
@@ -128,7 +128,10 @@ const Dietcompanies = (props) => {
 
                 {/* DietCompany start here */}
 
-                <ScrollView contentContainerStyle={styleCss.scrollViewCard}>
+                <ScrollView
+                  contentContainerStyle={styleCss.scrollViewCard}
+                  keyboardShouldPersistTaps="handled"
+                  keyboardDismissMode="interactive">
                   {props.homeData.dietcompanies.map((item, index) => {
                     return (
                       <View style={styleCss.homeCard} key={index}>
@@ -176,5 +179,6 @@ const mapStateToProps = (state) => {
 const actionCreators = {
   homeAction: homeActions.homeAction,
   labelAction: labelActions.labelAction,
+  selectedPlan: cartActions.selectedPlan,
 };
 export default connect(mapStateToProps, actionCreators)(Dietcompanies);

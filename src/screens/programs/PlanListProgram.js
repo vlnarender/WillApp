@@ -13,20 +13,25 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  I18nManager,
 } from 'react-native';
+import Toast from 'react-native-simple-toast';
 const {height, width} = Dimensions.get('window');
 import {
   REC,
   REC_SELECTED,
   CHECK_GREEN,
   PLUS_ORANGE,
+  PLAN_ARROW_LEFT,
+  PLAN_ARROW_RIGHT,
+  IMAGE_CDN,
 } from '../../_helpers/ImageProvide';
 let styleCss = require('../../GlobalStyle');
 
-import Loader from '../../components/Loader';
+import Loader from '../../components/Loader/Loader';
 import Swiper from 'react-native-swiper';
 import {connect} from 'react-redux';
-import Header from '../../components/Header';
+import Header from '../../components/Header/Header';
 import {cartActions} from '../../actions/cart';
 import {programPlanActions} from '../../actions/programPlan';
 const PlanListProgram = (props) => {
@@ -105,7 +110,10 @@ const PlanListProgram = (props) => {
     return (
       <>
         <Header />
-        <ScrollView style={{backgroundColor: '#ffffff'}}>
+        <ScrollView
+          style={{backgroundColor: '#ffffff'}}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive">
           <View>
             <Swiper
               style={{height: 200}}
@@ -176,39 +184,43 @@ const PlanListProgram = (props) => {
             }}>
             <TouchableOpacity onPress={() => scrollTo('right')}>
               <Image
-                source={require('../../../assets/left_arrow.png')}
+                source={I18nManager.isRTL ? PLAN_ARROW_RIGHT : PLAN_ARROW_LEFT}
                 style={{marginRight: 5}}
               />
             </TouchableOpacity>
-            <ScrollView
-              horizontal={true}
-              ref={scrollViewRef}
-              onContentSizeChange={(w, h) => setScrollViewWidth(w)}>
-              {programData.duration.map((item, index) => {
-                return (
-                  <TouchableOpacity
-                    style={{flexDirection: 'row'}}
-                    onPress={() => selectPlanList(item)}
-                    key={index}>
-                    <Image
-                      source={item.is_selected ? REC_SELECTED : REC}
-                      style={{
-                        marginRight: 5,
-                        marginLeft: 20,
-                        width: 10,
-                        height: 10,
-                        marginTop: 5,
-                      }}
-                    />
-                    <Text>{item.Week}</Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </ScrollView>
+            <View style={{alignSelf: 'flex-start'}}>
+              <ScrollView
+                keyboardShouldPersistTaps="handled"
+                keyboardDismissMode="interactive"
+                horizontal={true}
+                ref={scrollViewRef}
+                onContentSizeChange={(w, h) => setScrollViewWidth(w)}>
+                {programData.duration.map((item, index) => {
+                  return (
+                    <TouchableOpacity
+                      style={{flexDirection: 'row'}}
+                      onPress={() => selectPlanList(item)}
+                      key={index}>
+                      <Image
+                        source={item.is_selected ? REC_SELECTED : REC}
+                        style={{
+                          marginRight: 5,
+                          marginLeft: 20,
+                          width: 10,
+                          height: 10,
+                          marginTop: 5,
+                        }}
+                      />
+                      <Text>{item.Week}</Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
+            </View>
             <TouchableOpacity onPress={() => scrollTo('left')}>
               <Image
                 style={{marginLeft: 5}}
-                source={require('../../../assets/right_arrow.png')}
+                source={I18nManager.isRTL ? PLAN_ARROW_LEFT : PLAN_ARROW_RIGHT}
               />
             </TouchableOpacity>
           </View>
@@ -229,6 +241,7 @@ const PlanListProgram = (props) => {
               </Text>
             ) : (
               <>
+              <View style={[{marginTop: 10}, styleCss.mainContainer]}>
                 <View style={styles.cardBox}>
                   <Text
                     style={{
@@ -244,7 +257,7 @@ const PlanListProgram = (props) => {
                         style={{
                           paddingVertical: 10,
                           borderBottomWidth: 1,
-                          borderBottomColor: '#ccc',
+                          borderBottomColor: '#ddd',
                           flexDirection: 'row',
                           justifyContent: 'space-between',
                         }}
@@ -253,14 +266,12 @@ const PlanListProgram = (props) => {
                           <View style={styles.imgBox}>
                             <Image
                               style={{
-                                width: 60,
-                                height: 60,
+                                width: 63,
+                                height: 70,
                                 borderRadius: 10,
                               }}
                               source={{
-                                uri:
-                                  'https://will-app.s3.ap-south-1.amazonaws.com/' +
-                                  data.image,
+                                uri: IMAGE_CDN + data.image,
                               }}
                             />
                           </View>
@@ -280,7 +291,7 @@ const PlanListProgram = (props) => {
                                     setproductId(item.id);
                                     setMeal(item);
                                     setBasicInfo({
-                                      price: item.package_price,
+                                      plan_id: data.plan_id,
                                       plan_type: data.plan_type,
                                       relative_id: data.relative_id,
                                       duration_type: data.duration_type,
@@ -289,7 +300,10 @@ const PlanListProgram = (props) => {
                                   }}>
                                   <Image
                                     source={
-                                      productId === item.id ? REC_SELECTED : REC
+                                      productId === item.id &&
+                                      data.plan_id === planId
+                                        ? REC_SELECTED
+                                        : REC
                                     }
                                     style={{
                                       marginRight: 5,
@@ -306,7 +320,7 @@ const PlanListProgram = (props) => {
                         </View>
                         <View>
                           <Image
-                            style={{width: 20, height: 21}}
+                            style={{width: 22, height: 23}}
                             source={
                               data.plan_id === planId
                                 ? CHECK_GREEN
@@ -317,36 +331,43 @@ const PlanListProgram = (props) => {
                       </View>
                     );
                   })}
-                  <TouchableOpacity
+                  
+                </View>
+                
+                <TouchableOpacity
+                  style={[{marginBottom: 20},styleCss.btnButton]}
                     onPress={() => {
-                      let arrayData = meal;
-                      arrayData.package_diet_package = arrayData.package_diet_package.map(
-                        function (el) {
-                          el.meal = el.meal.map((me) => {
-                            var o = Object.assign({}, me);
+                      if (meal) {
+                        let arrayData = meal;
+                        arrayData.package_diet_package = arrayData.package_diet_package.map(
+                          function (el) {
+                            el.meal = el.meal.map((me) => {
+                              var o = Object.assign({}, me);
+                              o.isSelected = false;
+                              return o;
+                            });
+                            var o = Object.assign({}, el);
                             o.isSelected = false;
                             return o;
-                          });
-                          var o = Object.assign({}, el);
-                          o.isSelected = false;
-                          return o;
-                        },
-                      );
-                      navigation.navigate('MealSelection', {
-                        BasicInfo: BasicInfo,
-                        selectedPlan: props.selectedPlan,
-                        NumberOfWeeks: weekNumber,
-                        GenderId: gender_id,
-                        Meal: arrayData,
-                        week: weekNumber,
-                      });
+                          },
+                        );
+                        navigation.navigate('MealSelection', {
+                          BasicInfo: BasicInfo,
+                          selectedPlan: props.selectedPlan,
+                          NumberOfWeeks: weekNumber,
+                          GenderId: gender_id,
+                          Meal: arrayData,
+                          week: weekNumber,
+                        });
+                      } else {
+                        Toast.showWithGravity(
+                          'Please select your meal first',
+                          Toast.SHORT,
+                          Toast.CENTER,
+                        );
+                      }
                     }}
-                    style={{
-                      backgroundColor: '#F2AE88',
-                      marginVertical: 10,
-                      padding: 10,
-                      borderRadius: 10,
-                    }}>
+                    >
                     <Text
                       style={{
                         alignSelf: 'center',
@@ -356,10 +377,12 @@ const PlanListProgram = (props) => {
                       Continue
                     </Text>
                   </TouchableOpacity>
-                </View>
+                  </View>
               </>
+              
             )}
           </View>
+          
         </ScrollView>
       </>
     );
@@ -370,7 +393,7 @@ const styles = StyleSheet.create({
   cardBox: {
     //backgroundColor: 'red',
     alignSelf: 'center',
-    width: '90%',
+    width: '100%',
     shadowOffset: {width: 10, height: 5},
     shadowColor: 'gray',
     shadowOpacity: 10,
@@ -410,8 +433,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     mealListData: state.mealListReducer.mealListData,
-    selectedPlan: state.cartReducer.selectedPlan,
     programPlanData: state.programPlanReduce.programPlanData,
+    selectedPlan: state.cartReducer.selectedPlan,
     features_id: state.cartReducer.features_id,
     restaurant_id: state.cartReducer.restaurant_id,
     program_id: state.cartReducer.program_id,

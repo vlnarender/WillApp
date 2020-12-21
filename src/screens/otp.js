@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {
   View,
@@ -6,10 +6,11 @@ import {
   TextInput,
   SafeAreaView,
   Image,
-  ImageBackground,
   Text,
   Switch,
   StyleSheet,
+  Platform,
+  Keyboard,
 } from 'react-native';
 import {Formik} from 'formik';
 import * as yup from 'yup'; // for everything
@@ -17,6 +18,7 @@ import Toast from 'react-native-simple-toast';
 import {ScrollView} from 'react-native-gesture-handler';
 import {otpActions} from '../actions/otp';
 import AsyncStorage from '@react-native-community/async-storage';
+import {LOGIN_logo, LOGIN_pass} from '../_helpers/ImageProvide';
 const FieldWrapper = ({children, label, formikProps, formikKey}) => (
   <View style={{marginHorizontal: 20, marginVertical: 1}}>
     <Text style={{marginBottom: 3}}>{label}</Text>
@@ -39,10 +41,10 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     height: 50,
     width: 300,
     borderWidth: 1,
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
-    elevation: 20,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -69,7 +71,7 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
           marginTop: 25,
           position: 'absolute',
         }}
-        source={require('../../assets/login/pass.png')}
+        source={LOGIN_pass}
       />
       <TextInput
         style={inputStyles}
@@ -95,11 +97,11 @@ const StyledSwitch = ({formikKey, formikProps, label, ...rest}) => (
 );
 
 const validationSchema = yup.object().shape({
-  password: yup
+  otp: yup
     .string()
-    //.label('Password')
+    //.label('otp')
     .required()
-    .min(4, 'Password must have more than 4 characters '),
+    .min(4, 'Otp must have more than 4 characters '),
 });
 
 const signUp = ({values}) => {
@@ -138,86 +140,86 @@ const OtpScreen = (props) => {
   };
   return (
     <SafeAreaView>
-      <ScrollView>
-        <View
+      <View
+        style={{
+          marginTop: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 50,
+        }}>
+        <Image source={LOGIN_logo} />
+        <Text
           style={{
-            marginTop: 0,
-            justifyContent: 'center',
-            alignItems: 'center',
+            color: '#f2ae88',
+            fontSize: 15,
+            textAlign: 'center',
           }}>
-          <Image source={require('../../assets/login/logo.png')} />
-          <Text
-            style={{
-              color: '#f2ae88',
-              marginBottom: 30,
-              fontSize: 15,
-              textAlign: 'center',
-            }}>
-            A verification code sent to your email ending with **{email}**
-          </Text>
+          A verification code sent to your email ending with **{email}**
+        </Text>
 
-          <Formik
-            initialValues={{
-              // username: '',
-              password: '',
-            }}
-            onSubmit={(values, actions) => {
-              var user = {};
-              user.verification_code = values.password;
-              user.user_id = userid;
-              user.device_token = device_token;
-              user.device_type = device_type;
-              user.grant_type = 'password';
-              props.otpAction(user, props.navigation);
-              actions.setSubmitting(true);
-            }}
-            validationSchema={validationSchema}>
-            {(formikProps) => (
+        <Formik
+          initialValues={{
+            // username: '',
+            otp: '',
+          }}
+          onSubmit={(values, actions) => {
+            Keyboard.dismiss();
+
+            var user = {};
+            user.verification_code = values.otp;
+            user.user_id = userid;
+            user.device_token = device_token;
+            user.device_type = device_type;
+            user.grant_type = 'otp';
+            props.otpAction(user, props.navigation);
+            actions.setSubmitting(true);
+          }}
+          validationSchema={validationSchema}>
+          {(formikProps) => (
+            <React.Fragment>
+              <StyledInputPass
+                icon={'pass'}
+                formikProps={formikProps}
+                formikKey="otp"
+                placeholder="Verification Code"
+                secureTextEntry
+              />
+
               <React.Fragment>
-                <StyledInputPass
-                  icon={'pass'}
-                  formikProps={formikProps}
-                  formikKey="password"
-                  placeholder="Verification Code"
-                  secureTextEntry
-                />
-
-                <React.Fragment>
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                      marginTop: 25,
-                    }}>
-                    <TouchableOpacity onPress={formikProps.handleSubmit}>
-                      <View
-                        style={{
-                          backgroundColor: '#f2ae88',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          borderRadius: 15,
-                          padding: 10,
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    marginTop: 25,
+                  }}>
+                  <TouchableOpacity onPress={formikProps.handleSubmit}>
+                    <View
+                      style={{
+                        backgroundColor: '#f2ae88',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 15,
+                        padding: 10,
+                        width: 300,
+                        height: 50,
+                        shadowColor: 'red',
+                        shadowRadius: 16,
+                        shadowOpacity: 10,
+                        shadowOffset: {
                           width: 300,
                           height: 50,
-                          shadowColor: 'red',
-                          shadowRadius: 16,
-                          shadowOpacity: 10,
-                          shadowOffset: {
-                            width: 300,
-                            height: 50,
-                          },
-                          elevation: 12,
-                        }}>
-                        <Text style={{color: 'white'}}>Submit</Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </React.Fragment>
+                        },
+                        elevation: 12,
+                      }}>
+                      <Text style={{color: 'white'}}>Submit</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </React.Fragment>
-            )}
-          </Formik>
-        </View>
-      </ScrollView>
+            </React.Fragment>
+          )}
+        </Formik>
+      </View>
     </SafeAreaView>
   );
 };

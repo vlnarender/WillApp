@@ -1,6 +1,5 @@
 import {userConstants} from './actionTypes';
 import {GET_API} from '../util/api';
-import AsyncStorage from '@react-native-community/async-storage';
 export const cardActions = {
   cardAction,
 };
@@ -8,7 +7,7 @@ export const cardActions = {
 function cardAction(data, navigation) {
   return (dispatch) => {
     dispatch(request());
-    GET_API('creditcard/list').then(
+    return GET_API('creditcard/list').then(
       (data) => {
         if (data.success) {
           dispatch(success(data));

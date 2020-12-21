@@ -1,11 +1,8 @@
 import {userConstants} from '../actions/actionTypes';
-// import {AsyncStorage} from 'react-native';
 
 const initialState = {
   emailData: {},
   loading: false,
-  //isSignout: false,
-  //userToken: null,
   emailError: '',
   emailMessage: '',
 };

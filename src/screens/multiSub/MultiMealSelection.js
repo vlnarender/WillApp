@@ -4,7 +4,7 @@
  * @Owner Will
  */
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -17,14 +17,14 @@ import {
 const {width} = Dimensions.get('window');
 import Swiper from 'react-native-swiper';
 import Toast from 'react-native-simple-toast';
-import Header from '../../components/Header';
+import Header from '../../components/Header/Header';
 import {multiSubActions} from '../../actions/multiSub';
 import {connect} from 'react-redux';
+import {ADD_TO_THE_CART} from '../../util/api';
 import {
   CHECK_GREEN,
   PLUS_ORANGE,
   UP_DOWN_ARROW_BLACK,
-  UP_ICON,
   IN_ICON,
 } from '../../_helpers/ImageProvide';
 import {
@@ -33,11 +33,12 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import {IMAGE_CDN} from '../../_helpers/globalVeriable';
-import Loader from '../../components/Loader';
+import Loader from '../../components/Loader/Loader';
+import {cartActions} from '../../actions/cart';
+let styleCss = require('../../GlobalStyle');
 
 const MultiMealSelection = (props) => {
   const navigation = useNavigation();
-  var [list_of_item, setlistofitem] = useState(props.LIST_ITEMS);
   const [daysNumber, setDaysNumber] = useState(1);
   const [mealListing, setmealListing] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
@@ -46,31 +47,48 @@ const MultiMealSelection = (props) => {
       setDaysNumber(1);
       setmealListing([]);
       setSelectedData([]);
-      setlistofitem(props.LIST_ITEMS);
       getPrimaryData();
     });
     return () => {
       unsubscribe;
     };
   }, [props.LIST_ITEMS]);
-  const mealListingList = (id, meal_id, index, mealListData) => {
+  const mealListingList = (
+    id,
+    meal_id,
+    index,
+    mealListData,
+    meal_type,
+    plan_diet_package_id,
+  ) => {
     setmealListing(
       mealListing.map((x, i) => {
         if (index === i) {
           x.id = id;
           x.meal_id = meal_id;
           x.selectedData = mealListData;
+          x.day = daysNumber;
+          x.plan_diet_package_id = plan_diet_package_id;
+          x.meal_type = meal_type;
         }
         return x;
       }),
     );
   };
+
   const getPrimaryData = () => {
     let array = [];
-    console.log('props.LIST_ITEMS', props.LIST_ITEMS);
     if (props.LIST_ITEMS) {
       props.LIST_ITEMS.plan_package.data.package_diet_package.map((item) => {
-        array.push({id: null, meal_id: null, data: item, selectedData: null});
+        array.push({
+          id: null,
+          meal_id: null,
+          data: item,
+          selectedData: null,
+          day: null,
+          plan_diet_package_id: null,
+          meal_type: null,
+        });
       });
     }
     setmealListing(array);
@@ -78,41 +96,91 @@ const MultiMealSelection = (props) => {
 
   const checkoutList = () => {
     let tf = true;
+    // check for null meal value
     mealListing.map((item) => {
       if (item.id === null) {
         tf = false;
         Toast.showWithGravity(
-          'Please select atlist one meal from each section (Breakfast,Lunch,Dinner etc.)',
+          'Please select atlist one meal from each section.',
           Toast.SHORT,
           Toast.CENTER,
         );
       }
     });
     if (tf) {
-      let tempVar = mealListing.map((data) => {
-        return data.selectedData !== null && data.selectedData;
+      // remove the null value element
+      let tempVar = selectedData;
+      mealListing.map((data) => {
+        tempVar.push({
+          day: data.day,
+          meal_id: data.meal_id,
+          meal_type: data.meal_type,
+          plan_diet_package_id: data.plan_diet_package_id,
+        });
       });
-      setSelectedData([...selectedData, tempVar]);
+      setSelectedData(tempVar);
+
       if (daysNumber === 7) {
+        let tmpArray =
+          props.selectedMeals === undefined ? [] : props.selectedMeals;
+
         if (props.selectedWeek === props.multiSubWeek) {
-          console.log(props.selectedMeal);
-          navigation.navigate('Cart');
+          let sendData = {
+            duration: props.LIST_ITEMS.duration,
+            duration_type: props.LIST_ITEMS.duration_type,
+            plan_type: props.LIST_ITEMS.plan_type,
+            relative_id: props.LIST_ITEMS.relative_id,
+            type: 2,
+            gender: 1,
+            start_date: props.selectedDate,
+            diet_company: [
+              ...tmpArray,
+              {
+                restaurant_id: props.LIST_ITEMS.restaurant_id,
+                week: props.selectedWeek,
+                plan_id: props.LIST_ITEMS.plan_id,
+                plan_packages_id: props.LIST_ITEMS.plan_package.packageId,
+                meals: tempVar,
+              },
+            ],
+          };
+          sendData.diet_company.map((data, i) => {
+            if (data === undefined) {
+              sendData.diet_company.splice(i, 1);
+            }
+          });
+          ADD_TO_THE_CART(sendData, 'user/addToCart').then((data) => {
+            if (data.success) {
+              props.ListOfItems();
+              navigation.navigate('Cart');
+            } else {
+              Toast.showWithGravity(data.message, Toast.SHORT, Toast.CENTER);
+            }
+          });
         } else {
           props.multiSubSelectedWeek(props.selectedWeek + 1);
-          props.multiSubAddSelectedData({...selectedData, tempVar});
+          props.multiSubAddSelectedData({
+            restaurant_id: props.LIST_ITEMS.restaurant_id,
+            week: props.selectedWeek,
+            plan_id: props.LIST_ITEMS.plan_id,
+            plan_packages_id: props.LIST_ITEMS.plan_package.packageId,
+            meals: tempVar,
+          });
           navigation.navigate('MultiSubs');
         }
       }
-      setDaysNumber(daysNumber + 1);
+      daysNumber != 7 && setDaysNumber(daysNumber + 1);
       getPrimaryData();
     }
   };
   if (props.LIST_ITEMS && mealListing) {
-    console.log(props.LIST_ITEMS);
     return (
       <>
         <Header />
-        <ScrollView style={{backgroundColor: '#ffffff'}}>
+        <ScrollView
+          style={{backgroundColor: '#ffffff'}}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive">
           <View>
             <Swiper
               style={{height: 200}}
@@ -139,7 +207,7 @@ const MultiMealSelection = (props) => {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{alignSelf: 'center'}}>
+          <View style={[{marginTop: 10}, styleCss.mainContainer]}>
             <View style={{padding: 5, justifyContent: 'flex-end'}}>
               <View
                 style={{
@@ -165,14 +233,13 @@ const MultiMealSelection = (props) => {
                 />
               </View>
             </View>
-            <View style={{width: '95%'}}>
+            
+            <View >
               {mealListing.map((item, mtindex) => {
                 return (
                   <Collapse isCollapsed={true} key={mtindex}>
                     <CollapseHeader>
-                      <TouchableOpacity
-                        onPress={() => console.log('hi')}
-                        activeOpacity={0.9}>
+                      <TouchableOpacity activeOpacity={0.9}>
                         <View style={styles.heading}>
                           <Text style={styles.text}>{item.data.meal_name}</Text>
                           <View>
@@ -198,32 +265,37 @@ const MultiMealSelection = (props) => {
                                       mealListData.meal_id,
                                       mtindex,
                                       mealListData,
+                                      mealListData.meal_type_id,
+                                      meal_list.plan_diet_package_id,
                                     );
                                   }}
-                                  style={{
-                                    flexDirection: 'row',
-                                    marginVertical: 5,
-                                    borderBottomWidth: 1,
-                                    borderBottomColor: '#ccc',
-                                  }}>
-                                  <View>
+                                  >
+                                   <View style={styles.borderBottomBox}>
+                                    <Text style={styles.kd}>
+                                      Price : {mealListData.price} KD
+                                    </Text>
+                                    
+
+                                  <View style={{flexDirection: 'row'}}>
+                                    <View>
                                     <View style={styles.imgBox}>
                                       <Image
                                         style={{
-                                          width: 70,
-                                          height: 60,
+                                          width: 63,
+                                          height: 70,
                                           borderRadius: 10,
                                         }}
                                         source={{
                                           uri: IMAGE_CDN + mealListData.image,
                                         }}
                                       />
+                                      </View>
                                     </View>
-                                  </View>
+                                  
 
                                   <View
                                     style={{
-                                      flex: 2,
+                                      flex:2,
                                       paddingHorizontal: 10,
                                     }}>
                                     <Text style={styles.headingText}>
@@ -233,16 +305,18 @@ const MultiMealSelection = (props) => {
                                       {mealListData.discription}
                                     </Text>
                                   </View>
+                                  
                                   <View style={{width: 100}}>
                                     <View>
                                       <View
                                         style={{
                                           alignItems: 'flex-end',
+                                          marginTop: 10,
                                         }}>
                                         <Image
                                           style={{
-                                            width: 18,
-                                            height: 18,
+                                            width: 22,
+                                            height: 23,
                                             marginLeft: 5,
                                           }}
                                           source={
@@ -256,16 +330,18 @@ const MultiMealSelection = (props) => {
                                       </View>
                                     </View>
 
-                                    <Text style={{fontSize: 10}}>
-                                      Price : {mealListData.price} KD
-                                    </Text>
+                                    
+
+
+                                          {/* Power box */}
+
                                     <View style={styles.powerBox}>
                                       <View style={{flexDirection: 'row'}}>
                                         <Text style={styles.itemText}>
-                                          P {mealListData.protein}g
+                                          P {Math.round(mealListData.protein)}g
                                         </Text>
                                         <Text style={styles.itemText}>
-                                          Ca {mealListData.calorie}
+                                          Ca {Math.round(mealListData.calorie)}
                                         </Text>
                                       </View>
                                       <View
@@ -274,13 +350,20 @@ const MultiMealSelection = (props) => {
                                           marginTop: 10,
                                         }}>
                                         <Text style={styles.itemText}>
-                                          C {mealListData.carbohydrate}g
+                                          C
+                                          {Math.round(
+                                            mealListData.carbohydrate,
+                                          )}
+                                          g
                                         </Text>
                                         <Text style={styles.itemText}>
-                                          F {mealListData.fat}g
+                                          F {Math.round(mealListData.fat)}g
                                         </Text>
                                       </View>
                                     </View>
+                                  </View>
+                                  </View>
+                                  
                                   </View>
                                 </TouchableOpacity>
                               );
@@ -314,13 +397,15 @@ const mapStateToProps = (state) => {
   return {
     multiSubWeek: state.commonReducer.multiSubWeek,
     selectedWeek: state.commonReducer.selectedWeek,
-    selectedMeal: state.multiSubReducer.selectedMeal,
-    LIST_ITEMS: state.multiSubReducer.LIST_ITEMS,
+    selectedMeals: state.multiSubReducer.selectedMeal,
+    LIST_ITEMS: state.multiSubReducer.list_items,
+    selectedDate: state.cartReducer.selectedDate,
   };
 };
 const actionCreators = {
   multiSubAction: multiSubActions.multiSubAction,
   multiSubSelectedWeek: multiSubActions.multiSubSelectedWeek,
+  ListOfItems: cartActions.ListOfItems,
   multiSubAddSelectedData: multiSubActions.multiSubAddSelectedData,
 };
 export default connect(mapStateToProps, actionCreators)(MultiMealSelection);
@@ -329,19 +414,19 @@ const styles = StyleSheet.create({
   cardBox: {
     //backgroundColor: 'red',
     alignSelf: 'center',
-    width: '96%',
+    width: '100%',
     elevation: 3,
     backgroundColor: 'white', // invisible color
     borderRadius: 10,
-    marginBottom: 10,
+    marginVertical: 15,
     padding: 10,
   },
   imgBox: {
-    borderRadius: 5,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: '#dddddd',
     padding: 5,
-    width: 80,
+    width: 75,
   },
   back: {
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -380,7 +465,7 @@ const styles = StyleSheet.create({
     borderColor: '#f2cab3',
     borderTopLeftRadius: 8,
     padding: 5,
-    marginTop: 5,
+    marginTop: 10,
   },
 
   headingText: {
@@ -416,9 +501,16 @@ const styles = StyleSheet.create({
     padding: 5,
     marginVertical: 20,
   },
+
   checkoutText: {
     textAlign: 'center',
     color: 'white',
     fontSize: 16,
+  },
+  borderBottomBox: {
+    borderBottomWidth: 1,
+    borderColor: '#dddddd',
+    paddingBottom: 10,
+    marginBottom: 10,
   },
 });

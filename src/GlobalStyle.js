@@ -42,10 +42,11 @@ module.exports = StyleSheet.create({
     height: 50,
     width: 300,
     borderWidth: 1,
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
-    elevation: 20,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -92,7 +93,6 @@ module.exports = StyleSheet.create({
   header: {
     width: '100%',
     height: 45,
-    backgroundColor: 'white',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -178,10 +178,11 @@ module.exports = StyleSheet.create({
     textAlign: 'left',
     height: 50,
     borderWidth: 1,
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
-    elevation: 20,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -195,10 +196,11 @@ module.exports = StyleSheet.create({
     borderColor: '#f2ae88',
     height: 50,
     borderWidth: 1,
-    shadowOffset: {width: 0, height: 4},
-    shadowColor: '#f2ae88',
-    shadowOpacity: 0.6,
-    elevation: 8,
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
+    shadowColor: 'black',
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
+    elevation: 5,
     borderRadius: 16,
     backgroundColor: '#f2ae88',
     marginTop: 30,
@@ -213,9 +215,10 @@ module.exports = StyleSheet.create({
     textAlign: 'left',
     height: 50,
     borderWidth: 1,
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 20,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
@@ -229,9 +232,10 @@ module.exports = StyleSheet.create({
   inputStylesOpt: {
     borderColor: '#e0e0e0',
     borderWidth: 1,
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 20,
     backgroundColor: '#0000', // invisible color
     borderRadius: 10,
@@ -287,9 +291,10 @@ module.exports = StyleSheet.create({
     borderColor: '#ddd',
     borderBottomWidth: 1,
     shadowColor: '#ddd',
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     shadowRadius: 3,
     elevation: 6,
     padding: 10,
@@ -303,11 +308,11 @@ module.exports = StyleSheet.create({
     borderRadius: 8,
     borderColor: '#ddd',
     borderBottomWidth: 1,
-
     shadowColor: '#ddd',
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     shadowRadius: 3,
     elevation: 6,
     padding: 10,
@@ -322,7 +327,7 @@ module.exports = StyleSheet.create({
 
   h2: {
     fontSize: 18,
-    color: 'orange',
+    color: '#f2ae88',
     fontWeight: '700',
   },
   ptext: {
@@ -336,9 +341,10 @@ module.exports = StyleSheet.create({
   featureBox: {
     width: 165,
     height: 175,
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 6,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
@@ -357,9 +363,10 @@ module.exports = StyleSheet.create({
   programBox: {
     width: 165,
     height: 175,
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 6,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
@@ -380,16 +387,17 @@ module.exports = StyleSheet.create({
     flex: 1,
   },
   homeCard: {
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 6,
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
     width: width / 2.2,
-    height: 170,
+    height: 200,
     margin: 5,
-    padding: 5,
+    padding: 10,
   },
   scrollViewCard: {
     width: width,
@@ -400,9 +408,10 @@ module.exports = StyleSheet.create({
     justifyContent: 'center',
   },
   compBox: {
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 6,
     backgroundColor: '#0000', // invisible color
     borderRadius: 10,
@@ -428,10 +437,11 @@ module.exports = StyleSheet.create({
     height: 50,
     width: '100%',
     borderWidth: 1,
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
-    elevation: 20,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -464,10 +474,11 @@ module.exports = StyleSheet.create({
 
   //choose plan
   choosePlan: {
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 8,
-    elevation: 6,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
+    elevation: 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 10,
     backgroundColor: '#fff',

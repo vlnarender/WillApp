@@ -9,7 +9,9 @@ const Offers = (props) => {
   if (props.labelData) {
     return (
       <>
-        <ScrollView>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive">
           <View>
             <Swiper
               style={{height: 200}}
@@ -25,15 +27,15 @@ const Offers = (props) => {
               autoplay={true}>
               <Image
                 style={styles.img}
-                source={require('../../assets/food-1.png')}
+                source={require('../../assets/image/food-1.png')}
               />
               <Image
                 style={styles.img}
-                source={require('../../assets/food-2.png')}
+                source={require('../../assets/image/food-2.png')}
               />
               <Image
                 style={styles.img}
-                source={require('../../assets/food-3.png')}
+                source={require('../../assets/image/food-3.png')}
               />
             </Swiper>
             <View style={styles.back}>
@@ -53,7 +55,7 @@ const Offers = (props) => {
   } else return null;
 };
 
-AppRegistry.registerComponent('myproject', () => SwiperComponent);
+// AppRegistry.registerComponent('myproject', () => SwiperComponent);
 
 const styles = StyleSheet.create({
   img: {

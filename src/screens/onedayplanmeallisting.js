@@ -10,13 +10,15 @@ import {
 import Swiper from 'react-native-swiper';
 import {ScrollView} from 'react-native-gesture-handler';
 import MealListing from './MealListing';
-import Header from '../components/Header';
+import Header from '../components/Header/Header';
 const OneDayPlanMealListing = (props) => {
   const {itemId, featureId, oneday} = props.route.params;
   return (
     <>
       <Header />
-      <ScrollView>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive">
         <View>
           <Swiper
             style={{height: 200}}
@@ -57,7 +59,7 @@ const OneDayPlanMealListing = (props) => {
   );
 };
 
-AppRegistry.registerComponent('myproject', () => SwiperComponent);
+// AppRegistry.registerComponent('myproject', () => SwiperComponent);
 
 const styles = StyleSheet.create({
   innerImg: {

@@ -3,7 +3,7 @@
  * @email surajknkumar@gmail.com
  * @Owner Will
  */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {
   View,
@@ -13,65 +13,47 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {useNavigation} from '@react-navigation/native';
 import {programPlanActions} from '../actions/programPlan';
 import {dietCompanyPlanActions} from '../actions/dietPlan';
 import {cartActions} from '../actions/cart';
-const {height, width} = Dimensions.get('window');
-import Toast from 'react-native-simple-toast';
-import {ADD_AND_UPDATE_API} from '../util/api';
+import {CROSS_WHITE} from '../_helpers/ImageProvide';
+const {width} = Dimensions.get('window');
+import {CALANDER_CONFIG} from '../_helpers/globalVeriable';
 import moment from 'moment';
-import {parseInt} from 'lodash';
-import Loader from './Loader';
+import Loader from './Loader/Loader';
+import AsyncStorage from '@react-native-community/async-storage';
 const CommonCalendar = (props) => {
+  LocaleConfig.locales['ar'] = CALANDER_CONFIG['ar'];
+  LocaleConfig.locales['en'] = CALANDER_CONFIG['en'];
+  const [localLang, setLocalLang] = useState('en');
+  useEffect(() => {
+    const lc = async () => {
+      let lan = await AsyncStorage.getItem('language');
+      LocaleConfig.defaultLocale = lan;
+      setLocalLang(lan);
+    };
+    lc();
+  }, []);
   const navigation = useNavigation();
   const monthName = () => {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
+    const months = CALANDER_CONFIG[localLang].monthNames;
     return months[new Date().getMonth()];
   };
   var today = new Date();
 
   const dietCompanyPlannavigation = (day) => {
-    ADD_AND_UPDATE_API(
-      {
+    props
+      .dietCompanyPlanAction({
+        program_id: props.program_id,
         restaurant_id: props.restaurant_id,
-      },
-      'get/company/duration/week',
-    ).then((item) => {
-      if (item.data.length != 0) {
-        props
-          .dietCompanyPlanAction({
-            restaurant_id: props.restaurant_id,
-            type: parseInt(item.data[0].gender),
-            week: parseInt(item.data[0].week.replace('Week', '')),
-          })
-          .then(() => {
-            navigation.navigate('PlanListProgram', {
-              selectedDate: day,
-            });
-          });
-      } else {
-        Toast.showWithGravity(
-          'No Record found,Please go back and reselect the company',
-          Toast.SHORT,
-          Toast.CENTER,
-        );
-      }
-    });
+      })
+      .then(() => {
+        navigation.navigate('PlanListProgram', {
+          selectedDate: day,
+        });
+      });
   };
   const programPalnnavigation = (day) => {
     props
@@ -81,58 +63,52 @@ const CommonCalendar = (props) => {
       })
       .then(() => {
         navigation.navigate('PlanListProgram', {
-          selectedDate: day.dateString,
+          selectedDate: day,
         });
       });
   };
 
   // var priorDate = new Date().setDate(today.getDate() + 3);
-  const getDisabledDates = (calenderDate) => {
+  const getDisabledDates = () => {
     const disabledDates = {};
-    const start = moment(new Date());
-    const end = moment(new Date()).add(2, 'days');
-    for (
-      let m = moment(start).add(1, 'days');
-      m.diff(end, 'days') <= 0;
-      m.add(1, 'days')
-    ) {
-      disabledDates[m.format('YYYY-MM-DD')] = {
-        textColor: '#f2ae88',
+    for (let i = 0; i < 3; i++) {
+      let m_Day = moment(new Date()).add(i, 'days');
+      disabledDates[m_Day.format('YYYY-MM-DD')] = {
         disabled: true,
         disableTouchEvent: true,
         customStyles: {
           container: {
             backgroundColor:
-              new Date().getDate() === new Date(m).getDate()
+              new Date().getDate() === new Date(m_Day).getDate()
                 ? '#f2ae88'
                 : '#75798e',
           },
           text: {
             color: '#fff',
-            fontWeight: 'bold',
           },
         },
       };
     }
-    if (props.calenderData.data.calendar) {
-      props.calenderData.data.calendar.map((element) => {
-        disabledDates[moment(element.date).format('YYYY-MM-DD')] = {
-          textColor: '#75798e',
-          disabled: true,
-          disableTouchEvent: true,
-          customStyles: {
-            container: {
-              backgroundColor: '#75798e',
-            },
-            text: {
-              color: '#ccc',
-              fontWeight: 'bold',
-            },
-          },
-        };
-      });
-    }
 
+    if (Object.keys(props.calenderData).length !== 0) {
+      if (props.calenderData.data.calendar) {
+        props.calenderData.data.calendar.map((element) => {
+          disabledDates[moment(element.date).format('YYYY-MM-DD')] = {
+            textColor: '#75798e',
+            disabled: true,
+            disableTouchEvent: true,
+            customStyles: {
+              container: {
+                backgroundColor: '#75798e',
+              },
+              text: {
+                color: '#ccc',
+              },
+            },
+          };
+        });
+      }
+    }
     return disabledDates;
   };
 
@@ -140,11 +116,8 @@ const CommonCalendar = (props) => {
     return (
       <View style={styles.container}>
         <View style={styles.close}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              style={{width: 20, height: 20}}
-              source={require('../../assets/header/cross.png')}
-            />
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Image style={{width: 20, height: 20}} source={CROSS_WHITE} />
           </TouchableOpacity>
         </View>
         <View style={styles.circle}>
@@ -158,6 +131,7 @@ const CommonCalendar = (props) => {
           <Calendar
             horizontal={true}
             pagingEnabled={true}
+            scrollEnabled={true}
             minDate={new Date()}
             scrollEnabled={true}
             markingType={'period'}
@@ -165,11 +139,11 @@ const CommonCalendar = (props) => {
             rowHeight={5}
             theme={{
               calendarBackground: '#343739',
+              todayTextColor: '#ffffff',
               todayBackgroundColor: '#f2ae88',
               textDisabledColor: '#6a6e7f',
               dayTextColor: '#ffffff',
               monthTextColor: '#ffffff',
-              todayTextColor: '#ffffff',
               selectedDayBackgroundColor: '#333248',
             }}
             onDayPress={(day) => {
@@ -183,7 +157,6 @@ const CommonCalendar = (props) => {
               ...getDisabledDates(),
             }}
           />
-
           <View style={styles.seleceted}>
             <View style={styles.rowSpace}>
               <View style={styles.colorBox1}></View>
@@ -195,7 +168,7 @@ const CommonCalendar = (props) => {
               <View style={styles.rowSpace}>
                 <View style={styles.colorBox2}></View>
                 <View>
-                  <Text style={styles.textColor}>Not Selected</Text>
+                  <Text style={styles.textColor}>Available for Selection</Text>
                 </View>
               </View>
             </View>
@@ -203,7 +176,7 @@ const CommonCalendar = (props) => {
           <View style={styles.rowTwo}>
             <View style={styles.rowSpace}>
               <View style={styles.colorBox3}></View>
-              <Text style={styles.textColor}>Unavailable for Selected</Text>
+              <Text style={styles.textColor}>Unavailable for Selection</Text>
             </View>
           </View>
         </View>
@@ -351,7 +324,6 @@ const styles = StyleSheet.create({
   },
 
   rowTwo: {
-    marginBottom: -50,
     paddingTop: 10,
     alignItems: 'center',
     alignContent: 'center',

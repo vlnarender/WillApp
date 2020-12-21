@@ -9,15 +9,21 @@ import {
   Text,
   Switch,
   StyleSheet,
+  Platform,
+  Keyboard,
 } from 'react-native';
 import {Formik} from 'formik';
 import * as yup from 'yup'; // for everything
 import Toast from 'react-native-simple-toast';
-import {ScrollView} from 'react-native-gesture-handler';
 import {loginActions} from '../actions/login';
 import AsyncStorage from '@react-native-community/async-storage';
-import RoundCheckbox from 'rn-round-checkbox';
-import {LOGIN_email} from '../_helpers/ImageProvide';
+import {
+  LOGIN_email,
+  LOGIN_logo,
+  LOGIN_pass,
+  REC,
+  REC_SELECTED,
+} from '../_helpers/ImageProvide';
 
 const FieldWrapper = ({children, label, formikProps, formikKey}) => (
   <View style={{marginHorizontal: 20, marginVertical: 1}}>
@@ -41,9 +47,10 @@ const StyledInput = ({label, formikProps, formikKey, icon, ...rest}) => {
     height: 50,
     width: 300,
     borderWidth: 1,
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 5,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -92,9 +99,10 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     height: 50,
     width: 300,
     borderWidth: 1,
-    shadowOffset: {width: 20, height: 20},
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
     shadowColor: 'black',
-    shadowOpacity: 5,
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
@@ -118,7 +126,7 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
           marginTop: 25,
           position: 'absolute',
         }}
-        source={require('../../assets/login/pass.png')}
+        source={LOGIN_pass}
       />
       <TextInput
         style={inputStyles}
@@ -180,174 +188,177 @@ const LoginScreen = (props) => {
     }
   };
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <View
-          style={{
-            backgroundColor: '#ffffff',
-            marginTop: 0,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Image source={require('../../assets/login/logo.png')} />
-          <Text style={{color: '#f2ae88', fontSize: 20, marginTop: -45}}>
-            Welcome
-          </Text>
-          <Text style={{color: '#f2ae88', fontSize: 15}}>
-            Login to Continue
-          </Text>
+    <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Image source={LOGIN_logo} />
+        <Text style={{color: '#f2ae88', fontSize: 20, marginTop: -45}}>
+          Welcome
+        </Text>
+        <Text style={{color: '#f2ae88', fontSize: 15}}>Login to Continue</Text>
 
-          <Formik
-            initialValues={{
-              email: '',
-              password: '',
-            }}
-            onSubmit={(values, actions) => {
-              var user = {};
-              user.email = values.email;
-              user.password = values.password;
-              user.device_token = device_token;
-              user.device_type = device_type;
-              user.language = 'en';
-              props.logAction(user, props.navigation);
-              actions.setSubmitting(true);
-            }}
-            validationSchema={validationSchema}>
-            {(formikProps) => (
+        <Formik
+          initialValues={{
+            email: '',
+            password: '',
+          }}
+          onSubmit={(values, actions) => {
+            Keyboard.dismiss();
+            var user = {};
+            user.email = values.email;
+            user.password = values.password;
+            user.device_token = device_token;
+            user.device_type = device_type;
+            user.language = 'en';
+            props.logAction(user, props.navigation);
+            actions.setSubmitting(true);
+          }}
+          validationSchema={validationSchema}>
+          {(formikProps) => (
+            <React.Fragment>
+              <StyledInput
+                //label="Mobile"
+                icon={'email'}
+                formikProps={formikProps}
+                formikKey="email"
+                placeholder="Email"
+                // autoFocus
+              />
+              <StyledInputPass
+                //label="Password"
+                icon={'pass'}
+                formikProps={formikProps}
+                formikKey="password"
+                placeholder="Password"
+                secureTextEntry
+              />
+
               <React.Fragment>
-                <StyledInput
-                  //label="Mobile"
-                  icon={'email'}
-                  formikProps={formikProps}
-                  formikKey="email"
-                  placeholder="Email"
-                  autoFocus
-                />
-                <StyledInputPass
-                  //label="Password"
-                  icon={'pass'}
-                  formikProps={formikProps}
-                  formikKey="password"
-                  placeholder="Password"
-                  secureTextEntry
-                />
-
-                <React.Fragment>
-                  <View
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    paddingBottom: 10,
+                  }}>
+                  {/* <TouchableOpacity
                     style={{
-                      flex: 1,
-                      justifyContent: 'center',
-                      textAlign: 'center',
                       flexDirection: 'row',
-                      zIndex: 1000,
-                      marginBottom: 0,
+                    }}
+                    onPress={async () => {
+                      await AsyncStorage.setItem(
+                        'remember',
+                        selected ? 'no' : 'yes',
+                      );
+                      setSelected(!selected);
                     }}>
-                    <View style={{marginTop: 4.3}}>
-                      <RoundCheckbox
-                        size={13}
-                        icon={null}
-                        backgroundColor={'#F2AE88'}
-                        checked={selected}
-                        onValueChange={async (newValue) => {
-                          if (newValue) {
-                            await AsyncStorage.setItem('remember', 'yes');
-                            setSelected(newValue);
-                          } else {
-                            await AsyncStorage.setItem('remember', 'no');
-                            setSelected(newValue);
-                          }
-                        }}
-                      />
-                    </View>
-                    <View style={{width: '35%'}}>
-                      <Text style={{paddingLeft: 10}}>Remebmber Me</Text>
-                    </View>
-                    <View style={{width: '35%'}}>
-                      <Text
-                        style={{color: '#f2ae88', textAlign: 'right'}}
-                        onPress={() => {
-                          props.navigation.navigate('Email');
-                        }}>
-                        Forgot Password?
-                      </Text>
-                    </View>
-                  </View>
-                  <TouchableOpacity
-                    onPress={formikProps.handleSubmit}
-                    style={{
-                      backgroundColor: '#f2ae88',
-                      width: '75%',
-                      borderRadius: 50,
-                      paddingHorizontal: 10,
-                      paddingVertical: 15,
-                      marginTop: 10,
-                    }}>
+                    <Image
+                      source={selected ? REC_SELECTED : REC}
+                      style={{width: 13, height: 13}}
+                    />
+                    <Text style={{paddingLeft: 10, marginTop: -3}}>
+                      Remember Me
+                    </Text>
+                  </TouchableOpacity> */}
+                  <TouchableOpacity>
                     <Text
                       style={{
-                        alignSelf: 'center',
-                        fontWeight: 'bold',
-                        fontSize: 15,
-                        color: '#fff',
+                        color: '#f2ae88',
+                        textAlign: 'right',
+                      }}
+                      onPress={() => {
+                        props.navigation.navigate('Email');
                       }}>
-                      Log In
+                      Forgot Password?
                     </Text>
                   </TouchableOpacity>
-                  <Text style={{color: 'red'}}>
-                    {formikProps.errors.general}
-                  </Text>
-
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                      alignSelf: 'center',
-                      flexDirection: 'column',
-                    }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        props.navigation.navigate('Register');
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: '#f2ae88',
-                          alignSelf: 'center',
-                        }}>
-                        New User? Sign up
-                      </Text>
-                    </TouchableOpacity>
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignSelf: 'center',
-                        textAlign: 'center',
-                      }}>
-                      <View style={{height: 50}}>
-                        <Text style={{fontSize: 16, color: '#f2ae88'}}>
-                          Continouse as guest
-                        </Text>
-                      </View>
-                    </View>
-
-                    <View style={{width: '90%', height: 50}}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          justifyContent: 'center',
-                          textAlign: 'center',
-                          color: '#e6e6e6',
-                        }}>
-                        By sigining in you have indicate that you have read and
-                        agreed on the term and conditions.,
-                      </Text>
-                    </View>
-                  </View>
-                </React.Fragment>
+                </View>
               </React.Fragment>
-            )}
-          </Formik>
+              <React.Fragment>
+                <TouchableOpacity
+                  onPress={formikProps.handleSubmit}
+                  style={{
+                    backgroundColor: '#f2ae88',
+                    width: '70%',
+                    borderRadius: 50,
+                    paddingVertical: 15,
+                  }}>
+                  <Text
+                    style={{
+                      alignSelf: 'center',
+                      fontWeight: 'bold',
+                      fontSize: 15,
+                      color: '#fff',
+                    }}>
+                    Log In
+                  </Text>
+                </TouchableOpacity>
+                <Text style={{color: 'red'}}>{formikProps.errors.general}</Text>
+              </React.Fragment>
+            </React.Fragment>
+          )}
+        </Formik>
+        <View
+          style={{
+            justifyContent: 'center',
+            textAlign: 'center',
+            alignSelf: 'center',
+            flexDirection: 'column',
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate('Register');
+            }}>
+            <Text
+              style={{
+                fontSize: 18,
+                color: '#f2ae88',
+                alignSelf: 'center',
+              }}>
+              New User? Sign up
+            </Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignSelf: 'center',
+              textAlign: 'center',
+            }}>
+            <View style={{height: 50}}>
+              <TouchableOpacity
+                onPress={() => {
+                  props.logAction(
+                    {
+                      device_token: 'nnn',
+                      device_type: '2',
+                      language: 'en',
+                    },
+                    props.navigation,
+                  );
+                }}>
+                <Text style={{fontSize: 16, color: '#f2ae88'}}>
+                  continue as guest
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={{width: '90%'}}>
+            <Text
+              style={{
+                fontSize: 12,
+                justifyContent: 'center',
+                textAlign: 'center',
+                color: '#e6e6e6',
+              }}>
+              By sigining in you have indicate that you have read and agreed on
+              the term and conditions.,
+            </Text>
+          </View>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

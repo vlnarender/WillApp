@@ -1,6 +1,5 @@
 import Axios from 'axios';
 import {DEV_CONFIGS, PROD_CONFIGS} from './constant';
-import qs from 'qs';
 import AsyncStorage from '@react-native-community/async-storage';
 const axios = Axios.create({
   baseURL: PROD_CONFIGS.url,
@@ -59,6 +58,28 @@ const getAsyncStorage = async () => {
     bearer: 'Bearer ' + (await AsyncStorage.getItem('token')),
   };
 };
+
+/***** common api which need language, bearer and form data *****/
+export const PROFILE_API = async (formBody, API_NAME) => {
+  const data = await getAsyncStorage();
+  return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
+    method: 'POST',
+    headers: {
+      'X-Localization': data.language,
+      Authorization: data.bearer,
+      'Content-Type': 'multipart/form-data',
+    },
+    body: formBody,
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 /***** common api which need language, bearer and form data *****/
 export const COOMMON_API = async (formBody, API_NAME) => {
   const data = await getAsyncStorage();
@@ -66,7 +87,6 @@ export const COOMMON_API = async (formBody, API_NAME) => {
     API_NAME === ('edit/profile' || 'upload/profile/image')
       ? 'multipart/form-data'
       : 'application/x-www-form-urlencoded';
-
   return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
     method: 'POST',
     headers: {
@@ -141,7 +161,6 @@ export const ADD_AND_UPDATE_API = async (data, API_NAME) => {
     formBody.push(encodedKey + '=' + encodedValue);
   }
   formBody = formBody.join('&');
-
   return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
     method: 'POST',
     headers: {
@@ -150,6 +169,102 @@ export const ADD_AND_UPDATE_API = async (data, API_NAME) => {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     body: formBody,
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+export const ADD_TO_THE_CART = async (data, API_NAME) => {
+  let localstorage = await getAsyncStorage();
+  return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
+    method: 'POST',
+    headers: {
+      'X-Localization': localstorage.language,
+      'Content-Type': 'application/json',
+      Authorization: localstorage.bearer,
+    },
+
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+export const GET_MY_CART = async (API_NAME) => {
+  let localstorage = await getAsyncStorage();
+  return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
+    method: 'POST',
+    headers: {
+      'X-Localization': localstorage.language,
+      Authorization: localstorage.bearer,
+    },
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+export const PAYMENT_API = async (data, API_NAME) => {
+  let localstorage = await getAsyncStorage();
+  return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
+    method: 'POST',
+    headers: {
+      'X-Localization': localstorage.language,
+      'Content-Type': 'application/json',
+      Authorization: localstorage.bearer,
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+export const MYORDERS_API = async (API_NAME) => {
+  let localstorage = await getAsyncStorage();
+  return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
+    method: 'POST',
+    headers: {
+      'X-Localization': localstorage.language,
+      'Content-Type': 'application/json',
+      Authorization: localstorage.bearer,
+    },
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+export const MYORDERDETAILS_API = async (API_NAME) => {
+  let localstorage = await getAsyncStorage();
+  return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
+    method: 'POST',
+    headers: {
+      'X-Localization': localstorage.language,
+      'Content-Type': 'application/json',
+      Authorization: localstorage.bearer,
+    },
   })
     .then((response) => response.json())
     .then((responseJson) => {

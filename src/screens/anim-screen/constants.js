@@ -1,11 +1,11 @@
 export default {
   DURATION: {
-    STEP1_ANIMATION: 500,
-    SWIPER_SCREEN_2: 600,
-    STEP3_ANIMATION: 600,
-    STEP4_ANIMATION: 600,
-    STEP5_ANIMATION: 600,
-    STEP6_ANIMATION: 600
+    STEP1_ANIMATION: 300,
+    SWIPER_SCREEN_2: 300,
+    STEP3_ANIMATION: 300,
+    STEP4_ANIMATION: 300,
+    STEP5_ANIMATION: 300,
+    STEP6_ANIMATION: 300,
   },
   IMG: {
     BG: 'n',
@@ -15,29 +15,29 @@ export default {
     SWIPER_SCREEN_2: {
       LEFT: 'r',
       MID: 'f',
-      RIGHT: 'ao'
+      RIGHT: 'ao',
     },
     SWIPER_SCREEN_3: {
       LEFT: 'ae',
-      RIGHT: 'd'
+      RIGHT: 'd',
     },
-    WELCOME_SCREEN: 'welcome'
+    WELCOME_SCREEN: 'welcome',
   },
   STEP3: {
     logosize: 100,
-    top: 0
+    top: 0,
   },
   STEP4: {
-    top: 150
+    top: 150,
   },
   STEP5: {
-    top: 300
+    top: 300,
   },
   COLOR: {
     ACTIVE_SWIPER_DOT: '#f2b47e',
     INACTIVE_SWIPER_DOT: '#ccc',
     THEME: '#f2b47e',
     FILL_BTN_TEXT: '#fff',
-    FREE_BTN_TEXT: '#000'
-  }
-}
+    FREE_BTN_TEXT: '#000',
+  },
+};

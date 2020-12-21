@@ -16,6 +16,7 @@ import CreditCard from './noCreditCard';
 import {DEV_CONFIGS} from '../util/constant';
 import {COOMMON_API} from '../util/api';
 let styleCss = require('../GlobalStyle');
+import {CHECKED, CROSS, HEADER_unchecked, LOGO} from '../_helpers/ImageProvide';
 
 const MyPaymentMethod = (props) => {
   const [checked, setChecked] = useState(0);
@@ -82,23 +83,20 @@ const MyPaymentMethod = (props) => {
       if (props.cardData.length) {
         return (
           <>
-            <ScrollView style={{backgroundColor: 'white'}}>
+            <ScrollView
+              style={{backgroundColor: 'white'}}
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="interactive">
               <View style={styleCss.mainContainer}>
                 <View style={styleCss.creditHeader}>
                   <View style={{flex: 1}}></View>
                   <View style={{flex: 1, alignItems: 'center'}}>
-                    <Image
-                      style={{width: 50, height: 40}}
-                      source={require('../../assets/header/logo.png')}
-                    />
+                    <Image style={{width: 50, height: 40}} source={LOGO} />
                   </View>
                   <View style={{flex: 1, alignItems: 'flex-end'}}>
                     <TouchableOpacity
                       onPress={() => props.navigation.navigate('Home')}>
-                      <Image
-                        style={{width: 20, height: 20}}
-                        source={require('../../assets/header/cross.png')}
-                      />
+                      <Image style={{width: 20, height: 20}} source={CROSS} />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -120,10 +118,7 @@ const MyPaymentMethod = (props) => {
                               justifyContent: 'space-between',
                             }}>
                             <TouchableOpacity style={styles.radioAlign}>
-                              <Image
-                                style={styles.imgSize}
-                                source={require('../../assets/header/checked.png')}
-                              />
+                              <Image style={styles.imgSize} source={CHECKED} />
                               <View>
                                 <Text
                                   numberOfLines={1}
@@ -156,7 +151,7 @@ const MyPaymentMethod = (props) => {
                               style={styles.radioAlign}>
                               <Image
                                 style={styles.imgSize}
-                                source={require('../../assets/header/unchecked.png')}
+                                source={HEADER_unchecked}
                               />
                               <View>
                                 <Text
@@ -199,23 +194,20 @@ const MyPaymentMethod = (props) => {
       } else {
         return (
           <>
-            <ScrollView style={{backgroundColor: 'white'}}>
+            <ScrollView
+              style={{backgroundColor: 'white'}}
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="interactive">
               <View style={styleCss.mainContainer}>
                 <View style={styleCss.creditHeader}>
                   <View style={{flex: 1}}></View>
                   <View style={{flex: 1, alignItems: 'center'}}>
-                    <Image
-                      style={{width: 50, height: 40}}
-                      source={require('../../assets/header/logo.png')}
-                    />
+                    <Image style={{width: 50, height: 40}} source={LOGO} />
                   </View>
                   <View style={{flex: 1, alignItems: 'flex-end'}}>
                     <TouchableOpacity
                       onPress={() => props.navigation.navigate('Home')}>
-                      <Image
-                        style={{width: 20, height: 20}}
-                        source={require('../../assets/header/cross.png')}
-                      />
+                      <Image style={{width: 20, height: 20}} source={CROSS} />
                     </TouchableOpacity>
                   </View>
                 </View>

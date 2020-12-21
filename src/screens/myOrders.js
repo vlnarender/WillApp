@@ -1,0 +1,240 @@
+import React, {useEffect, useState} from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Button,
+  TouchableOpacity,
+} from 'react-native';
+import {MYORDERS_API} from '../util/api';
+import Header from '../components/Header/Header';
+import {PLAN_ARROW_RIGHT} from '../_helpers/ImageProvide';
+import Loader from '../components/Loader/Loader';
+import {CROSS} from '../_helpers/ImageProvide';
+
+const myOrders = (props) => {
+  //   const {result} = route.params;
+
+  const [totalOrders, settotalOrders] = useState(null);
+  const [loader, setLoader] = useState(true);
+  const [orderStatus, setorderStatus] = useState(null);
+
+  useEffect(() => {
+    setLoader(true);
+    // settotalOrders(null);
+    getData();
+  }, []);
+
+  const getData = () => {
+    MYORDERS_API('user/order/list').then((data) => {
+      settotalOrders(data.data);
+      setorderStatus(data.data.map((status) => status.status));
+      data.success ? setLoader(false) : setLoader(true);
+    });
+  };
+
+  const onPress = (orderlist) => {
+    // props.navigation.navigate('MyOrderDetails');
+  };
+
+  if (loader) {
+    return <Loader />;
+  } else {
+    return (
+      <>
+        <Header />
+        <ScrollView style={{paddingHorizontal: 20, backgroundColor: '#fff'}}>
+          <View style={{flexDirection: 'column', padding: 5}}>
+            <View style={{flexDirection: 'column', paddingVertical: 5}}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}>
+                <Text style={{fontWeight: 'bold', fontSize: 30}}>
+                  My Orders
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    paddingVertical: 8,
+                    marginBottom: 15,
+                  }}>
+                  <Text>
+                    {totalOrders.length}{' '}
+                    {totalOrders.length == 1 ? 'Order' : 'Orders'}
+                  </Text>
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  top: 15,
+                }}>
+                <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                  <Image style={{height: 14, width: 14}} source={CROSS}></Image>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View>
+              {totalOrders.map((orderlist, index) => {
+                return (
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      paddingVertical: 5,
+                    }}
+                    key={index}>
+                    <Text>
+                      <View
+                        style={[
+                          {
+                            flex: 2,
+                            paddingHorizontal: 10,
+                          },
+                          styles.borderBottomBox,
+                        ]}>
+                        <View style={{flexDirection: 'column'}}>
+                          <View style={{flexDirection: 'row'}}>
+                            <Text
+                              style={[
+                                styles.headingText,
+                                {alignSelf: 'flex-start'},
+                              ]}>
+                              Order #{orderlist.order_id}
+                            </Text>
+                            <Text>
+                              {orderlist.status == 0 ? (
+                                <Text
+                                  style={{
+                                    color: '#fc1703',
+                                    marginLeft: 130,
+                                    fontSize: 17,
+                                  }}>
+                                  {orderlist.total_paid_amount}
+                                </Text>
+                              ) : orderlist.status == 1 ? (
+                                <View>
+                                  <Text
+                                    style={{
+                                      color: '#F2AE88',
+                                      marginLeft: 130,
+                                      fontSize: 17,
+                                    }}>
+                                    {orderlist.total_paid_amount}
+                                  </Text>
+                                </View>
+                              ) : (
+                                <Text
+                                  style={{
+                                    color: '#23a145',
+                                    marginLeft: 130,
+                                    fontSize: 17,
+                                  }}>
+                                  {orderlist.total_paid_amount}
+                                </Text>
+                              )}
+                            </Text>
+                          </View>
+                        </View>
+                        <View style={{flexDirection: 'column'}}>
+                          <View style={{flexDirection: 'row'}}>
+                            <Text
+                              style={[
+                                styles.thiredSection,
+                                {alignSelf: 'flex-start'},
+                              ]}>
+                              {orderlist.status == 0 ? (
+                                <Text style={{color: '#fc1703'}}>
+                                  Cancelled
+                                </Text>
+                              ) : orderlist.status == 1 ? (
+                                <View>
+                                  <Text style={{color: '#F2AE88'}}>
+                                    On it's way
+                                  </Text>
+                                  <TouchableOpacity>
+                                    <Text>Edit your Program</Text>
+                                  </TouchableOpacity>
+                                </View>
+                              ) : (
+                                <Text style={{color: '#23a145'}}>
+                                  Delivered
+                                </Text>
+                              )}
+                            </Text>
+                            <Text style={{marginLeft: 130}}>
+                              {orderlist.created_on}
+                            </Text>
+                            <TouchableOpacity
+                              onPress={() => onPress(orderlist)}>
+                              <View style={{marginLeft: 10}}>
+                                <Image source={PLAN_ARROW_RIGHT}></Image>
+                              </View>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </View>
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+
+            <View style={{paddingTop: 30}}>
+              <Button
+                title="Export Orders via Email"
+                color="#f2ae88"
+                style={{}}></Button>
+            </View>
+          </View>
+        </ScrollView>
+      </>
+    );
+  }
+};
+
+const styles = StyleSheet.create({
+  itemContent: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    fontSize: 15,
+  },
+
+  thiredSection: {
+    flex: 1,
+    // justifyContent: 'flex-end',
+    flexDirection: 'column',
+    alignSelf: 'flex-start',
+    paddingVertical: 2,
+  },
+
+  borderBottomBox: {
+    borderBottomWidth: 1,
+    borderColor: '#dddddd',
+    paddingBottom: 10,
+    marginBottom: 10,
+  },
+
+  total: {color: '#F2AE88', fontSize: 20, fontWeight: 'bold'},
+
+  imgBox: {
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#dddddd',
+    padding: 2,
+    width: 70,
+  },
+
+  headingText: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 3,
+  },
+});
+
+export default myOrders;

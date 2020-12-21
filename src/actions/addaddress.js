@@ -1,6 +1,5 @@
 import {userConstants} from './actionTypes';
 import {ADD_AND_UPDATE_API} from '../util/api';
-import AsyncStorage from '@react-native-community/async-storage';
 export const addAddressActions = {
   addAddressAction,
 };

@@ -1,9 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet, I18nManager} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import {onedayplanActions} from '../actions/oneplan';
-import Header from '../components/Header';
+import Header from '../components/Header/Header';
+import {
+  AR,
+  COMMON_ARROW_LEFT,
+  COMMON_ARROW_RIGHT,
+  HOME_THREE_DOTS_LEFT,
+  HOME_THREE_DOTS_RIGHT,
+} from '../_helpers/ImageProvide';
 let styleCss = require('../GlobalStyle');
 const OneDayPlan = (props) => {
   const {featureId} = props.route.params;
@@ -11,7 +18,9 @@ const OneDayPlan = (props) => {
     return (
       <>
         <Header />
-        <ScrollView>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive">
           <View style={styleCss.mainContainer}>
             <View style={{alignItems: 'center', marginTop: 20}}>
               <View style={{position: 'absolute', left: 10, top: '44%'}}>
@@ -19,7 +28,9 @@ const OneDayPlan = (props) => {
                   onPress={() => props.navigation.navigate('Home')}>
                   <Image
                     style={{width: 30, height: 19}}
-                    source={require('../../assets/arrowLeft.png')}
+                    source={
+                      I18nManager.isRTL ? COMMON_ARROW_RIGHT : COMMON_ARROW_LEFT
+                    }
                   />
                 </TouchableOpacity>
               </View>
@@ -32,7 +43,7 @@ const OneDayPlan = (props) => {
                   <View style={{flex: 1}}>
                     <Image
                       style={{width: 9, height: 19}}
-                      source={require('../../assets/home/threeDotLeft.png')}
+                      source={HOME_THREE_DOTS_LEFT}
                     />
                   </View>
                   <View style={{flex: 4}}>
@@ -53,7 +64,7 @@ const OneDayPlan = (props) => {
                         flexDirection: 'row',
                         alignSelf: 'flex-end',
                       }}
-                      source={require('../../assets/home/threeDotRight.png')}
+                      source={HOME_THREE_DOTS_RIGHT}
                     />
                   </View>
                 </View>
@@ -84,10 +95,7 @@ const OneDayPlan = (props) => {
                     <Text>{props.labelData.day}</Text>
                   </View>
                   <View style={{justifyContent: 'center', paddingLeft: 5}}>
-                    <Image
-                      style={{width: 12, height: 16}}
-                      source={require('../../assets/ar.png')}
-                    />
+                    <Image style={{width: 12, height: 16}} source={AR} />
                   </View>
                 </View>
               </View>
@@ -96,7 +104,10 @@ const OneDayPlan = (props) => {
 
           {/* choose plan */}
 
-          <ScrollView contentContainerStyle={styleCss.scrollViewCard}>
+          <ScrollView
+            contentContainerStyle={styleCss.scrollViewCard}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="interactive">
             {props.onedayplanData.diet_company.map((item, index) => {
               return (
                 <View style={styleCss.homeCard} key={index}>
@@ -112,9 +123,11 @@ const OneDayPlan = (props) => {
                         source={{
                           uri: item.image_url + item.image,
                         }}
-                        style={{width: '99%', height: 140, borderRadius: 10}}
+                        style={{width: '95%', height: 160, borderRadius: 10}}
                       />
-                      <Text style={{fontSize: 12}}>{item.name}</Text>
+                      <Text style={{fontSize: 12, paddingTop: 6}}>
+                        {item.name}
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -129,15 +142,6 @@ const OneDayPlan = (props) => {
   }
 };
 
-const styles = StyleSheet.create({
-  gridView: {
-    flex: 1,
-  },
-  texStyle: {
-    fontSize: 10,
-  },
-});
-//export default OneDayPlan;
 const mapStateToProps = (state) => {
   return {
     onedayplanStatus: state.onedayplanReducer.onedayplanStatus,

@@ -1,22 +1,37 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import {CROSS_WHITE} from '../_helpers/ImageProvide';
+
 import {useFocusEffect} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {CalendarList} from 'react-native-calendars';
+import {CalendarList, LocaleConfig} from 'react-native-calendars';
 import {ADD_AND_UPDATE_API} from '../util/api';
 import Toast from 'react-native-simple-toast';
 import {mealListActions} from '../actions/mealList';
 import moment from 'moment';
 import {connect} from 'react-redux';
-import Loader from '../components/Loader';
+import Loader from '../components/Loader/Loader';
+import {CALANDER_CONFIG} from '../_helpers/globalVeriable';
+import AsyncStorage from '@react-native-community/async-storage';
 const OneDayCalender = (props) => {
+  LocaleConfig.locales['ar'] = CALANDER_CONFIG['ar'];
+  LocaleConfig.locales['en'] = CALANDER_CONFIG['en'];
+  useEffect(() => {
+    const lC = async () => {
+      let lan = await AsyncStorage.getItem('language');
+      LocaleConfig.defaultLocale = lan;
+      setLocalLang(lan);
+    };
+    lC();
+  }, []);
+  const [localLang, setLocalLang] = useState('en');
   const {itemId, featureId} = props.route.params;
   const [select, setSelect] = useState(false);
   const [value, setValue] = useState([]);
   useFocusEffect(
     React.useCallback(() => {
       setSelect(false);
+      setValue([]);
       let isActive = true;
       const fetchUser = async () => {
         try {
@@ -46,7 +61,6 @@ const OneDayCalender = (props) => {
     }, [itemId.id]),
   );
   const onDayPress = (day) => {
-    setSelect(false);
     props
       .mealListAction({
         restaurant_id: itemId.id,
@@ -61,35 +75,15 @@ const OneDayCalender = (props) => {
       });
   };
   const monthName = () => {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
+    const months = CALANDER_CONFIG[localLang].monthNames;
     const d = new Date();
     return months[d.getMonth()];
   };
   const getDisabledDates = (calenderDate) => {
     const disabledDates = {};
-    const start = moment(new Date());
-    const end = moment(new Date()).add(2, 'days');
-
-    for (
-      let m = moment(start).add(1, 'days');
-      m.diff(end, 'days') <= 0;
-      m.add(1, 'days')
-    ) {
+    for (let i = 0; i < 3; i++) {
+      let m = moment(new Date()).add(i, 'days');
       disabledDates[m.format('YYYY-MM-DD')] = {
-        textColor: '#f2ae88',
         disabled: true,
         disableTouchEvent: true,
         customStyles: {
@@ -101,7 +95,6 @@ const OneDayCalender = (props) => {
           },
           text: {
             color: '#fff',
-            fontWeight: 'bold',
           },
         },
       };
@@ -113,11 +106,13 @@ const OneDayCalender = (props) => {
         disableTouchEvent: true,
         customStyles: {
           container: {
-            backgroundColor: '#75798e',
+            backgroundColor:
+              new Date().getDate() === new Date(m).getDate()
+                ? '#f2ae88'
+                : '#75798e',
           },
           text: {
             color: '#ccc',
-            fontWeight: 'bold',
           },
         },
       };
@@ -134,18 +129,17 @@ const OneDayCalender = (props) => {
     return (
       <>
         <View style={styles.calendarbg}>
-          <ScrollView>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="interactive">
             <View style={styles.topBg}>
               <View style={styles.arrow}>
                 <TouchableOpacity
                   onPress={() => {
-                    props.navigation.goBack('OneDayPlan');
-                    setSelect(false);
+                    setSelect(true);
+                    props.navigation.goBack();
                   }}>
-                  <Image
-                    style={styles.arrowImg}
-                    source={require('../../assets/header/cross.png')}
-                  />
+                  <Image style={styles.arrowImg} source={CROSS_WHITE} />
                 </TouchableOpacity>
               </View>
 
@@ -168,16 +162,18 @@ const OneDayCalender = (props) => {
                 minDate={new Date()}
                 markingType={'period'}
                 disableAllTouchEventsForDisabledDays
+                rowHeight={5}
                 onDayPress={onDayPress}
                 theme={{
                   calendarBackground: '#343739',
-                  todayTextColor: 'white',
+                  todayTextColor: '#ffffff',
                   todayBackgroundColor: '#f2ae88',
                   textDisabledColor: '#6a6e7f',
-                  dayTextColor: 'white',
-                  monthTextColor: 'white',
+                  dayTextColor: '#ffffff',
+                  monthTextColor: '#ffffff',
                   selectedDayBackgroundColor: '#333248',
                 }}
+                markingType={'custom'}
                 markedDates={{
                   ...getDisabledDates(calendar),
                 }}
@@ -195,7 +191,9 @@ const OneDayCalender = (props) => {
                 <View style={styles.rowSpace}>
                   <View style={styles.colorBox2}></View>
                   <View>
-                    <Text style={styles.textColor}>Not Selected</Text>
+                    <Text style={styles.textColor}>
+                      Available for Selection
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -203,7 +201,7 @@ const OneDayCalender = (props) => {
             <View style={styles.rowTwo}>
               <View style={styles.rowSpace}>
                 <View style={styles.colorBox3}></View>
-                <Text style={styles.textColor}>Unavailable for Selected</Text>
+                <Text style={styles.textColor}>Unavailable for Selection</Text>
               </View>
             </View>
           </ScrollView>

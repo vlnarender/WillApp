@@ -1,11 +1,10 @@
 import {userConstants} from './actionTypes';
 import {ADD_AND_UPDATE_API} from '../util/api';
-import AsyncStorage from '@react-native-community/async-storage';
 export const addressSetActions = {
   addressSetAction,
 };
 
-function addressSetAction(add, data, navigation) {
+function addressSetAction(data) {
   return (dispatch) => {
     dispatch(request());
     return ADD_AND_UPDATE_API(data, 'update-address').then(

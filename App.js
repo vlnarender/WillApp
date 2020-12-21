@@ -6,17 +6,21 @@ import {NavigationContainer} from '@react-navigation/native';
 import {
   MainStackNavigator,
   CustomStackNavigator,
-} from './src/components/stackNavigator';
-import DrawerNavigator from './src/components/drawer';
+} from './src/components/navigation/stackNavigator';
+import DrawerNavigator from './src/components/navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import {getUniqueId, getSystemName} from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
+import GlobalFont from 'react-native-global-font';
+import PushController from './src/components/PushNotification/PushController';
 const Stack = createStackNavigator();
 const screenOptionStyle = {
   headerShown: false,
 };
 const App = () => {
   useEffect(() => {
+    let fontName = 'SFPro-Regular';
+    GlobalFont.applyGlobal(fontName);
     const device_token = getUniqueId();
     const device_name = getSystemName();
     if (device_name == 'Android') {
@@ -37,6 +41,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <StatusBar barStyle="dark-content" />
+      <PushController />
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName={'Main'}

@@ -12,34 +12,43 @@ import {
   TouchableOpacity,
   Text,
   Dimensions,
+  I18nManager,
+  ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Header from '../../components/Header';
+import Header from '../../components/Header/Header';
 import {programActions} from '../../actions/program';
 import {calenderActions} from '../../actions/Calender';
 import {cartActions} from '../../actions/cart';
-import {ScrollView} from 'react-native-gesture-handler';
-const {height, width} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
+import Loader from '../../components/Loader/Loader';
+import {
+  COMMON_ARROW_LEFT,
+  COMMON_ARROW_RIGHT,
+  HOME_THREE_DOTS_RIGHT,
+} from '../../_helpers/ImageProvide';
 let styleCss = require('../../GlobalStyle');
+
 const ProgramsComponent = (props) => {
   const navigation = useNavigation();
-
   const calenderCall = (item) => {
-    props.calenderAction({restaurant_id: item.id});
+    props.selectedImageUrl(
+      props.programData.program_deatils.image_url +
+        props.programData.program_deatils.image,
+    );
+    props.calender_Action({restaurant_id: item.id});
     props.selectedPlan(item);
     props.restaurantId(item.id);
     navigation.navigate('CommonCalendar');
   };
 
   if (props.programStatus) {
-    props.selectedImageUrl(
-      props.programData.program_deatils.image_url +
-        props.programData.program_deatils.image,
-    );
     return (
       <>
         <Header />
-        <ScrollView>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive">
           <View style={styles.container}>
             <View style={styles.header}>
               <TouchableOpacity
@@ -47,7 +56,9 @@ const ProgramsComponent = (props) => {
                 onPress={() => navigation.navigate('Home')}>
                 <Image
                   style={{width: 30, height: 20}}
-                  source={require('../../../assets/arrowLeft.png')}
+                  source={
+                    I18nManager.isRTL ? COMMON_ARROW_RIGHT : COMMON_ARROW_LEFT
+                  }
                 />
               </TouchableOpacity>
               <View style={styleCss.programBox}>
@@ -73,7 +84,7 @@ const ProgramsComponent = (props) => {
                       style={{
                         alignSelf: 'flex-start',
                       }}
-                      source={require('../../../assets/home/threeDotLeft.png')}
+                      source={require('../../../assets/image/home/threeDotLeft.png')}
                     />
                   </View>
                   <View style={{flex: 4}}>
@@ -91,7 +102,7 @@ const ProgramsComponent = (props) => {
                         flexDirection: 'row',
                         alignSelf: 'flex-end',
                       }}
-                      source={require('../../../assets/home/threeDotRight.png')}
+                      source={HOME_THREE_DOTS_RIGHT}
                     />
                   </View>
                 </View>
@@ -123,7 +134,6 @@ const ProgramsComponent = (props) => {
                           <View style={{padding: 5}}>
                             <Text>Name : {item.name}</Text>
                             <Text>{item.iban}</Text>
-                            <Text>Address : {item.address}</Text>
                           </View>
                         </View>
                       </TouchableOpacity>
@@ -136,7 +146,7 @@ const ProgramsComponent = (props) => {
         </ScrollView>
       </>
     );
-  } else return null;
+  } else return <Loader />;
 };
 
 const mapStateToProps = (state) => {
@@ -149,7 +159,7 @@ const mapStateToProps = (state) => {
 };
 const actionCreators = {
   programAction: programActions.programAction,
-  calenderAction: calenderActions.calenderAction,
+  calender_Action: calenderActions.calenderAction,
   restaurantId: cartActions.restaurantId,
   selectedPlan: cartActions.selectedPlan,
   selectedImageUrl: cartActions.selectedImageUrl,

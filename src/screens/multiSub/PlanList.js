@@ -6,19 +6,21 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
 const {height, width} = Dimensions.get('window');
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {connect} from 'react-redux';
-const checkGreen = require('../../../assets/checkGreen.png');
-const plusOrange = require('../../../assets/plusOrange.png');
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Swiper from 'react-native-swiper';
 let styleCss = require('../../GlobalStyle');
-import Header from '../../components/Header';
+import Header from '../../components/Header/Header';
 import {WEEK_LIST} from '../../_helpers/globalVeriable';
 import {useNavigation} from '@react-navigation/native';
 import {multiSubActions} from '../../actions/multiSub';
+import {CHECK_GREEN, IMAGE_CDN, PLUS_ORANGE} from '../../_helpers/ImageProvide';
+
 const PlanList = (props) => {
   const {itemId, featureId, oneday, week} = props.route.params;
+
   const navigation = useNavigation();
   const [selectedButton, setSelectedButton] = useState({
     planId: null,
@@ -29,8 +31,13 @@ const PlanList = (props) => {
   const [selectedIndex, setSelectedIndex] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState('Select First');
   const [selectedIndexRestaurent, setSelectedIndexRestaurent] = useState([]);
-
+  const [LOCAL_WEEK_LIST, setLOCAL_WEEK_LIST] = useState(WEEK_LIST['en']);
   useEffect(() => {
+    const lC = async () => {
+      const lan = await AsyncStorage.getItem('language');
+      setLOCAL_WEEK_LIST(WEEK_LIST[lan]);
+    };
+    lC();
     const unsubscribe = navigation.addListener('focus', () => {
       setSelectedPrice('Select First');
       setFinalSelection();
@@ -83,7 +90,9 @@ const PlanList = (props) => {
     return (
       <>
         <Header />
-        <ScrollView>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive">
           <View>
             <Swiper
               style={{height: 200}}
@@ -120,7 +129,7 @@ const PlanList = (props) => {
               Plans
             </Text>
             <View style={{flexDirection: 'row', paddingBottom: 5}}>
-              {WEEK_LIST.map((item, index) => {
+              {LOCAL_WEEK_LIST.map((item, index) => {
                 if (index + 1 === props.selectedWeek) {
                   return (
                     <View style={{flexDirection: 'row'}} key={index}>
@@ -157,20 +166,17 @@ const PlanList = (props) => {
                             borderRadius: 10,
                           }}
                           source={{
-                            uri:
-                              'https://will-app.s3.ap-south-1.amazonaws.com/' +
-                              value.image,
+                            uri: IMAGE_CDN + value.image,
                           }}
                         />
                       </View>
                       <View style={{flexDirection: 'column', padding: 10}}>
-                        <Text>{value.program_name}</Text>
+                        <Text style={{fontWeight:'bold', fontSize:14, marginBottom:5}}>{value.program_name} </Text>
                         {value.plan_package.map((item, index) => {
                           return (
                             <TouchableOpacity
                               style={{flexDirection: 'row'}}
                               onPress={() => {
-                                console.log(JSON.stringify(item));
                                 let arrayData = item;
                                 arrayData.package_diet_package = arrayData.package_diet_package.map(
                                   function (el) {
@@ -230,12 +236,13 @@ const PlanList = (props) => {
                       <Image
                         style={{
                           width: 22,
-                          height: 22,
+                          height: 23,
+                          marginTop:5
                         }}
                         source={
                           selectedButton.planId === value.plan_id
-                            ? checkGreen
-                            : plusOrange
+                            ? CHECK_GREEN
+                            : PLUS_ORANGE
                         }
                       />
                     </View>
@@ -243,13 +250,15 @@ const PlanList = (props) => {
                 </View>
 
                 <TouchableOpacity
-                  style={styles.checkout}
+                  style={styleCss.btnButton}
                   onPress={() => {
-                    props.multiSub_LIST_ITEM({
-                      ...finalSelection,
-                      plan_package: selectedButton,
-                    });
-                    props.navigation.navigate('MultiMealSelection');
+                    if (selectedButton.planId !== null) {
+                      props.multiSub_LIST_ITEM({
+                        ...finalSelection,
+                        plan_package: selectedButton,
+                      });
+                      props.navigation.navigate('MultiMealSelection');
+                    }
                   }}>
                   <Text style={styles.checkoutText}>Continue</Text>
                 </TouchableOpacity>
@@ -309,6 +318,7 @@ const styles = StyleSheet.create({
   },
   itemContent: {
     fontSize: 12,
+    marginBottom:5
   },
 
   powerBox: {
@@ -378,15 +388,16 @@ const styles = StyleSheet.create({
   checkout: {
     backgroundColor: '#f2ae88',
     bottom: 0,
-    borderRadius: 5,
+    borderRadius: 8,
     marginHorizontal: 5,
-    padding: 5,
+    padding: 10,
     marginTop: 10,
   },
   checkoutText: {
     textAlign: 'center',
     color: 'white',
     fontSize: 16,
+    
   },
   img: {
     height: 200,

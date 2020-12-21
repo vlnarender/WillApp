@@ -11,25 +11,20 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import {profileActions} from '../actions/profile';
-import AsyncStorage from '@react-native-community/async-storage';
 import ImagePicker from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
 let styleCss = require('../GlobalStyle');
-import {DEV_CONFIGS} from '../util/constant';
-import {COOMMON_API} from '../util/api';
-import Header from '../components/Header';
-const Profile = (props) => {
-  const data = [
-    {
-      label: 'Home Address',
-    },
-    {
-      label: 'data 2',
-    },
-  ];
+import {PROFILE_API} from '../util/api';
 
-  const [loding, setLoading] = useState(false);
-  const [image, setImage] = useState('');
+import {
+  CAMERA_WHITE,
+  HEADER_EDIT_ORANGE,
+  HEADER_PROFILE_IMG,
+  ARROW_LEFT,
+  HEADER_SMALL_LOGO,
+  CROSS,
+} from '../_helpers/ImageProvide';
+const Profile = (props) => {
   useEffect(() => {
     getTokenValue();
   }, []);
@@ -42,9 +37,15 @@ const Profile = (props) => {
     }
   };
   const camera = async () => {
+    var options = {
+      title: 'Select Image',
+
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
     try {
-      var data = await AsyncStorage.getItem('token');
-      var lang = await AsyncStorage.getItem('language');
       const result = await PermissionsAndroid.requestMultiple([
         PermissionsAndroid.PERMISSIONS.CAMERA,
         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
@@ -55,31 +56,47 @@ const Profile = (props) => {
         result['android.permission.READ_EXTERNAL_STORAGE'] &&
         result['android.permission.WRITE_EXTERNAL_STORAGE'] === 'granted'
       ) {
-        ImagePicker.showImagePicker({}, (response) => {
+        ImagePicker.showImagePicker(options, (response) => {
           if (response.didCancel) {
+            Toast.showWithGravity(
+              'Camera permission denied',
+              Toast.SHORT,
+              Toast.CENTER,
+            );
           } else if (response.error) {
+            Toast.showWithGravity(
+              `Image picker ${response.error}`,
+              Toast.SHORT,
+              Toast.CENTER,
+            );
           } else if (response.customButton) {
+            Toast.showWithGravity(
+              'User tap custom button',
+              Toast.SHORT,
+              Toast.CENTER,
+            );
           } else {
-            const source = {uri: response.uri};
             var image = {
               name: response.fileName,
               type: response.type,
+
               uri:
                 Platform.OS === 'android'
                   ? response.uri
                   : respone.uri.replace('file://', ''),
+
+              data: response.data,
             };
-            var lang_uage = 'en';
-            if (lang == 'ar') {
-              lang_uage = 'ar';
-            }
+
             var formData = new FormData();
             formData.append('image', image);
-            var add = {};
-            add.token = data;
-            add.language = lang_uage;
-            COOMMON_API(formData, 'upload/profile/image').then(
+            PROFILE_API(formData, 'upload/profile/image').then(
               (responseJson) => {
+                Toast.showWithGravity(
+                  responseJson.message,
+                  Toast.SHORT,
+                  Toast.CENTER,
+                );
                 props.profileAction();
               },
             );
@@ -102,8 +119,32 @@ const Profile = (props) => {
   if (props.profileStatus) {
     return (
       <>
-        <Header />
-        <ScrollView>
+        <View style={styleCss.header}>
+          <View
+            style={{flex: 1, alignSelf: 'center', alignItems: 'center'}}></View>
+          <View style={{flex: 4, alignItems: 'center', alignSelf: 'center'}}>
+            <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
+              <Image
+                style={{width: 50, height: 50}}
+                source={HEADER_SMALL_LOGO}
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              alignSelf: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
+              <Image style={{height: 20, width: 20}} source={CROSS} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive">
           <View style={styleCss.mainContainer}>
             <View style={{marginBottom: 30}}>
               <View
@@ -126,55 +167,66 @@ const Profile = (props) => {
                     ) : (
                       <Image
                         style={{width: '100%', height: '100%'}}
-                        source={require('../../assets/header/profileimg.png')}
+                        source={HEADER_PROFILE_IMG}
                       />
                     )}
                   </View>
-                  <View style={styleCss.roundShape}>
-                    <TouchableOpacity onPress={camera}>
-                      <Image
-                        style={{width: 19, height: 16}}
-                        source={require('../../assets/header/cameraWhite.png')}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={{marginTop: 10}}>
-                  <Text
-                    style={{
-                      fontSize: 28,
-                      fontWeight: '700',
-                      textAlign: 'center',
-                    }}>
-                    {props.profileData.username}
-                  </Text>
-                  <Text style={{fontSize: 14, textAlign: 'center'}}>
-                    Sharq, Kuwait City
-                  </Text>
-                  <View style={{position: 'absolute', bottom: -3, right: -90}}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View>
-                        <Text style={{fontSize: 18, fontWeight: '700'}}>
-                          {props.labelData.edit_all}
-                        </Text>
-                      </View>
-                      <View>
-                        <TouchableOpacity
-                          onPress={() =>
-                            props.navigation.navigate('ProfileEdit')
-                          }>
-                          <Image
-                            style={{
-                              width: 20,
-                              height: 18,
-                              marginLeft: 5,
-                              marginTop: 4,
-                            }}
-                            source={require('../../assets/header/editOrange.png')}
-                          />
-                        </TouchableOpacity>
-                      </View>
+                  {props.profileData.user_type != 3 && (
+                    <View style={styleCss.roundShape}>
+                      <TouchableOpacity onPress={camera}>
+                        <Image
+                          style={{width: 19, height: 16}}
+                          source={CAMERA_WHITE}
+                        />
+                      </TouchableOpacity>
                     </View>
+                  )}
+                </View>
+                <View style={{marginTop: 10, flex: 1, flexDirection: 'column'}}>
+                  <View style={{flex: 1}}>
+                    <Text
+                      style={{
+                        fontSize: 28,
+                        fontWeight: '700',
+                        textAlign: 'center',
+                        color: '#000',
+                      }}>
+                      {props.profileData.username}
+                    </Text>
+                  </View>
+                  <View style={{width: '90%', flex: 1, flexDirection: 'row'}}>
+                    <View style={{flex: 5}}>
+                      <Text style={{fontSize: 14, textAlign: 'center'}}>
+                        {props.profileData.default_address
+                          ? props.profileData.default_address.area
+                          : null}
+                      </Text>
+                    </View>
+                    {props.profileData.user_type != 3 && (
+                      <View style={{flexDirection: 'row', flex: 1, width: 100}}>
+                        <View>
+                          <Text style={{fontSize: 16, fontWeight: '700'}}>
+                            {props.labelData.edit_all}
+                          </Text>
+                        </View>
+                        <View>
+                          <TouchableOpacity
+                            onPress={() =>
+                              props.navigation.navigate('ProfileEdit')
+                            }>
+                            <Image
+                              style={{
+                                width: 18,
+                                height: 16,
+                                marginLeft: 5,
+                                marginTop: 4,
+                              }}
+                              source={HEADER_EDIT_ORANGE}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    )}
                   </View>
                 </View>
               </View>
@@ -207,16 +259,13 @@ const Profile = (props) => {
                   <Text style={styles.text}>
                     Default:
                     {props.profileData.default_address
-                      ? props.profileData.default_address.basic_address
+                      ? props.profileData.default_address.area
                       : null}
                     {'\n'}
                     {props.profileData.default_address
                       ? props.profileData.default_address.complete_address
                       : null}
                     {'\n'}
-                    {props.profileData.default_address
-                      ? props.profileData.default_address.address_type
-                      : null}
                   </Text>
                 </View>
               </View>

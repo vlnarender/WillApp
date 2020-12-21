@@ -7,11 +7,14 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
+const {height} = Dimensions.get('window');
 let styleCss = require('../GlobalStyle');
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-simple-toast';
 import {COOMMON_API} from '../util/api';
+import {LOGIN_email, LOGIN_logo} from '../_helpers/ImageProvide';
 const ChangeEmail = (props) => {
   const [token, setToken] = useState('');
   const [language, setLanguage] = useState('');
@@ -68,13 +71,10 @@ const ChangeEmail = (props) => {
     }
   };
   return (
-    <ScrollView style={{backgroundColor: 'white'}}>
+    <View style={{flex: 1, justifyContent: 'center', height}}>
       <View style={styleCss.mainContainer}>
         <View style={{alignItems: 'center'}}>
-          <Image
-            style={{width: 220, height: 220}}
-            source={require('../../assets/login/logo.png')}
-          />
+          <Image style={{width: 220, height: 220}} source={LOGIN_logo} />
         </View>
         <View style={{alignItems: 'center', marginBottom: 30}}>
           <Text style={styles.heading}>Change Email</Text>
@@ -83,10 +83,7 @@ const ChangeEmail = (props) => {
 
         <View style={styleCss.inputStylesPass}>
           <View style={styles.imgStyle}>
-            <Image
-              style={{width: 18, height: 11}}
-              source={require('../../assets/login/email.png')}
-            />
+            <Image style={{width: 18, height: 11}} source={LOGIN_email} />
           </View>
           <View style={{flex: 5}}>
             <TextInput
@@ -94,7 +91,7 @@ const ChangeEmail = (props) => {
               placeholder="Enter New Email Id"
               onChangeText={(text) => setEmail(text)}
               value={email}
-              autoFocus
+              //autoFocus
             />
           </View>
         </View>
@@ -104,7 +101,7 @@ const ChangeEmail = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

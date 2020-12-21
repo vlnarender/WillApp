@@ -17,8 +17,7 @@ import {
 const {width} = Dimensions.get('window');
 import Toast from 'react-native-simple-toast';
 
-import Header from '../../components/Header';
-// let styleCss = require('../../GlobalStyle');
+import Header from '../../components/Header/Header';
 import {
   CHECK_GREEN,
   PLUS_ORANGE,
@@ -28,16 +27,17 @@ import {
   IMAGE_CDN,
 } from '../../_helpers/ImageProvide';
 import {programPlanActions} from '../../actions/programPlan';
-import Loader from '../../components/Loader';
+import Loader from '../../components/Loader/Loader';
 import Swiper from 'react-native-swiper';
 import {connect} from 'react-redux';
-import {MealListData} from '../../_helpers/globalVeriable';
 import {
   Collapse,
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
-import {CART_DATA, DIET_COMPANY, MEAL} from '../../_helpers/globalVeriable';
+import {cartActions} from '../../actions/cart';
+import {ADD_TO_THE_CART} from '../../util/api';
+let styleCss = require('../../GlobalStyle');
 var temp_diet_company = [];
 
 const MealSelection = (props) => {
@@ -53,32 +53,37 @@ const MealSelection = (props) => {
   const [mealDataInfo, setmealDataInfo] = useState([]);
   const [daysNumber, setDaysNumber] = useState(1);
   const [MealTitle, setMealTitle] = useState([]);
+  const [MealList, setMealList] = useState([]);
+  const [NumberOfWeek, setNumberOfWeek] = useState(1);
   const [getPlan_packages_id, setPlan_packages_id] = useState();
   const selectItem = (index) => {};
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      setmealDataInfo(MEAL);
+      setmealDataInfo([]);
       setMealTitle([]);
+      setDaysNumber(1);
+      setMealList([]);
       setPlan_packages_id();
       initializeMeal();
     });
     return unsubscribe;
   }, []);
+
   const initializeMeal = () => {
     let tempArray = [];
     Meal.package_diet_package.map((data) => {
+      setPlan_packages_id(data.plan_packages_id);
       tempArray.push({
         day: null,
-        meal: data.meal,
-        meal_name: data.meal_name,
         plan_diet_package_id: null,
-        meal_type: null,
+        mealData: null,
         meal_id: null,
         meal_list_id: null,
-        mealData: null,
-        type: null,
-        plan_id: null,
+        plan_id: data.plan_id,
+        meal_type: data.meal_type,
+        meal: data.meal,
+        meal_name: data.meal_name,
+        plan_packages_id: data.plan_packages_id,
       });
     });
     setmealDataInfo(tempArray);
@@ -87,26 +92,38 @@ const MealSelection = (props) => {
     index,
     mealData,
     mealId,
-    type,
-    meal_type,
     plan_diet_package_id,
-    plan_id,
-    plan_packages_id,
+    meal_list_id,
+    meal_type,
   ) => {
+    let tmpArray = MealList;
     let tf = true;
-    setPlan_packages_id(plan_packages_id);
+    tmpArray.map((e, i) => {
+      if (e.day === daysNumber && e.meal_type === meal_type) {
+        tf = false;
+        e.meal_id = mealId;
+        e.plan_diet_package_id = plan_diet_package_id;
+      }
+    });
+    if (tf) {
+      tmpArray.push({
+        day: daysNumber,
+        meal_type: meal_type,
+        meal_id: mealId,
+        plan_diet_package_id: plan_diet_package_id,
+      });
+    }
+    setMealList(tmpArray);
     setmealDataInfo(
       mealDataInfo.map((x, i) => {
         return index === i
           ? {
               ...x,
+              day: daysNumber % 7 === 0 ? 7 : daysNumber % 7,
               plan_diet_package_id: plan_diet_package_id,
-              meal_type: meal_type,
               meal_id: mealId,
-              meal_list_id: plan_packages_id,
               mealData: mealData,
-              type: type,
-              plan_id: plan_id,
+              meal_list_id: meal_list_id,
             }
           : x;
       }),
@@ -115,11 +132,13 @@ const MealSelection = (props) => {
   const checkoutList = () => {
     let tmpTF = false;
     mealDataInfo.map((data) => {
-      tmpTF = (data.meal_id === null) & true;
+      if (data.meal_id === null) {
+        tmpTF = true;
+      }
     });
     if (tmpTF) {
       Toast.showWithGravity(
-        'Please select atlist one meal from each section (Breakfast,Lunch,Dinner)',
+        'Please select atlist one meal from each section.',
         Toast.SHORT,
         Toast.CENTER,
       );
@@ -131,14 +150,13 @@ const MealSelection = (props) => {
         });
         temp_diet_company.push({
           restaurant_id: props.restaurant_id,
-          week: daysNumber / 7,
+          week: NumberOfWeek,
           plan_id: Meal.plan_id,
           plan_packages_id: getPlan_packages_id,
-          meals: myArray,
+          meals: MealList,
         });
         setMealTitle([]);
-        // setmealDataInfo(MEAL);
-        if (daysNumber === week * 7) {
+        if (NumberOfWeek === week) {
           let cartTemp = {
             duration_type: BasicInfo.duration_type,
             relative_id: BasicInfo.relative_id,
@@ -147,23 +165,34 @@ const MealSelection = (props) => {
             duration: BasicInfo.duration,
             diet_company: temp_diet_company,
             type: props.program_id,
-            geGenderIdnder: GenderId,
+            gender: GenderId,
           };
-          navigation.navigate('CartComponent', {
-            cartData: cartTemp,
-          });
+          console.log(JSON.stringify(cartTemp));
+          // ADD_TO_THE_CART(cartTemp, 'user/addToCart').then((data) => {
+          //   if (data.success) {
+          //     props.ListOfItems();
+          //     navigation.navigate('Cart');
+          //   } else {
+          //     Toast.showWithGravity(data.message, Toast.SHORT, Toast.CENTER);
+          //   }
+          // });
         }
       }
       setMealTitle([...MealTitle, mealDataInfo]);
       initializeMeal();
-      setDaysNumber(daysNumber + 1);
+      daysNumber === NumberOfWeek * 7
+        ? setDaysNumber(0)
+        : setDaysNumber(daysNumber + 1);
     }
   };
   if (selectedPlan) {
     return (
       <>
         <Header />
-        <ScrollView style={{backgroundColor: '#ffffff'}}>
+        <ScrollView
+          style={{backgroundColor: '#ffffff'}}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive">
           <View>
             <Swiper
               style={{height: 200}}
@@ -188,12 +217,12 @@ const MealSelection = (props) => {
               ))}
             </Swiper>
             <View style={styles.back}>
-              <TouchableOpacity onPress={() => navigation.goBack()}>
+              <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                 <Text style={{color: 'red', fontSize: 11}}>Back</Text>
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{alignSelf: 'center'}}>
+          <View style={[{marginTop: 10}, styleCss.mainContainer]}>
             <View style={{padding: 5, justifyContent: 'flex-end'}}>
               <View
                 style={{
@@ -221,7 +250,7 @@ const MealSelection = (props) => {
             </View>
             <View
               style={{
-                width: '95%',
+                width: '100%',
               }}>
               {mealDataInfo.map((item, mtindex) => {
                 return (
@@ -246,27 +275,22 @@ const MealSelection = (props) => {
                         {item.meal.map((mealData, mindex) => {
                           return mealData.meal_list.map((meal_list, ml) => {
                             return (
+                              <View style={styles.borderBottomBox}>
                               <TouchableOpacity
                                 key={ml}
                                 onPress={() => {
-                                  setPlan_packages_id(item.plan_packages_id);
                                   selectMeal(
                                     mtindex,
                                     meal_list,
                                     mealData.id,
-                                    item.meal_name,
-                                    item.meal_type,
                                     mealData.plan_diet_package_id,
-                                    item.plan_packages_id,
                                     meal_list.meal_id,
+                                    item.meal_type,
                                   );
                                 }}
-                                style={{
-                                  flexDirection: 'row',
-                                  marginVertical: 5,
-                                  borderBottomWidth: 1,
-                                  borderBottomColor: '#ccc',
-                                }}>
+                                >
+                              <View >
+                                  <View style={{flexDirection: 'row'}}>
                                 <View>
                                   <View style={styles.imgBox}>
                                     <Image
@@ -299,12 +323,12 @@ const MealSelection = (props) => {
                                     <View
                                       style={{
                                         alignItems: 'flex-end',
-                                        marginTop: 10,
+                                        marginBottom: 10,
                                       }}>
                                       <Image
                                         style={{
                                           width: 22,
-                                          height: 22,
+                                          height: 23,
                                         }}
                                         source={
                                           item.meal_id === mealData.id &&
@@ -319,10 +343,17 @@ const MealSelection = (props) => {
                                   <View style={styles.powerBox}>
                                     <View style={{flexDirection: 'row'}}>
                                       <Text style={styles.itemText}>
-                                        P {meal_list.protein}g
+                                        P
+                                        {Math.round(meal_list.protein).toFixed(
+                                          2,
+                                        )}
+                                        g
                                       </Text>
                                       <Text style={styles.itemText}>
-                                        Ca {meal_list.calorie}
+                                        Ca
+                                        {Math.round(meal_list.calorie).toFixed(
+                                          2,
+                                        )}
                                       </Text>
                                     </View>
                                     <View
@@ -331,15 +362,20 @@ const MealSelection = (props) => {
                                         marginTop: 10,
                                       }}>
                                       <Text style={styles.itemText}>
-                                        C {meal_list.carbohydrate}g
+                                        C {Math.round(meal_list.carbohydrate)}g
                                       </Text>
                                       <Text style={styles.itemText}>
-                                        F {meal_list.fat}g
+                                        F {Math.round(meal_list.fat)}g
                                       </Text>
                                     </View>
+                                    </View>
                                   </View>
+                                 
+                                  
+                                </View>
                                 </View>
                               </TouchableOpacity>
+                              </View>
                             );
                           });
                         })}
@@ -350,10 +386,11 @@ const MealSelection = (props) => {
               })}
 
               <TouchableOpacity
-                style={styles.checkout}
+                style={styleCss.btnButton}
                 onPress={() => checkoutList()}>
                 <Text style={styles.checkoutText}>
-                  {daysNumber != week * 7 && `${daysNumber} / ${week * 7}`}
+                  {daysNumber != week * 7 &&
+                    `${daysNumber * NumberOfWeek} / ${week * 7}`}
                   {'   '}
                   {daysNumber === week * 7 ? 'CheckOut' : 'Continue'}
                 </Text>
@@ -370,11 +407,11 @@ const styles = StyleSheet.create({
   cardBox: {
     //backgroundColor: 'red',
     alignSelf: 'center',
-    width: '96%',
+    width: '100%',
     elevation: 3,
     backgroundColor: 'white', // invisible color
     borderRadius: 10,
-    marginBottom: 10,
+    marginVertical: 15,
     padding: 10,
   },
   imgBox: {
@@ -461,6 +498,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
+  borderBottomBox: {
+    borderBottomWidth: 1,
+    borderColor: '#dddddd',
+    paddingBottom: 10,
+    marginBottom: 10,
+  },
 });
 
 const mapStateToProps = (state) => {
@@ -477,5 +520,6 @@ const mapStateToProps = (state) => {
 };
 const mapActionToProps = {
   programPlanAction: programPlanActions.programPlanAction,
+  ListOfItems: cartActions.ListOfItems,
 };
 export default connect(mapStateToProps, mapActionToProps)(MealSelection);

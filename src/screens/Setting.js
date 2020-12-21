@@ -1,16 +1,25 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Image, ScrollView, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
-import ToggleSwitch from 'toggle-switch-react-native';
 import Toggle from '../components/Toggle';
 import AsyncStorage from '@react-native-community/async-storage';
 let styleCss = require('../GlobalStyle');
 import {profileActions} from '../actions/profile';
 import {labelActions} from '../actions/label';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import Headers from '../components/Header';
+import {
+  Switch,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
+import Headers from '../components/Header/Header';
+import {languageRestart} from '../components/LanguageRestart';
+import {INFINITY} from '../_helpers/ImageProvide';
 const Setting = (props) => {
   const [LocalLanguage, setLocalLanguage] = useState('');
+  const [AllowLocation, setAllowLocation] = useState(true);
+  const [Notification, setNotification] = useState(true);
+  const [ReceiveOffer, setReceiveOffer] = useState(true);
+
   useEffect(() => {
     getValue();
   }, []);
@@ -21,9 +30,11 @@ const Setting = (props) => {
       console.error(e);
     }
   };
+
   const languageChange = (isOn) => {
     AsyncStorage.setItem('language', isOn ? 'en' : 'ar');
     props.labelAction();
+    languageRestart(isOn);
     setLocalLanguage(isOn ? 'en' : 'ar');
   };
   if (props.settingStatus && props.labelStatus) {
@@ -49,15 +60,19 @@ const Setting = (props) => {
                   {LocalLanguage == 'en' ? 'English' : 'عربى'}
                 </Text>
               </View>
-              <View>
-                <ToggleSwitch
+              <TouchableOpacity
+                onPress={() =>
+                  languageChange(LocalLanguage == 'en' ? false : true)
+                }>
+                <Toggle booleanValue={LocalLanguage == 'en' ? true : false} />
+                {/* <ToggleSwitch
                   isOn={LocalLanguage == 'en' ? true : false}
                   onColor="#f2ae88"
                   offColor="#d0d0d2"
                   size="small"
                   onToggle={(isOn) => languageChange(isOn)}
-                />
-              </View>
+                /> */}
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.settingRow}>
@@ -80,6 +95,12 @@ const Setting = (props) => {
                 {props.settingData.password}
               </Text>
             </View>
+            <View>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate('UpdatePassword')}>
+                <Text style={styles.setGreenText}>Change</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View style={styles.settingRow}>
@@ -95,22 +116,34 @@ const Setting = (props) => {
           <View style={styles.settingRow}>
             <View>
               <Text style={styles.setTextLight}>Receive notfication</Text>
-              <Text style={styles.setTextDark}>Enabled</Text>
+              <Text style={styles.setTextDark}>
+                {Notification ? 'Enabled' : 'Disabled'}
+              </Text>
             </View>
-            <View>
-              <Toggle booleanValue={true} />
-            </View>
+            <Switch
+              trackColor={{false: '#d0d0d2', true: '#f2ae88'}}
+              thumbColor={'#ffffff'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={() => setNotification(!Notification)}
+              value={Notification}
+            />
           </View>
           <View style={styles.settingRow}>
             <View>
               <Text style={styles.setTextLight}>
                 {langChange.alow_location}
               </Text>
-              <Text style={styles.setTextDark}>Disabled</Text>
+              <Text style={styles.setTextDark}>
+                {AllowLocation ? 'Enable' : 'Disable'}
+              </Text>
             </View>
-            <View>
-              <Toggle booleanValue={false} />
-            </View>
+            <Switch
+              trackColor={{false: '#d0d0d2', true: '#f2ae88'}}
+              thumbColor={'#ffffff'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={() => setAllowLocation(!AllowLocation)}
+              value={AllowLocation}
+            />
           </View>
 
           <View style={styles.settingRow}>
@@ -118,11 +151,17 @@ const Setting = (props) => {
               <Text style={styles.setTextLight}>
                 {langChange.receive_specail_offers}
               </Text>
-              <Text style={styles.setTextDark}>Enabled</Text>
+              <Text style={styles.setTextDark}>
+                {ReceiveOffer ? 'Enabled' : 'Disabled'}
+              </Text>
             </View>
-            <View>
-              <Toggle booleanValue={false} />
-            </View>
+            <Switch
+              trackColor={{false: '#d0d0d2', true: '#f2ae88'}}
+              thumbColor={'#ffffff'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={() => setReceiveOffer(!ReceiveOffer)}
+              value={ReceiveOffer}
+            />
           </View>
         </View>
       </>
@@ -130,7 +169,7 @@ const Setting = (props) => {
   } else {
     return (
       <View>
-        <Image source={require('../../assets/infinity.gif')} />
+        <Image source={INFINITY} />
       </View>
     );
   }
@@ -149,7 +188,7 @@ const styles = StyleSheet.create({
   setTextDark: {
     color: '#000',
     fontSize: 15,
-    marginTop: 5,
+    alignSelf: 'flex-start',
   },
 
   setGreenText: {

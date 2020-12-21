@@ -1,15 +1,21 @@
 package com.will;
 
+import java.util.List;
 import android.app.Application;
 import android.content.Context;
-import com.facebook.react.PackageList;
-import com.facebook.react.ReactApplication;
-import com.facebook.react.ReactInstanceManager;
-import com.facebook.react.ReactNativeHost;
-import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.facebook.react.PackageList;
+import com.facebook.react.ReactPackage;
+import com.facebook.react.ReactNativeHost;
+import com.facebook.react.ReactApplication;
+import com.reactnativerestart.RestartPackage;
+import androidx.multidex.MultiDexApplication;
+import com.facebook.react.ReactInstanceManager;
+import com.airbnb.android.react.maps.MapsPackage;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
+import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage; 
+import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -19,11 +25,12 @@ public class MainApplication extends Application implements ReactApplication {
         public boolean getUseDeveloperSupport() {
           return BuildConfig.DEBUG;
         }
-
+   
         @Override
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
+          // packages.add(new ReactNativeFirebaseAppPackage());
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           return packages;

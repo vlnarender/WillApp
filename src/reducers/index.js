@@ -23,6 +23,8 @@ import cartReducer from './cart';
 import homeReducer from './home';
 import otpReducer from './otp';
 import commonReducer from './common';
+import paymentReducer from './payment';
+import myOrdersReducer from './myOrders';
 const AppReducer = combineReducers({
   registrationReducer: registrationReducer,
   editaddressReducer: editaddressReducer,
@@ -47,6 +49,8 @@ const AppReducer = combineReducers({
   otpReducer: otpReducer,
   commonReducer: commonReducer,
   programPlanReduce: programPlanReduce,
+  paymentReducer: paymentReducer,
+  myOrdersReducer: myOrdersReducer,
 });
 
 // Clean state when user logs out

@@ -12,7 +12,8 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.ADDRESS_LIST_REQUEST:
       return {
-        loading: true,
+        ...state,
+        addressStatus: false,
       };
     case userConstants.ADDRESS_LIST_SUCCESS:
       return {

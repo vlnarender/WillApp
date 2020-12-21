@@ -1,6 +1,5 @@
 import {userConstants} from './actionTypes';
 import {USER_API} from '../util/api';
-import AsyncStorage from '@react-native-community/async-storage';
 export const otpActions = {
   otpUserAction,
 };

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Image, StyleSheet, ImagePropTypes} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {CROSS} from '../_helpers/ImageProvide';
 import {Calendar, CalendarList} from 'react-native-calendars';
 import moment from 'moment';
 import _ from 'lodash';
@@ -34,11 +35,11 @@ const OneDay = (props) => {
     const end = moment(startDate).add(2, 'days');
 
     for (
-      let m = moment(start).add(1, 'days');
-      m.diff(end, 'days') <= 0;
-      m.add(1, 'days')
+      let m_Day = moment(start).add(1, 'days');
+      m_Day.diff(end, 'days') <= 0;
+      m_Day.add(1, 'days')
     ) {
-      disabledDates[m.format('YYYY-MM-DD')] = {
+      disabledDates[m_Day.format('YYYY-MM-DD')] = {
         textColor: '#f2ae88',
         disabled: true,
         disableTouchEvent: true,
@@ -63,13 +64,12 @@ const OneDay = (props) => {
     return (
       <>
         <View style={styles.calendarbg}>
-          <ScrollView>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="interactive">
             <View style={styles.topBg}>
               <View style={styles.arrow}>
-                <Image
-                  style={styles.arrowImg}
-                  source={require('../../assets/header/cross.png')}
-                />
+                <Image style={styles.arrowImg} source={CROSS} />
               </View>
 
               <View style={styles.roundShap}>
@@ -120,7 +120,9 @@ const OneDay = (props) => {
                 <View style={styles.rowSpace}>
                   <View style={styles.colorBox2}></View>
                   <View>
-                    <Text style={styles.textColor}>Not Selected</Text>
+                    <Text style={styles.textColor}>
+                      Available for Selection
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -128,7 +130,7 @@ const OneDay = (props) => {
             <View style={styles.rowTwo}>
               <View style={styles.rowSpace}>
                 <View style={styles.colorBox3}></View>
-                <Text style={styles.textColor}>Unavailable for Selected</Text>
+                <Text style={styles.textColor}>Unavailable for Selection</Text>
               </View>
             </View>
           </ScrollView>

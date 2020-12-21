@@ -12,8 +12,9 @@ let styleCss = require('../GlobalStyle');
 import {profileActions} from '../actions/profile';
 import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
+import {CHECKED, CROSS, HEADER_unchecked} from '../_helpers/ImageProvide';
 import Toast from 'react-native-simple-toast';
-import {COOMMON_API} from '../util/api';
+import {COOMMON_API, PROFILE_API} from '../util/api';
 const ProfileEdit = (props) => {
   const [token, setToken] = useState('');
   const [first, setFirst] = useState('');
@@ -53,9 +54,17 @@ const ProfileEdit = (props) => {
   };
   const handleSubmit = async () => {
     if (first == null || first == undefined || first == '') {
-      Toast.showWithGravity('Must be non empty', Toast.SHORT, Toast.CENTER);
+      Toast.showWithGravity(
+        'First name can not be empty',
+        Toast.SHORT,
+        Toast.CENTER,
+      );
     } else if (last == null || last == undefined || last == '') {
-      Toast.showWithGravity('Must be non empty', Toast.SHORT, Toast.CENTER);
+      Toast.showWithGravity(
+        'Last name can not be empty',
+        Toast.SHORT,
+        Toast.CENTER,
+      );
     } else if (
       phone == null ||
       phone == undefined ||
@@ -82,7 +91,7 @@ const ProfileEdit = (props) => {
       var add = {};
       add.token = token;
       add.language = language;
-      COOMMON_API(formData, 'edit/profile').then((responseJson) => {
+      PROFILE_API(formData, 'edit/profile').then((responseJson) => {
         if (responseJson.success) {
           props.profileAction();
           props.navigation.navigate('Profile');
@@ -92,7 +101,10 @@ const ProfileEdit = (props) => {
     }
   };
   return (
-    <ScrollView style={{backgroundColor: 'white', flex: 1}}>
+    <ScrollView
+      style={{backgroundColor: 'white', flex: 1}}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="interactive">
       <View style={styleCss.mainContainer}>
         <View
           style={{
@@ -102,10 +114,7 @@ const ProfileEdit = (props) => {
           }}>
           <TouchableOpacity
             onPress={() => props.navigation.navigate('Profile')}>
-            <Image
-              style={{width: 20, height: 20}}
-              source={require('../../assets/header/cross.png')}
-            />
+            <Image style={{width: 20, height: 20}} source={CROSS} />
           </TouchableOpacity>
         </View>
         <View style={{paddingBottom: 30}}>
@@ -113,7 +122,7 @@ const ProfileEdit = (props) => {
             <View style={styles.imgStyle}>
               <Image
                 style={{width: 14, height: 16}}
-                source={require('../../assets/register/name.png')}
+                source={require('../../assets/image/register/name.png')}
               />
             </View>
             <View style={{flex: 5}}>
@@ -129,7 +138,7 @@ const ProfileEdit = (props) => {
             <View style={styles.imgStyle}>
               <Image
                 style={{width: 14, height: 16}}
-                source={require('../../assets/register/name.png')}
+                source={require('../../assets/image/register/name.png')}
               />
             </View>
             <View style={{flex: 5}}>
@@ -144,7 +153,7 @@ const ProfileEdit = (props) => {
             <View style={styles.imgStyle}>
               <Image
                 style={{width: 14, height: 14}}
-                source={require('../../assets/register/phone.png')}
+                source={require('../../assets/image/register/phone.png')}
               />
             </View>
             <View style={{flex: 5}}>
@@ -162,10 +171,7 @@ const ProfileEdit = (props) => {
                 <View key={key}>
                   {checked === item.id ? (
                     <TouchableOpacity style={styles.radioAlign}>
-                      <Image
-                        style={styles.imgSize}
-                        source={require('../../assets/header/checked.png')}
-                      />
+                      <Image style={styles.imgSize} source={CHECKED} />
                       <View>
                         {checked === item.id ||
                         (checked === item.id &&
@@ -189,10 +195,7 @@ const ProfileEdit = (props) => {
                         setChecked(item.id);
                       }}
                       style={styles.radioAlign}>
-                      <Image
-                        style={styles.imgSize}
-                        source={require('../../assets/header/unchecked.png')}
-                      />
+                      <Image style={styles.imgSize} source={HEADER_unchecked} />
                       <View>
                         {checked === item.id ||
                         (checked === item.id &&

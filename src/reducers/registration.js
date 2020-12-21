@@ -1,5 +1,4 @@
 import {userConstants} from '../actions/actionTypes';
-// import {AsyncStorage} from 'react-native';
 
 const initialState = {
   regResponse: '',

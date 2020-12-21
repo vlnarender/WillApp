@@ -8,6 +8,14 @@ target 'will' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Contacts', :path => "#{permissions_path}/Contacts.podspec"
+  pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone.podspec"
+  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications.podspec"
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
+
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
   target 'willTests' do
     inherit! :complete
     # Pods for testing
@@ -30,14 +38,4 @@ target 'will-tvOS' do
     inherit! :search_paths
     # Pods for testing
   end
-end
-
-target 'will' do
-
-  permissions_path = '../node_modules/react-native-permissions/ios'
-  pod 'Permission-Contacts', :path => "#{permissions_path}/Contacts.podspec"
-  pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone.podspec"
-  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications.podspec"
-  pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
-  
 end

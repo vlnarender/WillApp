@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 let styleCss = require('../GlobalStyle');
+import {CROSS, LOGIN_pass, LOGO} from '../_helpers/ImageProvide';
 
 const Subscription = (props) => {
   const [oldpass, setOldpass] = useState('');
@@ -31,23 +32,20 @@ const Subscription = (props) => {
     setFocus(true);
   };
   return (
-    <ScrollView style={{backgroundColor: 'white'}}>
+    <ScrollView
+      style={{backgroundColor: 'white'}}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="interactive">
       <View style={{marginBottom: 50}}>
         <View style={styleCss.mainContainer}>
           <View style={{alignItems: 'flex-end', marginTop: 10}}>
             <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
-              <Image
-                style={{width: 16, height: 16}}
-                source={require('../../assets/header/cross.png')}
-              />
+              <Image style={{width: 16, height: 16}} source={CROSS} />
             </TouchableOpacity>
           </View>
 
           <View style={{alignItems: 'center', marginVertical: 30}}>
-            <Image
-              style={{width: 120, height: 100}}
-              source={require('../../assets/header/logo.png')}
-            />
+            <Image style={{width: 120, height: 100}} source={LOGO} />
           </View>
           <View style={{alignItems: 'center'}}>
             <Text style={styles.heading}>Chanage Password</Text>
@@ -59,10 +57,7 @@ const Subscription = (props) => {
             </View>
             <View style={styleCss.inputStylesPass}>
               <View style={styles.imgStyle}>
-                <Image
-                  style={{width: 14, height: 16}}
-                  source={require('../../assets/login/pass.png')}
-                />
+                <Image style={{width: 14, height: 16}} source={LOGIN_pass} />
               </View>
               <View style={{flex: 5}}>
                 <TextInput

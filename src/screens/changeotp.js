@@ -15,6 +15,7 @@ import {connect} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import {DEV_CONFIGS} from '../util/constant';
 import {COOMMON_API} from '../util/api';
+import {LOGO} from '../_helpers/ImageProvide';
 const Otp = (props) => {
   const [token, setToken] = useState('');
   const [language, setLanguage] = useState('');
@@ -65,15 +66,15 @@ const Otp = (props) => {
     }
   };
   return (
-    <ScrollView style={{backgroundColor: 'white'}}>
+    <ScrollView
+      style={{backgroundColor: 'white'}}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="interactive">
       <View style={styleCss.mainContainer}>
         <View style={{alignItems: 'flex-end', marginTop: 30}}></View>
 
         <View style={{alignItems: 'center', marginVertical: 30}}>
-          <Image
-            style={{width: 120, height: 100}}
-            source={require('../../assets/header/logo.png')}
-          />
+          <Image style={{width: 120, height: 100}} source={LOGO} />
         </View>
 
         <View style={{alignItems: 'center', marginBottom: 30}}>
@@ -91,7 +92,7 @@ const Otp = (props) => {
             keyboardType="numeric"
             onChangeText={(text) => setOtp(text)}
             value={otp}
-            autoFocus
+            //autoFocus
           />
         </View>
         <View style={{marginBottom: 20}}>

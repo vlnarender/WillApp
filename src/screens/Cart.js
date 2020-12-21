@@ -4,7 +4,7 @@
  * @Owner Will
  */
 import {connect} from 'react-redux';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Image,
@@ -14,19 +14,25 @@ import {
   Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Header from '../components/Header';
+import Header from '../components/Header/Header';
 import {programActions} from '../actions/program';
+import {paymentActions} from '../actions/payment';
 import {calenderActions} from '../actions/Calender';
 import {cartActions} from '../actions/cart';
 import {ScrollView} from 'react-native-gesture-handler';
-const {height, width} = Dimensions.get('window');
-let styleCss = require('../GlobalStyle');
+const {width} = Dimensions.get('window');
 const CartComponent = (props) => {
   const navigation = useNavigation();
+  useEffect(() => {
+    getCartDetail();
+  });
+  const getCartDetail = () => {};
   return (
     <>
       <Header />
-      <ScrollView>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive">
         <Text>Cart View</Text>
         <Text>{JSON.stringify(props.route.params.cartData)}</Text>
       </ScrollView>
@@ -40,10 +46,12 @@ const mapStateToProps = (state) => {
     programMessage: state.programReducer.programMessage,
     programData: state.programReducer.programData,
     programStatus: state.programReducer.programStatus,
+    paymentData: state.paymentReducer.paymentData,
   };
 };
 const actionCreators = {
   programAction: programActions.programAction,
+  paymentAction: paymentActions.paymentAction,
   calenderAction: calenderActions.calenderAction,
   restaurantId: cartActions.restaurantId,
   selectedPlan: cartActions.selectedPlan,

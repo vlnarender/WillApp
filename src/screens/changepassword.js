@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 let styleCss = require('../GlobalStyle');
 import {connect} from 'react-redux';
+import {CROSS, LOGIN_pass, LOGO} from '../_helpers/ImageProvide';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-simple-toast';
@@ -96,27 +97,24 @@ const ChangePassword = (props) => {
   };
   if (props.labelData) {
     return (
-      <ScrollView style={{backgroundColor: 'white'}}>
+      <ScrollView
+        style={{backgroundColor: 'white'}}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive">
         <View style={{marginBottom: 50}}>
           <View style={styleCss.mainContainer}>
             <View style={{alignItems: 'flex-end', marginTop: 10}}>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate('Setting')}>
-                <Image
-                  style={{width: 16, height: 16}}
-                  source={require('../../assets/header/cross.png')}
-                />
+                <Image style={{width: 16, height: 16}} source={CROSS} />
               </TouchableOpacity>
             </View>
 
             <View style={{alignItems: 'center', marginVertical: 30}}>
-              <Image
-                style={{width: 120, height: 100}}
-                source={require('../../assets/header/logo.png')}
-              />
+              <Image style={{width: 120, height: 100}} source={LOGO} />
             </View>
             <View style={{alignItems: 'center'}}>
-              <Text style={styles.heading}>Chanage Password</Text>
+              <Text style={styles.heading}>Change Password</Text>
             </View>
 
             <View style={styles.mrgTop}>
@@ -125,10 +123,7 @@ const ChangePassword = (props) => {
               </View>
               <View style={styleCss.inputStylesPass}>
                 <View style={styles.imgStyle}>
-                  <Image
-                    style={{width: 14, height: 16}}
-                    source={require('../../assets/login/pass.png')}
-                  />
+                  <Image style={{width: 14, height: 16}} source={LOGIN_pass} />
                 </View>
                 <View style={{flex: 5}}>
                   <TextInput
@@ -137,7 +132,7 @@ const ChangePassword = (props) => {
                     onChangeText={(text) => setOldpass(text)}
                     value={oldpass}
                     secureTextEntry={true}
-                    autoFocus
+                    // autoFocus
                   />
                 </View>
               </View>
@@ -149,10 +144,7 @@ const ChangePassword = (props) => {
               </View>
               <View style={styleCss.inputStylesPass}>
                 <View style={styles.imgStyle}>
-                  <Image
-                    style={{width: 14, height: 16}}
-                    source={require('../../assets/login/pass.png')}
-                  />
+                  <Image style={{width: 14, height: 16}} source={LOGIN_pass} />
                 </View>
                 <View style={{flex: 5}}>
                   <TextInput
@@ -174,10 +166,7 @@ const ChangePassword = (props) => {
               </View>
               <View style={styleCss.inputStylesPass}>
                 <View style={styles.imgStyle}>
-                  <Image
-                    style={{width: 14, height: 16}}
-                    source={require('../../assets/login/pass.png')}
-                  />
+                  <Image style={{width: 14, height: 16}} source={LOGIN_pass} />
                 </View>
                 <View style={{flex: 5}}>
                   <TextInput

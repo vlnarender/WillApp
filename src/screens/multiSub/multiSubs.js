@@ -4,14 +4,19 @@
  * @Owner Will
  */
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Dimensions,
+  I18nManager,
+} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import {multiSubActions} from '../../actions/multiSub';
 import {mealListActions} from '../../actions/mealList';
-import Header from '../../components/Header';
-const upIcon = require('../../../assets/upIcon.png');
-const inIcon = require('../../../assets/inIcon.png');
+import Header from '../../components/Header/Header';
 const {width, height} = Dimensions.get('window');
 let styleCss = require('../../GlobalStyle');
 import {
@@ -20,10 +25,14 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import {
-  REC,
-  REC_SELECTED,
   CHECK_GREEN,
   PLUS_ORANGE,
+  COMMON_ARROW_LEFT,
+  COMMON_ARROW_RIGHT,
+  HOME_THREE_DOTS_RIGHT,
+  AR,
+  UP_ICON,
+  IN_ICON,
 } from '../../_helpers/ImageProvide';
 import {useNavigation} from '@react-navigation/native';
 const MultiSubs = (props) => {
@@ -55,10 +64,7 @@ const MultiSubs = (props) => {
       ]);
     });
 
-    return () => {
-      // Unsubscribe for the focus Listener
-      unsubscribe;
-    };
+    return unsubscribe;
   }, []);
 
   const selectItem = (index) => {
@@ -80,7 +86,10 @@ const MultiSubs = (props) => {
     return (
       <>
         <Header />
-        <ScrollView style={{backgroundColor: '#fff'}}>
+        <ScrollView
+          style={{backgroundColor: '#fff'}}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive">
           <View style={styleCss.mainContainer}>
             <View style={{alignItems: 'center', marginTop: 20}}>
               <View style={{position: 'absolute', left: 10, top: '44%'}}>
@@ -88,7 +97,9 @@ const MultiSubs = (props) => {
                   onPress={() => props.navigation.navigate('Home')}>
                   <Image
                     style={{width: 30, height: 19}}
-                    source={require('../../../assets/arrowLeft.png')}
+                    source={
+                      I18nManager.isRTL ? COMMON_ARROW_RIGHT : COMMON_ARROW_LEFT
+                    }
                   />
                 </TouchableOpacity>
               </View>
@@ -101,7 +112,7 @@ const MultiSubs = (props) => {
                   <View style={{flex: 1}}>
                     <Image
                       style={{width: 9, height: 19}}
-                      source={require('../../../assets/home/threeDotLeft.png')}
+                      source={require('../../../assets/image/home/threeDotLeft.png')}
                     />
                   </View>
                   <View style={{flex: 4}}>
@@ -122,7 +133,7 @@ const MultiSubs = (props) => {
                         flexDirection: 'row',
                         alignSelf: 'flex-end',
                       }}
-                      source={require('../../../assets/home/threeDotRight.png')}
+                      source={HOME_THREE_DOTS_RIGHT}
                     />
                   </View>
                 </View>
@@ -153,10 +164,7 @@ const MultiSubs = (props) => {
                     <Text>Week {props.selectedWeek}</Text>
                   </View>
                   <View style={{justifyContent: 'center', paddingLeft: 5}}>
-                    <Image
-                      style={{width: 12, height: 16}}
-                      source={require('../../../assets/ar.png')}
-                    />
+                    <Image style={{width: 12, height: 16}} source={AR} />
                   </View>
                 </View>
               </View>
@@ -165,7 +173,10 @@ const MultiSubs = (props) => {
 
           {/* choose plan */}
 
-          <ScrollView contentContainerStyle={styleCss.scrollViewCard}>
+          <ScrollView
+            contentContainerStyle={styleCss.scrollViewCard}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="interactive">
             {Object.keys(planData.company_list).map(
               (item, company_list_index) => {
                 if (company_list_index === props.selectedWeek - 1) {
@@ -198,8 +209,8 @@ const MultiSubs = (props) => {
                                 style={{width: 20, height: 20}}
                                 source={
                                   weekList[company_list_index].selected
-                                    ? upIcon
-                                    : inIcon
+                                    ? UP_ICON
+                                    : IN_ICON
                                 }
                               />
                             </View>
@@ -274,7 +285,11 @@ const MultiSubs = (props) => {
                                         }
                                       />
                                     </View>
-                                    <Text style={{padding: 10}}>
+                                    <Text
+                                      style={{
+                                        textAlign: 'center',
+                                        paddingTop: 6,
+                                      }}>
                                       {list.name}
                                     </Text>
                                   </TouchableOpacity>
@@ -322,8 +337,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
     width: width / 2.4,
+    height: 200,
     margin: 5,
-    padding: 5,
+    padding: 10,
   },
   kd: {
     fontSize: 10,
