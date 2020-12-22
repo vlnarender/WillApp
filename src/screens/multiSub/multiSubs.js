@@ -143,6 +143,7 @@ const MultiSubs = (props) => {
             <View
               style={{
                 marginTop: 15,
+                marginBottom:15,
                 justifyContent: 'space-between',
                 flexDirection: 'row',
               }}>
@@ -225,6 +226,8 @@ const MultiSubs = (props) => {
                             alignItems: 'center',
                             flexWrap: 'wrap',
                             justifyContent: 'center',
+                            marginTop:15,
+                            marginBottom:15,
                           }}>
                           {planData.company_list[item].diet_company.map(
                             (list, index) => {

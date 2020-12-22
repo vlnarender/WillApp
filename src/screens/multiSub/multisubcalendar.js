@@ -147,8 +147,9 @@ const MultiSubCalender = (props) => {
                     <Text
                       style={{
                         color: '#fff',
-                        fontWeight: 'bold',
+                        fontWeight: '400',
                         fontSize: 18,
+                        marginTop:5
                       }}>
                       Week
                     </Text>

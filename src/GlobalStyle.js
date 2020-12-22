@@ -395,10 +395,29 @@ module.exports = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
     width: width / 2.2,
-    height: 200,
     margin: 5,
     padding: 10,
+    height:170,
+    marginBottom:10
   },
+
+
+  homeCard2: {
+    shadowOffset:
+      Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
+    shadowColor: 'black',
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
+    elevation: 6,
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+    width: width / 2.2,
+    margin: 5,
+    padding: 10,
+    height:200,
+    marginBottom:10
+  },
+
+
   scrollViewCard: {
     width: width,
     flexDirection: 'row',

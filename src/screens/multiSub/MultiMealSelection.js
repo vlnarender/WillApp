@@ -234,7 +234,7 @@ const MultiMealSelection = (props) => {
               </View>
             </View>
             
-            <View >
+            <View style={{marginBottom:30}}>
               {mealListing.map((item, mtindex) => {
                 return (
                   <Collapse isCollapsed={true} key={mtindex}>
@@ -377,7 +377,7 @@ const MultiMealSelection = (props) => {
               })}
 
               <TouchableOpacity
-                style={styles.checkout}
+                style={styleCss.btnButton}
                 onPress={() => checkoutList()}>
                 <Text style={styles.checkoutText}>
                   {daysNumber != 7 && `${daysNumber} / 7`}

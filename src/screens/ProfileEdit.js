@@ -117,7 +117,7 @@ const ProfileEdit = (props) => {
             <Image style={{width: 20, height: 20}} source={CROSS} />
           </TouchableOpacity>
         </View>
-        <View style={{paddingBottom: 30}}>
+        <View style={{paddingBottom: 40}}>
           <View style={styleCss.inputStyles}>
             <View style={styles.imgStyle}>
               <Image

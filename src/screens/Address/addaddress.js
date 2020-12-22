@@ -27,7 +27,7 @@ import {
 } from '../../_helpers/ImageProvide';
 import {ADD_AND_UPDATE_API} from '../../util/api';
 const FieldWrapper = ({children, label, formikProps, formikKey}) => (
-  <View style={{marginHorizontal: 20, marginVertical: 1}}>
+  <View style={{ marginVertical: 1}}>
     <Text style={{marginBottom: 3}}>{label}</Text>
     {children}
     <Text style={{color: 'red'}}>
@@ -54,7 +54,7 @@ const StyledInputName = ({
     paddingLeft: 50,
     textAlign: 'left',
     height: 50,
-    width: 300,
+    width: '100%',
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
@@ -117,7 +117,7 @@ const Addaddress = (props) => {
     area: yup.string().required('Please enter area').default(formData.area),
     name: yup.string().required('Please enter name').default(formData.name),
     block: yup.string().required('Please enter block').default(formData.block),
-    additional_direction: yup.string().default(formData.additional_direction),
+    additional_direction: yup.string().default(formData.additional_direction==null?'':formData.additional_direction),
     street: yup
       .string()
       .required('Please enter street')
@@ -147,7 +147,7 @@ const Addaddress = (props) => {
   if (props.labelData) {
     return (
       <ScrollView
-        style={{paddingHorizontal: 20, height}}
+        
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive">
         <View style={styleCss.mainContainer}>
@@ -163,7 +163,7 @@ const Addaddress = (props) => {
             </View>
             <View style={{flex: 1}}></View>
           </View>
-          <View>
+          <View style={{marginVertical:12}}>
             <Text style={styleCss.headingPro}> Address</Text>
           </View>
           <Formik
@@ -312,7 +312,7 @@ const Addaddress = (props) => {
                 </TouchableOpacity>
                 <View
                   style={{
-                    backgroundColor: 'white',
+                    
                     paddingLeft: 15,
                     paddingRight: 15,
                     paddingVertical: 30,
@@ -368,7 +368,7 @@ var styles = StyleSheet.create({
     paddingLeft: 50,
     textAlign: 'left',
     height: 50,
-    width: 300,
+    width: '100%',
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
@@ -378,7 +378,7 @@ var styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
     marginBottom: 10,
-    marginLeft: 20,
+   
     fontStyle: 'italic',
   },
 });

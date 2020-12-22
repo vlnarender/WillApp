@@ -109,7 +109,7 @@ const ProgramsComponent = (props) => {
               </View>
             </View>
             <View style={styles.body}>
-              <Text style={{alignSelf: 'flex-start'}}>
+              <Text style={{alignSelf: 'flex-start', fontSize:18, marginBottom:15, marginTop:10}}>
                 Restaurents Offer {props.programData.program_deatils.name}
               </Text>
               <View style={styles.grid}>

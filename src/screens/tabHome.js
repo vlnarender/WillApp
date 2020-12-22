@@ -402,6 +402,8 @@ const Home = (props) => {
                         marginHorizontal: 20,
                         alignItems: 'center',
                         marginTop: 20,
+                        marginBottom:10
+                        
                       }}>
                       <View>
                         <Text style={{fontSize: 20, fontWeight: '700'}}>
@@ -416,7 +418,7 @@ const Home = (props) => {
                         </TouchableOpacity>
                       </View>
                     </View>
-                    <View style={{marginBottom: 15}}>
+                    <View style={{marginBottom: 80}}>
                       <ScrollView
                         keyboardShouldPersistTaps="handled"
                         keyboardDismissMode="interactive"
@@ -446,6 +448,8 @@ const Home = (props) => {
                                   height: 170,
                                   margin: 5,
                                   padding: 5,
+                                  marginBottom:10
+
                                 }}>
                                 <Image
                                   source={{
@@ -462,13 +466,15 @@ const Home = (props) => {
                   </View>
                 )}
                 {viewall && (
-                  <View style={{marginBottom: 15}}>
+                  <View style={{ paddingBottom:80}}>
                     <Text
                       style={{
                         textAlign: 'center',
-                        fontSize: 17,
+                        fontSize: 24,
                         fontWeight: '500',
-                        marginTop: 7,
+                        marginTop: 20,
+                        marginBottom:20  
+                  
                       }}>
                       {props.labelData.diet_companies}
                     </Text>
@@ -486,7 +492,7 @@ const Home = (props) => {
                                 source={{
                                   uri: item.image_url + item.image,
                                 }}
-                                style={{width: '95%', height: 150, margin: 5}}
+                                style={{width: '95%', height: 140, margin: 5}}
                               />
                             </View>
                           </TouchableOpacity>

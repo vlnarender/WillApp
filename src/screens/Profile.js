@@ -146,7 +146,9 @@ const Profile = (props) => {
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive">
           <View style={styleCss.mainContainer}>
-            <View style={{marginBottom: 30}}>
+          
+            <View style={{marginBottom: 30, position:'relative'}}>
+            
               <View
                 style={{
                   flexDirection: 'column',
@@ -154,6 +156,32 @@ const Profile = (props) => {
                   alignItems: 'center',
                 }}>
                 <View>
+                {props.profileData.user_type != 3 && (
+                      <View style={{flexDirection: 'row', flex: 1, width: 100, position:'absolute', top:70, left:-100}}>
+                        <View>
+                          <Text style={{fontSize: 16, fontWeight: '700'}}>
+                            {props.labelData.edit_all}
+                          </Text>
+                        </View>
+                        <View>
+                          <TouchableOpacity
+                            onPress={() =>
+                              props.navigation.navigate('ProfileEdit')
+                            }>
+                            <Image
+                              style={{
+                                width: 18,
+                                height: 16,
+                                marginLeft: 5,
+                                marginTop: 4,
+                              }}
+                              source={HEADER_EDIT_ORANGE}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    )}
+                  
                   <View style={styles.profileImage}>
                     {props.profileData.image ? (
                       <Image
@@ -202,31 +230,7 @@ const Profile = (props) => {
                           : null}
                       </Text>
                     </View>
-                    {props.profileData.user_type != 3 && (
-                      <View style={{flexDirection: 'row', flex: 1, width: 100}}>
-                        <View>
-                          <Text style={{fontSize: 16, fontWeight: '700'}}>
-                            {props.labelData.edit_all}
-                          </Text>
-                        </View>
-                        <View>
-                          <TouchableOpacity
-                            onPress={() =>
-                              props.navigation.navigate('ProfileEdit')
-                            }>
-                            <Image
-                              style={{
-                                width: 18,
-                                height: 16,
-                                marginLeft: 5,
-                                marginTop: 4,
-                              }}
-                              source={HEADER_EDIT_ORANGE}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    )}
+                    {/* Edit button here */}
                   </View>
                 </View>
               </View>

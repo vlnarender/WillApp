@@ -145,7 +145,7 @@ const MealListing = (props) => {
     return (
       <>
         <View style={[{marginTop: 10}, styleCss.mainContainer]}>
-          <View style={{paddingBottom: 60}}>
+          <View style={{paddingBottom: 30}}>
             <View>
               {value.map((item, index) => {
                 return (
@@ -280,7 +280,7 @@ const MealListing = (props) => {
               })}
 
               <TouchableOpacity
-                style={styles.checkout}
+                style={styleCss.btnButton}
                 onPress={() => checkoutList()}>
                 <Text style={styles.checkoutText}>Checkout</Text>
               </TouchableOpacity>

@@ -74,6 +74,7 @@ const OneDayPlan = (props) => {
             <View
               style={{
                 marginTop: 15,
+                marginBottom:15,
                 justifyContent: 'space-between',
                 flexDirection: 'row',
               }}>
@@ -103,14 +104,14 @@ const OneDayPlan = (props) => {
           </View>
 
           {/* choose plan */}
-
+          <View style={{marginBottom:40}}>
           <ScrollView
             contentContainerStyle={styleCss.scrollViewCard}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="interactive">
             {props.onedayplanData.diet_company.map((item, index) => {
               return (
-                <View style={styleCss.homeCard} key={index}>
+                <View style={styleCss.homeCard2} key={index}>
                   <TouchableOpacity
                     onPress={() => {
                       props.navigation.navigate('OneCalendar', {
@@ -134,7 +135,9 @@ const OneDayPlan = (props) => {
               );
             })}
           </ScrollView>
+          </View>
         </ScrollView>
+       
       </>
     );
   } else {

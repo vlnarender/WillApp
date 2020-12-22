@@ -252,6 +252,7 @@ const MealSelection = React.memo((props) => {
             <View
               style={{
                 width: '100%',
+                marginBottom:20
               }}>
               {mealDataInfo.map((item, mtindex) => {
                 return (
