@@ -27,6 +27,7 @@ import PaymentView from '../../screens/paymentView';
 import PaymentResult from '../../screens/paymentResult';
 import MyOrders from '../../screens/myOrders';
 import MyOrderDetails from '../../screens/myOrderDetails';
+import EmailView from '../../screens/emailView';
 
 import TermCondition from '../../screens/termCondition';
 import PrivacyPolicy from '../../screens/privacyPolicy';
@@ -233,6 +234,14 @@ const MyOrdersStackNavigator = () => {
   );
 };
 
+const EmailExportStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="emailView" component={EmailView} />
+    </Stack.Navigator>
+  );
+};
+
 export {
   MainStackNavigator,
   ProgramsStackNavigator,
@@ -251,4 +260,5 @@ export {
   CartStackNavigator,
   CommonCalendarStackNavigator,
   MyOrdersStackNavigator,
+  EmailExportStackNavigator,
 };

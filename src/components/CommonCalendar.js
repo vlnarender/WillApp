@@ -52,6 +52,7 @@ const CommonCalendar = (props) => {
       .then(() => {
         navigation.navigate('PlanListProgram', {
           selectedDate: day,
+          type: 3,
         });
       });
   };
@@ -64,6 +65,7 @@ const CommonCalendar = (props) => {
       .then(() => {
         navigation.navigate('PlanListProgram', {
           selectedDate: day,
+          type: 2,
         });
       });
   };

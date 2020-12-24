@@ -403,7 +403,6 @@ const Home = (props) => {
                         alignItems: 'center',
                         marginTop: 20,
                         marginBottom:10
-                        
                       }}>
                       <View>
                         <Text style={{fontSize: 20, fontWeight: '700'}}>

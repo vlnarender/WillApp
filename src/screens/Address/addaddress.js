@@ -117,7 +117,13 @@ const Addaddress = (props) => {
     area: yup.string().required('Please enter area').default(formData.area),
     name: yup.string().required('Please enter name').default(formData.name),
     block: yup.string().required('Please enter block').default(formData.block),
-    additional_direction: yup.string().default(formData.additional_direction==null?'':formData.additional_direction),
+    additional_direction: yup
+      .string()
+      .default(
+        formData.additional_direction == null
+          ? ''
+          : formData.additional_direction,
+      ),
     street: yup
       .string()
       .required('Please enter street')
@@ -291,7 +297,10 @@ const Addaddress = (props) => {
                       : ''
                   }
                   onChangeText={(e) => {
-                    setformData({...formData, additional_direction: e});
+                    setformData({
+                      ...formData,
+                      additional_direction: e,
+                    });
                   }}
                 />
 

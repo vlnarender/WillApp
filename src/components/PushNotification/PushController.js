@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-// import PushNotification from 'react-native-push-notification';
 var PushNotification = require('react-native-push-notification');
 import {Alert} from 'react-native';
 import messaging from '@react-native-firebase/messaging';

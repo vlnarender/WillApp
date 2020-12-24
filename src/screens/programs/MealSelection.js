@@ -165,9 +165,10 @@ const MealSelection = React.memo((props) => {
             plan_type: BasicInfo.plan_type,
             duration: BasicInfo.duration,
             diet_company: temp_diet_company,
-            type: props.program_id,
+            type: BasicInfo.type,
             gender: GenderId,
           };
+          console.log(JSON.stringify(cartTemp));
           ADD_TO_THE_CART(cartTemp, 'user/addToCart').then((data) => {
             if (data.success) {
               props.ListOfItems();
@@ -252,7 +253,7 @@ const MealSelection = React.memo((props) => {
             <View
               style={{
                 width: '100%',
-                marginBottom:20
+                marginBottom: 20,
               }}>
               {mealDataInfo.map((item, mtindex) => {
                 return (

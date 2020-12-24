@@ -5,6 +5,8 @@
  */
 
 // arrow
+
+export const FOOD_AV = require('../../assets/image/food_temp.png');
 export const AR = require('../../assets/image/arrows/ar.png');
 export const LOADER_FOOD = require('../../assets/image/loader/food.gif');
 export const LOADER_BOTTEL = require('../../assets/image/loader/bottel.gif');

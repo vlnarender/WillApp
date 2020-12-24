@@ -29,6 +29,8 @@ import {
   CartStackNavigator,
   ProgramsStackNavigator,
   CommonCalendarStackNavigator,
+  PaymentStatusStackNavigator,
+  MyOrdersStackNavigator,
 } from './stackNavigator';
 import HomeScreen from '../../screens/home';
 import BottomTabNavigator from './navigation';
@@ -47,9 +49,10 @@ import GetCardDetail from '../GetCardDetail';
 import AddNewCard from '../AddNewCard';
 import Conformation from '../Conformation';
 import MyOrders from '../../screens/myOrders';
+import MyOrderDetails from '../../screens/myOrderDetails';
+import EmailView from '../../screens/emailView';
 import {MENU_arrow_right} from '../../_helpers/ImageProvide';
 import PushNotification from '../PushNotification/PushNotification';
-import MyOrderDetails from '../../screens/myOrderDetails';
 let styleCss = require('../../GlobalStyle');
 const Drawer = createDrawerNavigator();
 function FocusAwareStatusBar(props) {
@@ -281,6 +284,12 @@ const DrawerNavigator = (props) => {
         <Drawer.Screen
           name="AddNewCard"
           component={AddNewCard}
+          options={{swipeEnabled: false}}
+        />
+
+        <Drawer.Screen
+          name="emailView"
+          component={EmailView}
           options={{swipeEnabled: false}}
         />
 

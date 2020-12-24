@@ -49,11 +49,8 @@ const PlanList = (props) => {
         data: null,
       });
     });
-    return () => {
-      // Unsubscribe for the focus Listener
-      unsubscribe;
-    };
-  }, []);
+    return unsubscribe;
+  });
   const selectItem = (index) => {
     if (selectedIndex.indexOf(index) > -1) {
       let newArray = selectedIndex.filter((indexObject) => {
@@ -81,10 +78,6 @@ const PlanList = (props) => {
     }
   };
   let value = null;
-  const selectValue = (index) => {
-    value = props.mealListData.data[index];
-  };
-
   if (props.mealListData) {
     value = props.mealListData.data[0];
     return (
@@ -171,7 +164,14 @@ const PlanList = (props) => {
                         />
                       </View>
                       <View style={{flexDirection: 'column', padding: 10}}>
-                        <Text style={{fontWeight:'bold', fontSize:14, marginBottom:5}}>{value.program_name} </Text>
+                        <Text
+                          style={{
+                            fontWeight: 'bold',
+                            fontSize: 14,
+                            marginBottom: 5,
+                          }}>
+                          {value.program_name}{' '}
+                        </Text>
                         {value.plan_package.map((item, index) => {
                           return (
                             <TouchableOpacity
@@ -199,13 +199,13 @@ const PlanList = (props) => {
                                 setFinalSelection({
                                   plan_id: value.plan_id,
                                   restaurant_id: value.restaurant_id,
+                                  program_id: value.program_id,
                                   type: value.type,
                                   type_name: value.type_name,
                                   feature_id: value.feature_id,
                                   feature_name: value.feature_name,
                                   plan_type: value.plan_type,
                                   relative_id: value.relative_id,
-                                  program_id: value.program_id,
                                   program_name: value.program_name,
                                   image: value.image,
                                   duration_type: value.duration_type,
@@ -237,7 +237,7 @@ const PlanList = (props) => {
                         style={{
                           width: 22,
                           height: 23,
-                          marginTop:5
+                          marginTop: 5,
                         }}
                         source={
                           selectedButton.planId === value.plan_id
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
   },
   itemContent: {
     fontSize: 12,
-    marginBottom:5
+    marginBottom: 5,
   },
 
   powerBox: {
@@ -397,7 +397,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
     fontSize: 16,
-    
   },
   img: {
     height: 200,

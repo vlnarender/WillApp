@@ -470,8 +470,8 @@ const FirstScreen = ({text, screen, navigation, log}) => {
   return (
     <View style={[styles.container, {justifyContent: 'space-between'}]}>
       <Text style={styles.firstScreenTextStyle}>{text}</Text>
-      {screen === '4' &&
-        (log ? (
+      <View style={{zIndex: 10000, position: 'absolute', bottom: 0}}>
+        {screen === '4' && (
           <Btn
             style={{
               marginBottom: verticleScale(90),
@@ -481,23 +481,11 @@ const FirstScreen = ({text, screen, navigation, log}) => {
             btnTextStyle={styles.startBtnText}
             lable={'Get start here'}
             onPress={() => {
-              navigation.navigate('Drawer');
+              navigation.navigate(log ? 'Drawer' : 'Login');
             }}
           />
-        ) : (
-          <Btn
-            style={{
-              marginBottom: verticleScale(90),
-              borderRadius: verticleScale(18),
-              zIndex: 999,
-            }}
-            btnTextStyle={styles.startBtnText}
-            lable={'Get start here'}
-            onPress={() => {
-              navigation.navigate('Login');
-            }}
-          />
-        ))}
+        )}
+      </View>
     </View>
   );
 };

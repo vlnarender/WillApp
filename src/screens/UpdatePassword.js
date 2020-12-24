@@ -80,7 +80,6 @@ const StyledInput = ({label, formikProps, formikKey, icon, ...rest}) => {
   );
 };
 const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
-  console.log(label);
   const inputStyles = {
     borderColor: '#e0e0e0',
     padding: 10,

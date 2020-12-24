@@ -26,7 +26,10 @@ export default function (state = initialState, action) {
     case userConstants.MULTI_SUB_ADD_SELECTED_DATA:
       return {
         ...state,
-        selectedMeal: [state.selectedMeal, action.data],
+        selectedMeal:
+          state.selectedMeal === undefined
+            ? [action.data]
+            : [...state.selectedMeal, action.data],
       };
     case userConstants.MULTI_SUB_LIST_ITEMS:
       return {

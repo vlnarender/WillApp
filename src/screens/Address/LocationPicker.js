@@ -94,7 +94,7 @@ const LocationPicker = (props) => {
         },
         (error) => {
           // See error code charts below.
-          console.log(
+          console.error(
             'See error code ',
             error.code,
             '\n\n\nSee error message\n\n\n',

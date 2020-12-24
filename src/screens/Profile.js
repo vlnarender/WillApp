@@ -15,7 +15,6 @@ import ImagePicker from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
 let styleCss = require('../GlobalStyle');
 import {PROFILE_API} from '../util/api';
-
 import {
   CAMERA_WHITE,
   HEADER_EDIT_ORANGE,
@@ -156,32 +155,6 @@ const Profile = (props) => {
                   alignItems: 'center',
                 }}>
                 <View>
-                {props.profileData.user_type != 3 && (
-                      <View style={{flexDirection: 'row', flex: 1, width: 100, position:'absolute', top:70, left:-100}}>
-                        <View>
-                          <Text style={{fontSize: 16, fontWeight: '700'}}>
-                            {props.labelData.edit_all}
-                          </Text>
-                        </View>
-                        <View>
-                          <TouchableOpacity
-                            onPress={() =>
-                              props.navigation.navigate('ProfileEdit')
-                            }>
-                            <Image
-                              style={{
-                                width: 18,
-                                height: 16,
-                                marginLeft: 5,
-                                marginTop: 4,
-                              }}
-                              source={HEADER_EDIT_ORANGE}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    )}
-                  
                   <View style={styles.profileImage}>
                     {props.profileData.image ? (
                       <Image
@@ -230,7 +203,31 @@ const Profile = (props) => {
                           : null}
                       </Text>
                     </View>
-                    {/* Edit button here */}
+                    {props.profileData.user_type != 3 && (
+                      <View style={{flexDirection: 'row', flex: 1, width: 100}}>
+                        <View>
+                          <Text style={{fontSize: 16, fontWeight: '700'}}>
+                            {props.labelData.edit_all}
+                          </Text>
+                        </View>
+                        <View>
+                          <TouchableOpacity
+                            onPress={() =>
+                              props.navigation.navigate('ProfileEdit')
+                            }>
+                            <Image
+                              style={{
+                                width: 18,
+                                height: 16,
+                                marginLeft: 5,
+                                marginTop: 4,
+                              }}
+                              source={HEADER_EDIT_ORANGE}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    )}
                   </View>
                 </View>
               </View>

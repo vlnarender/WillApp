@@ -22,15 +22,15 @@ export const cartActions = {
 function ListOfItems() {
   return (dispatch) => {
     GET_MY_CART(`user/myCart`).then((data) => {
-      if (data.success) {
-        if (Array.isArray(data)) {
-          dispatch(success(data.data.length));
-        } else {
-          dispatch(success(1));
-        }
-      } else {
-        dispatch(success(0));
-      }
+      if (data) {
+        if (data.success) {
+          if (Array.isArray(data)) {
+            dispatch(success(data.data.length));
+          } else {
+            dispatch(success(1));
+          }
+        } else dispatch(success(0));
+      } else dispatch(success(0));
     });
   };
   function success(data) {

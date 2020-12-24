@@ -126,20 +126,21 @@ const MultiMealSelection = (props) => {
 
         if (props.selectedWeek === props.multiSubWeek) {
           let sendData = {
-            duration: props.LIST_ITEMS.duration,
             duration_type: props.LIST_ITEMS.duration_type,
-            plan_type: props.LIST_ITEMS.plan_type,
             relative_id: props.LIST_ITEMS.relative_id,
-            type: 2,
-            gender: 1,
+            plan_type: props.LIST_ITEMS.plan_type,
+            duration: props.LIST_ITEMS.duration,
             start_date: props.selectedDate,
+            gender: 1,
+            type: 1,
             diet_company: [
               ...tmpArray,
               {
-                restaurant_id: props.LIST_ITEMS.restaurant_id,
-                week: props.selectedWeek,
-                plan_id: props.LIST_ITEMS.plan_id,
                 plan_packages_id: props.LIST_ITEMS.plan_package.packageId,
+                restaurant_id: props.LIST_ITEMS.restaurant_id,
+                program_id: props.LIST_ITEMS.program_id,
+                plan_id: props.LIST_ITEMS.plan_id,
+                week: props.selectedWeek,
                 meals: tempVar,
               },
             ],
@@ -149,6 +150,7 @@ const MultiMealSelection = (props) => {
               sendData.diet_company.splice(i, 1);
             }
           });
+          console.log(JSON.stringify(sendData));
           ADD_TO_THE_CART(sendData, 'user/addToCart').then((data) => {
             if (data.success) {
               props.ListOfItems();
@@ -162,6 +164,7 @@ const MultiMealSelection = (props) => {
           props.multiSubAddSelectedData({
             restaurant_id: props.LIST_ITEMS.restaurant_id,
             week: props.selectedWeek,
+            program_id: props.LIST_ITEMS.program_id,
             plan_id: props.LIST_ITEMS.plan_id,
             plan_packages_id: props.LIST_ITEMS.plan_package.packageId,
             meals: tempVar,
@@ -233,8 +236,8 @@ const MultiMealSelection = (props) => {
                 />
               </View>
             </View>
-            
-            <View style={{marginBottom:30}}>
+
+            <View style={{marginBottom: 30}}>
               {mealListing.map((item, mtindex) => {
                 return (
                   <Collapse isCollapsed={true} key={mtindex}>
@@ -268,102 +271,99 @@ const MultiMealSelection = (props) => {
                                       mealListData.meal_type_id,
                                       meal_list.plan_diet_package_id,
                                     );
-                                  }}
-                                  >
-                                   <View style={styles.borderBottomBox}>
+                                  }}>
+                                  <View style={styles.borderBottomBox}>
                                     <Text style={styles.kd}>
                                       Price : {mealListData.price} KD
                                     </Text>
-                                    
 
-                                  <View style={{flexDirection: 'row'}}>
-                                    <View>
-                                    <View style={styles.imgBox}>
-                                      <Image
-                                        style={{
-                                          width: 63,
-                                          height: 70,
-                                          borderRadius: 10,
-                                        }}
-                                        source={{
-                                          uri: IMAGE_CDN + mealListData.image,
-                                        }}
-                                      />
+                                    <View style={{flexDirection: 'row'}}>
+                                      <View>
+                                        <View style={styles.imgBox}>
+                                          <Image
+                                            style={{
+                                              width: 63,
+                                              height: 70,
+                                              borderRadius: 10,
+                                            }}
+                                            source={{
+                                              uri:
+                                                IMAGE_CDN + mealListData.image,
+                                            }}
+                                          />
+                                        </View>
                                       </View>
-                                    </View>
-                                  
 
-                                  <View
-                                    style={{
-                                      flex:2,
-                                      paddingHorizontal: 10,
-                                    }}>
-                                    <Text style={styles.headingText}>
-                                      {mealListData.meal_name}
-                                    </Text>
-                                    <Text style={styles.itemContent}>
-                                      {mealListData.discription}
-                                    </Text>
-                                  </View>
-                                  
-                                  <View style={{width: 100}}>
-                                    <View>
                                       <View
                                         style={{
-                                          alignItems: 'flex-end',
-                                          marginTop: 10,
+                                          flex: 2,
+                                          paddingHorizontal: 10,
                                         }}>
-                                        <Image
-                                          style={{
-                                            width: 22,
-                                            height: 23,
-                                            marginLeft: 5,
-                                          }}
-                                          source={
-                                            item.id === meal_list.id &&
-                                            item.meal_id ===
-                                              mealListData.meal_id
-                                              ? CHECK_GREEN
-                                              : PLUS_ORANGE
-                                          }
-                                        />
+                                        <Text style={styles.headingText}>
+                                          {mealListData.meal_name}
+                                        </Text>
+                                        <Text style={styles.itemContent}>
+                                          {mealListData.discription}
+                                        </Text>
+                                      </View>
+
+                                      <View style={{width: 100}}>
+                                        <View>
+                                          <View
+                                            style={{
+                                              alignItems: 'flex-end',
+                                              marginTop: 10,
+                                            }}>
+                                            <Image
+                                              style={{
+                                                width: 22,
+                                                height: 23,
+                                                marginLeft: 5,
+                                              }}
+                                              source={
+                                                item.id === meal_list.id &&
+                                                item.meal_id ===
+                                                  mealListData.meal_id
+                                                  ? CHECK_GREEN
+                                                  : PLUS_ORANGE
+                                              }
+                                            />
+                                          </View>
+                                        </View>
+
+                                        {/* Power box */}
+
+                                        <View style={styles.powerBox}>
+                                          <View style={{flexDirection: 'row'}}>
+                                            <Text style={styles.itemText}>
+                                              P{' '}
+                                              {Math.round(mealListData.protein)}
+                                              g
+                                            </Text>
+                                            <Text style={styles.itemText}>
+                                              Ca{' '}
+                                              {Math.round(mealListData.calorie)}
+                                            </Text>
+                                          </View>
+                                          <View
+                                            style={{
+                                              flexDirection: 'row',
+                                              marginTop: 10,
+                                            }}>
+                                            <Text style={styles.itemText}>
+                                              C
+                                              {Math.round(
+                                                mealListData.carbohydrate,
+                                              )}
+                                              g
+                                            </Text>
+                                            <Text style={styles.itemText}>
+                                              F {Math.round(mealListData.fat)}g
+                                            </Text>
+                                          </View>
+                                        </View>
                                       </View>
                                     </View>
-
-                                    
-
-
-                                          {/* Power box */}
-
-                                    <View style={styles.powerBox}>
-                                      <View style={{flexDirection: 'row'}}>
-                                        <Text style={styles.itemText}>
-                                          P {Math.round(mealListData.protein)}g
-                                        </Text>
-                                        <Text style={styles.itemText}>
-                                          Ca {Math.round(mealListData.calorie)}
-                                        </Text>
-                                      </View>
-                                      <View
-                                        style={{
-                                          flexDirection: 'row',
-                                          marginTop: 10,
-                                        }}>
-                                        <Text style={styles.itemText}>
-                                          C
-                                          {Math.round(
-                                            mealListData.carbohydrate,
-                                          )}
-                                          g
-                                        </Text>
-                                        <Text style={styles.itemText}>
-                                          F {Math.round(mealListData.fat)}g
-                                        </Text>
-                                      </View>
-                                    </View>
-                                  </View>
-                                  </View>
-                                  
                                   </View>
                                 </TouchableOpacity>
                               );

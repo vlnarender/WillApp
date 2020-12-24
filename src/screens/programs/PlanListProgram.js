@@ -51,7 +51,7 @@ const PlanListProgram = (props) => {
   const [weekNumber, setweekNumber] = useState(1);
   const [SelectedPrice, setSelectedPrice] = useState('Select First');
   const [BasicInfo, setBasicInfo] = useState({});
-
+  console.log('----------------------', props.route.params);
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setplanId(0);
@@ -298,6 +298,7 @@ const PlanListProgram = (props) => {
                                         relative_id: data.relative_id,
                                         duration_type: data.duration_type,
                                         duration: data.duration,
+                                        type: props.route.params.type,
                                       });
                                     }}>
                                     <Image

@@ -29,6 +29,7 @@ import {
   REC,
   REC_SELECTED,
   AR,
+  FOOD_AV,
 } from '../_helpers/ImageProvide';
 import {
   ScrollView,
@@ -39,24 +40,27 @@ import {cartActions} from '../actions/cart';
 import {paymentActions} from '../actions/payment';
 import {CALANDER_CONFIG} from '../_helpers/globalVeriable';
 import AsyncStorage from '@react-native-community/async-storage';
+import OneDayCart from './Cart/OneDay';
+import MultiSubCart from './Cart/MultiSub';
+import ProgramsCart from './Cart/Programs';
 
 const CartComponent = (props) => {
   const weekConfig = CALANDER_CONFIG;
   const [weekModalVisible, setWeekModalVisible] = useState(false);
   const [BestAndWorstFood, setBestAndWorstFood] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [deliveryTime, setDeliveryTime] = useState(true);
+  const [deliveryTime, setDeliveryTime] = useState('1');
   const [cartSelection, setcartSelection] = useState(0);
   const [MealList, setMealList] = useState(null);
   const [Alergies, setAlergies] = useState('');
   const [cartPlan, setcartPlan] = useState(0);
-  const [height, setHeight] = useState('150');
+  const [height, setHeight] = useState('');
   const [daysOff, setDaysOff] = useState([1]);
   const [loader, setLoader] = useState(true);
-  const [weight, setWeight] = useState('60');
+  const [weight, setWeight] = useState('');
   const [gender, setGender] = useState('1');
   const [lan, setLan] = useState('en');
-  const [age, setAge] = useState('20');
+  const [age, setAge] = useState('');
   const navigation = useNavigation();
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -77,12 +81,10 @@ const CartComponent = (props) => {
         JSON.stringify(data.data.meal_list) === undefined ? 0 : 1,
       );
       setcartPlan(JSON.stringify(data.data.package_name === undefined ? 0 : 1));
+      // console.log(JSON.stringify(data.data));
       setMealList(data.data);
       data.success ? setLoader(false) : setLoader(true);
     });
-  };
-  const editAddress = () => {
-    console.log('editAddress');
   };
 
   const checkOut = () => {
@@ -95,9 +97,9 @@ const CartComponent = (props) => {
       weight: weight,
       gender: gender,
       delivery_time: deliveryTime,
-      is_day_off: 1,
+      is_day_off: MealList.case == '1' ? '0' : 1,
       payment_mode: 1,
-      dataSet: daysOff,
+      dataSet: MealList.case == '1' ? [] : daysOff,
     };
 
     MealList.my_address.map((e, i) => {
@@ -106,6 +108,7 @@ const CartComponent = (props) => {
       }
     });
     if (data.address_id != null) {
+      console.log(data);
       props.paymentAction(data).then((data) => {
         if (data.success) {
           navigation.navigate('PaymentView', {
@@ -161,7 +164,6 @@ const CartComponent = (props) => {
                     }}>
                     <Text style={styles.textStyle}>Yes</Text>
                   </TouchableHighlight>
-
                   <TouchableHighlight
                     style={{...styles.openButton}}
                     onPress={() => {
@@ -193,121 +195,16 @@ const CartComponent = (props) => {
                   : MealList.meal_list.length + ` items added`}
               </Text>
             </View>
-            {!cartPlan ? (
-              cartSelection ? (
-                <>
-                  {MealList.plan_type ? (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        paddingVertical: 5,
-                      }}>
-                      <View>
-                        <View style={styles.imgBox}>
-                          <Image
-                            style={{
-                              height: 60,
-                              borderRadius: 5,
-                            }}
-                            source={{
-                              uri: IMAGE_CDN + MealList.program_details.image,
-                            }}
-                          />
-                        </View>
-                      </View>
+            {MealList.case == '1' ? <OneDayCart mealList={MealList} /> : null}
+            {MealList.case == '2' ? <MultiSubCart mealList={MealList} /> : null}
+            {MealList.case == '3' || MealList.case == '4' ? (
+              <ProgramsCart
+                mealList={MealList}
+                programName={MealList.case == 4 ? 'Diet Plan' : 'Programs'}
+              />
+            ) : null}
 
-                      <View
-                        style={[
-                          {
-                            paddingHorizontal: 10,
-                          },
-                          styles.borderBottomBox,
-                        ]}>
-                        <Text style={styles.headingText}>
-                          {MealList.program_details.name}
-                        </Text>
-                        <Text>{MealList.concat_duration}</Text>
-                        <Text> {MealList.package_name}</Text>
-                      </View>
-                    </View>
-                  ) : (
-                    <View>
-                      {MealList.meal_list.map((meal_list, index) => {
-                        return (
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              paddingVertical: 5,
-                            }}
-                            key={index}>
-                            <View>
-                              <View style={styles.imgBox}>
-                                <Image
-                                  style={{
-                                    height: 60,
-                                    borderRadius: 5,
-                                  }}
-                                  source={{
-                                    uri: IMAGE_CDN + meal_list.image,
-                                  }}
-                                />
-                              </View>
-                            </View>
-                            <View
-                              style={[
-                                {
-                                  flex: 2,
-                                  paddingHorizontal: 10,
-                                },
-                                styles.borderBottomBox,
-                              ]}>
-                              <View>
-                                <Text style={styles.headingText}>
-                                  {meal_list.name}
-                                </Text>
-                                <Text style={styles.itemContent}>
-                                  {meal_list.description}
-                                </Text>
-                              </View>
-                              <View style={{alignSelf: 'flex-end'}}>
-                                <Text>KD {meal_list.price}</Text>
-                              </View>
-                            </View>
-                          </View>
-                        );
-                      })}
-                    </View>
-                  )}
-                </>
-              ) : (
-                MealList.week_package.map((e, i) => {
-                  return (
-                    <View>
-                      <Text>{e.plan_package.package_name_en}</Text>
-                    </View>
-                  );
-                })
-              )
-            ) : (
-              <View>
-                <Text>{MealList.package_name}</Text>
-              </View>
-            )}
             <View>
-              <View style={styles.thiredSection}>
-                <Text>Total</Text>
-                <Text>KD {MealList.total_amount}</Text>
-              </View>
-
-              <View style={styles.thiredSection}>
-                <Text>Delivery</Text>
-                <Text>KD {MealList.delivery_amount}</Text>
-              </View>
-
-              <View style={styles.thiredSection}>
-                <Text style={styles.total}>Total</Text>
-                <Text style={styles.total}>KD {MealList.sub_amount}</Text>
-              </View>
               <View
                 style={[
                   styles.thiredSection,
@@ -367,7 +264,7 @@ const CartComponent = (props) => {
                           flexDirection: 'row',
                           justifyContent: 'flex-end',
                         }}
-                        onPress={() => editAddress()}>
+                        onPress={() => navigation.navigate('Address')}>
                         <Text style={{paddingHorizontal: 15}}>edit</Text>
                         <Image source={EDIT_PENCIL} style={{height: 15}} />
                       </TouchableOpacity>
@@ -399,11 +296,11 @@ const CartComponent = (props) => {
                 }}>
                 <TouchableOpacity
                   onPress={() => {
-                    setDeliveryTime(!deliveryTime);
+                    setDeliveryTime('1');
                   }}
                   style={{flexDirection: 'row'}}>
                   <Image
-                    source={deliveryTime ? REC_SELECTED : REC}
+                    source={deliveryTime == '1' ? REC_SELECTED : REC}
                     style={{
                       width: 14,
                       height: 14,
@@ -415,11 +312,11 @@ const CartComponent = (props) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    setDeliveryTime(!deliveryTime);
+                    setDeliveryTime('2');
                   }}
                   style={{flexDirection: 'row'}}>
                   <Image
-                    source={deliveryTime ? REC : REC_SELECTED}
+                    source={deliveryTime == '2' ? REC_SELECTED : REC}
                     style={{
                       width: 14,
                       height: 14,
@@ -478,9 +375,9 @@ const CartComponent = (props) => {
                         flexDirection: 'row',
                         paddingHorizontal: 5,
                       }}
-                      onPress={() => setGender('1')}>
+                      onPress={() => setGender('2')}>
                       <Image
-                        source={gender === '1' ? REC_SELECTED : REC}
+                        source={gender === '2' ? REC_SELECTED : REC}
                         style={{
                           width: 13,
                           height: 13,
@@ -494,9 +391,9 @@ const CartComponent = (props) => {
                         flexDirection: 'row',
                         paddingHorizontal: 5,
                       }}
-                      onPress={() => setGender('2')}>
+                      onPress={() => setGender('3')}>
                       <Image
-                        source={gender === '2' ? REC_SELECTED : REC}
+                        source={gender === '3' ? REC_SELECTED : REC}
                         style={{
                           width: 13,
                           margin: 3,
@@ -509,44 +406,49 @@ const CartComponent = (props) => {
                 </View>
               </View>
             </View>
-            <View style={[styles.parent, {flexDirection: 'column'}]}>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={styles.total}>Days Off</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setWeekModalVisible(true);
-                  }}
+            {MealList.case != '1' && (
+              <View style={[styles.parent, {flexDirection: 'column'}]}>
+                <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'center',
-                    borderColor: '#ccc',
-                    borderWidth: 1,
-                    borderRadius: 5,
-                    paddingVertical: 5,
-                    paddingHorizontal: 10,
+                    justifyContent: 'space-between',
                   }}>
-                  <Image
-                    source={AR}
-                    style={{
-                      alignSelf: 'center',
-                      width: 10,
-                      height: 15,
-                      marginRight: 5,
+                  <Text style={styles.total}>Days Off</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setWeekModalVisible(true);
                     }}
-                  />
-                  <Text style={{color: 'gray', fontSize: 18}}>Selected</Text>
-                </TouchableOpacity>
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      borderColor: '#ccc',
+                      borderWidth: 1,
+                      borderRadius: 5,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}>
+                    <Image
+                      source={AR}
+                      style={{
+                        alignSelf: 'center',
+                        width: 10,
+                        height: 15,
+                        marginRight: 5,
+                      }}
+                    />
+                    <Text style={{color: 'gray', fontSize: 18}}>Selected</Text>
+                  </TouchableOpacity>
+                </View>
+                <Text>Selected Days</Text>
+                <View style={{flexDirection: 'row'}}>
+                  {daysOff.map((e, i) => {
+                    return (
+                      <Text key={i}>{weekConfig[lan].dayNames[e - 1]}, </Text>
+                    );
+                  })}
+                </View>
               </View>
-              <Text>Selected Days</Text>
-              <View style={{flexDirection: 'row'}}>
-                {daysOff.map((e, i) => {
-                  return (
-                    <Text key={i}>{weekConfig[lan].dayNames[e - 1]}, </Text>
-                  );
-                })}
-              </View>
-            </View>
+            )}
             <Modal
               animationType="slide"
               transparent={true}
@@ -603,7 +505,6 @@ const CartComponent = (props) => {
                 onChangeText={(text) => setAlergies(text)}
               />
             </View>
-
             <View style={[styles.parent, {flexDirection: 'column'}]}>
               <Text style={styles.total}>Best And Worst Meal</Text>
               <TextInput
