@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import LoginScreen from '../../screens/login';
+import LoginScreen from '../../screens/Auth/login';
 import OtpScreen from '../../screens/otp';
 import ForgotOtpScreen from '../../screens/forgototp';
 import ForgotScreen from '../../screens/forgot';
@@ -23,8 +23,6 @@ import Addresslist from '../../screens/Address/addresslist';
 import Addaddress from '../../screens/Address/addaddress';
 import Editaddress from '../../screens/Address/editaddress';
 import OneDayPlan from '../../screens/oneplan';
-import PaymentView from '../../screens/paymentView';
-import PaymentResult from '../../screens/paymentResult';
 import MyOrders from '../../screens/myOrders';
 import MyOrderDetails from '../../screens/myOrderDetails';
 import EmailView from '../../screens/emailView';
@@ -195,18 +193,6 @@ const TermConditionStackNavigator = () => {
   );
 };
 
-const CartStackNavigator = () => {
-  return (
-    <Stack.Navigator
-      initialRouteName={'CartComponent'}
-      screenOptions={screenOptionStyle}>
-      <Stack.Screen name="CartComponent" component={CartComponent} />
-      <Stack.Screen name="PaymentView" component={PaymentView} />
-      <Stack.Screen name="PaymentResult" component={PaymentResult} />
-    </Stack.Navigator>
-  );
-};
-
 const ProgramsStackNavigator = () => {
   return (
     <Stack.Navigator
@@ -257,7 +243,6 @@ export {
   FaqSupportStackNavigator,
   TermConditionStackNavigator,
   PrivacyPolicyStackNavigator,
-  CartStackNavigator,
   CommonCalendarStackNavigator,
   MyOrdersStackNavigator,
   EmailExportStackNavigator,

@@ -173,7 +173,7 @@ const MealSelection = React.memo((props) => {
             if (data.success) {
               props.ListOfItems();
               initializeMeal();
-              navigation.navigate('Cart');
+              navigation.navigate('CartComponent');
             } else {
               Toast.showWithGravity(data.message, Toast.SHORT, Toast.CENTER);
             }

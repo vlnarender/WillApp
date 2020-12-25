@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import FoodLoader from '../components/Loader/Loader_food';
 
 const paymentView = ({navigation, route, ListOfItems}) => {
-  const {paymentUrl, data} = route.params;
+  const {paymentUrl} = route.params;
   const [visible, setVisible] = useState(true);
   const _onNavigationStateChange = (webViewState) => {
     var fullUrl = webViewState.url;
@@ -38,7 +38,7 @@ const paymentView = ({navigation, route, ListOfItems}) => {
         <WebView
           onLoad={() => setVisible(false)}
           style={{height: 600}}
-          onNavigationStateChange={_onNavigationStateChange.bind(this)}
+          onNavigationStateChange={(e) => _onNavigationStateChange(e)}
           originWhitelist={['*']}
           scalesPageToFit={false}
           source={{uri: paymentUrl}}></WebView>

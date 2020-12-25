@@ -15,7 +15,7 @@ import {
 import {Formik} from 'formik';
 import * as yup from 'yup'; // for everything
 import Toast from 'react-native-simple-toast';
-import {loginActions} from '../actions/login';
+import {loginActions} from '../../actions/login';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
   LOGIN_email,
@@ -23,7 +23,7 @@ import {
   LOGIN_pass,
   REC,
   REC_SELECTED,
-} from '../_helpers/ImageProvide';
+} from '../../_helpers/ImageProvide';
 
 const FieldWrapper = ({children, label, formikProps, formikKey}) => (
   <View style={{marginHorizontal: 20, marginVertical: 1}}>

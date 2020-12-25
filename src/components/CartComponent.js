@@ -108,12 +108,11 @@ const CartComponent = (props) => {
       }
     });
     if (data.address_id != null) {
-      console.log(data);
       props.paymentAction(data).then((data) => {
         if (data.success) {
+          console.log(data.data);
           navigation.navigate('PaymentView', {
             paymentUrl: data.data.data.paymenturl,
-            data: data.data,
           });
         } else {
           Toast.showWithGravity(data.message, Toast.SHORT, Toast.CENTER);
@@ -143,7 +142,7 @@ const CartComponent = (props) => {
       <>
         <Header />
         <ScrollView
-          style={{paddingHorizontal: 20}}
+          style={{paddingHorizontal: 20, backgroundColor: '#fff'}}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive">
           <Modal

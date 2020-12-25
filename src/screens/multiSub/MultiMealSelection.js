@@ -154,7 +154,7 @@ const MultiMealSelection = (props) => {
           ADD_TO_THE_CART(sendData, 'user/addToCart').then((data) => {
             if (data.success) {
               props.ListOfItems();
-              navigation.navigate('Cart');
+              navigation.navigate('CartComponent');
             } else {
               Toast.showWithGravity(data.message, Toast.SHORT, Toast.CENTER);
             }

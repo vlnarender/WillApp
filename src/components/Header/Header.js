@@ -34,7 +34,7 @@ const Header = (props) => {
         <TouchableOpacity
           onPress={() => {
             if (props.listOfItem > 0) {
-              navigation.navigate('Cart');
+              navigation.navigate('CartComponent');
             } else {
               Toast.showWithGravity(
                 'Please select your plan first.',

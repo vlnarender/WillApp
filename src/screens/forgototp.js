@@ -85,10 +85,7 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
 };
 
 const validationSchema = yup.object().shape({
-  password: yup
-    .string()
-    .required()
-    .min(4, 'Password must have more than 4 characters '),
+  password: yup.string().required(),
 });
 
 const ForgotOtpScreen = (props) => {

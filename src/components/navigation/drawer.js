@@ -26,7 +26,7 @@ import {
   TermConditionStackNavigator,
   PrivacyPolicyStackNavigator,
   FaqSupportStackNavigator,
-  CartStackNavigator,
+  PaymentStackNavigator,
   ProgramsStackNavigator,
   CommonCalendarStackNavigator,
   PaymentStatusStackNavigator,
@@ -42,7 +42,7 @@ import MultiSubCalendar from '../../screens/multiSub/multisubcalendar';
 import OneDayPlanMealListing from '../../screens/onedayplanmeallisting';
 import LocationPicker from '../../screens/Address/LocationPicker';
 import MealSelection from '../../screens/programs/MealSelection';
-import CartComponent from '../../screens/Cart';
+import CartComponent from '../../components/CartComponent';
 import MultiMealSelection from '../../screens/multiSub/MultiMealSelection';
 import PaymentMethod from '../PaymentMethod';
 import GetCardDetail from '../GetCardDetail';
@@ -53,6 +53,9 @@ import MyOrderDetails from '../../screens/myOrderDetails';
 import EmailView from '../../screens/emailView';
 import {MENU_arrow_right} from '../../_helpers/ImageProvide';
 import PushNotification from '../PushNotification/PushNotification';
+import LogOut from '../../screens/Auth/logOut';
+import paymentView from '../../screens/paymentView';
+import paymentResult from '../../screens/paymentResult';
 let styleCss = require('../../GlobalStyle');
 const Drawer = createDrawerNavigator();
 function FocusAwareStatusBar(props) {
@@ -162,7 +165,7 @@ const DrawerNavigator = (props) => {
               {
                 text: 'Cancel',
                 onPress: () => {
-                  return null;
+                  props.navigation.navigate('Home');
                 },
               },
               {
@@ -348,6 +351,13 @@ const DrawerNavigator = (props) => {
           component={AddressStackNavigator}
           options={{swipeEnabled: false}}
         />
+
+        <Drawer.Screen
+          name="LogOut"
+          component={LogOut}
+          options={{swipeEnabled: false}}
+        />
+
         <Drawer.Screen
           name="Setting"
           component={SettingStackNavigator}
@@ -364,8 +374,13 @@ const DrawerNavigator = (props) => {
           options={{swipeEnabled: false}}
         />
         <Drawer.Screen
-          name="Cart"
-          component={CartStackNavigator}
+          name="PaymentView"
+          component={paymentView}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
+          name="PaymentResult"
+          component={paymentResult}
           options={{swipeEnabled: false}}
         />
         <Drawer.Screen

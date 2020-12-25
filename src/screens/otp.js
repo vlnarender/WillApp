@@ -97,16 +97,8 @@ const StyledSwitch = ({formikKey, formikProps, label, ...rest}) => (
 );
 
 const validationSchema = yup.object().shape({
-  otp: yup
-    .string()
-    //.label('otp')
-    .required()
-    .min(4, 'Otp must have more than 4 characters '),
+  otp: yup.string().required(),
 });
-
-const signUp = ({values}) => {
-  return values;
-};
 
 const OtpScreen = (props) => {
   const [email, setEmail] = useState('');
@@ -159,7 +151,6 @@ const OtpScreen = (props) => {
 
         <Formik
           initialValues={{
-            // username: '',
             otp: '',
           }}
           onSubmit={(values, actions) => {
