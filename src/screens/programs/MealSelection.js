@@ -168,7 +168,6 @@ const MealSelection = React.memo((props) => {
             type: BasicInfo.type,
             gender: GenderId,
           };
-          console.log(JSON.stringify(cartTemp));
           ADD_TO_THE_CART(cartTemp, 'user/addToCart').then((data) => {
             if (data.success) {
               props.ListOfItems();
@@ -220,7 +219,7 @@ const MealSelection = React.memo((props) => {
             </Swiper>
             <View style={styles.back}>
               <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                <Text style={{color: 'red', fontSize: 11}}>Back</Text>
+                <Text style={{color: '#f2ae88', fontSize: 11}}>Back</Text>
               </TouchableOpacity>
             </View>
           </View>

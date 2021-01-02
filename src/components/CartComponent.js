@@ -20,16 +20,14 @@ import Loader from '../components/Loader/Loader';
 const {width} = Dimensions.get('window');
 import {ADD_AND_UPDATE_API, GET_MY_CART} from '../util/api';
 import Toast from 'react-native-simple-toast';
-
+import {commonActions} from '../actions/common';
 import {
   CHECKED,
   EDIT_PENCIL,
   DELETE_ICON,
-  IMAGE_CDN,
   REC,
   REC_SELECTED,
   AR,
-  FOOD_AV,
 } from '../_helpers/ImageProvide';
 import {
   ScrollView,
@@ -50,10 +48,8 @@ const CartComponent = (props) => {
   const [BestAndWorstFood, setBestAndWorstFood] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [deliveryTime, setDeliveryTime] = useState('1');
-  const [cartSelection, setcartSelection] = useState(0);
   const [MealList, setMealList] = useState(null);
   const [Alergies, setAlergies] = useState('');
-  const [cartPlan, setcartPlan] = useState(0);
   const [height, setHeight] = useState('');
   const [daysOff, setDaysOff] = useState([1]);
   const [loader, setLoader] = useState(true);
@@ -77,11 +73,6 @@ const CartComponent = (props) => {
   }, []);
   const getData = () => {
     GET_MY_CART('user/myCart').then((data) => {
-      setcartSelection(
-        JSON.stringify(data.data.meal_list) === undefined ? 0 : 1,
-      );
-      setcartPlan(JSON.stringify(data.data.package_name === undefined ? 0 : 1));
-      // console.log(JSON.stringify(data.data));
       setMealList(data.data);
       data.success ? setLoader(false) : setLoader(true);
     });
@@ -110,7 +101,6 @@ const CartComponent = (props) => {
     if (data.address_id != null) {
       props.paymentAction(data).then((data) => {
         if (data.success) {
-          console.log(data.data);
           navigation.navigate('PaymentView', {
             paymentUrl: data.data.data.paymenturl,
           });
@@ -139,10 +129,10 @@ const CartComponent = (props) => {
     return <Loader />;
   } else {
     return (
-      <>
+      <View style={styles.container}>
         <Header />
         <ScrollView
-          style={{paddingHorizontal: 20, backgroundColor: '#fff'}}
+          style={{backgroundColor: '#fff', paddingHorizontal: 15}}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive">
           <Modal
@@ -203,35 +193,36 @@ const CartComponent = (props) => {
               />
             ) : null}
 
-            <View>
-              <View
-                style={[
-                  styles.thiredSection,
-                  {width: width / 1.2, paddingVertical: 15},
-                ]}>
-                <Text style={{fontSize: 25}}>coupon</Text>
-                <TextInput
-                  style={{
-                    borderWidth: 1,
-                    borderRadius: 5,
-                    height: 35,
-                    width: width / 2.5,
-                    paddingVertical: 0,
-                    paddingHorizontal: 20,
-                    marginHorizontal: 10,
-                  }}>
-                  {MealList.coupon == null ? 'Enter Code' : MealList.coupon}
-                </TextInput>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: '#f2ae88',
-                    paddingVertical: 7,
-                    paddingHorizontal: 20,
-                    borderRadius: 5,
-                  }}>
-                  <Text style={{color: '#fff', fontWeight: 'bold'}}>Apply</Text>
-                </TouchableOpacity>
-              </View>
+            <View
+              style={[
+                styles.thiredSection,
+                {
+                  paddingVertical: 15,
+                  justifyContent: 'space-between',
+                },
+              ]}>
+              <Text style={{fontSize: 25}}>coupon</Text>
+              <TextInput
+                style={{
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  width: width / 2.9,
+                  paddingVertical: 0,
+                  paddingHorizontal: 20,
+                  marginHorizontal: 10,
+                }}
+                placeholder="coupan">
+                {MealList.coupon == null ? '' : MealList.coupon}
+              </TextInput>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#f2ae88',
+                  paddingVertical: 7,
+                  paddingHorizontal: 20,
+                  borderRadius: 5,
+                }}>
+                <Text style={{color: '#fff', fontWeight: 'bold'}}>Apply</Text>
+              </TouchableOpacity>
             </View>
             <View style={{paddingVertical: 10}}>
               <Text style={styles.total}>Delivery Address</Text>
@@ -263,19 +254,25 @@ const CartComponent = (props) => {
                           flexDirection: 'row',
                           justifyContent: 'flex-end',
                         }}
-                        onPress={() => navigation.navigate('Address')}>
+                        onPress={() => {
+                          props.pathAction('CartComponent');
+                          navigation.navigate('Address');
+                        }}>
                         <Text style={{paddingHorizontal: 15}}>edit</Text>
                         <Image source={EDIT_PENCIL} style={{height: 15}} />
                       </TouchableOpacity>
                     </View>
                   ) : null;
                 })}
-                <View style={{justifyContent: 'space-between'}}>
+                <View style={{justifyContent: 'space-between', paddingTop: 10}}>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate('Address');
+                      navigation.navigate('LocationPicker');
                     }}>
-                    <Text> + Add new Address</Text>
+                    <Text style={{fontWeight: 'bold', fontSize: 16}}>
+                      {' '}
+                      + Add new Address
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -339,9 +336,11 @@ const CartComponent = (props) => {
                 <View style={{flexDirection: 'row'}}>
                   <Text style={styles.textContent}>Height</Text>
                   <TextInput
+                    placeholder="170 cm"
                     style={styles.textinputs}
                     onChangeText={(text) => setHeight(text)}
                     value={height}
+                    keyboardType="numeric"
                   />
                 </View>
               </View>
@@ -349,9 +348,11 @@ const CartComponent = (props) => {
                 <View style={{flexDirection: 'row'}}>
                   <Text style={styles.textContent}>Weight</Text>
                   <TextInput
+                    placeholder="80 kg"
                     style={styles.textinputs}
                     onChangeText={(text) => setWeight(text)}
                     value={weight}
+                    keyboardType="numeric"
                   />
                 </View>
               </View>
@@ -359,9 +360,11 @@ const CartComponent = (props) => {
                 <View style={{flexDirection: 'row'}}>
                   <Text style={styles.textContent}>Age</Text>
                   <TextInput
+                    placeholder="25 y"
                     style={styles.textinputs}
                     onChangeText={(text) => setAge(text)}
                     value={age}
+                    keyboardType="numeric"
                   />
                 </View>
               </View>
@@ -466,7 +469,9 @@ const CartComponent = (props) => {
                             if (idx == -1) {
                               weekdays.push(i + 1);
                             } else {
-                              weekdays.splice(idx, 1);
+                              if (daysOff.length > 1) {
+                                weekdays.splice(idx, 1);
+                              }
                             }
                             setDaysOff(weekdays);
                             setWeekModalVisible(false);
@@ -520,7 +525,7 @@ const CartComponent = (props) => {
               onPress={() => checkOut()}
               style={{
                 backgroundColor: '#f2ae88',
-                paddingVertical: 10,
+                paddingVertical: 15,
                 marginVertical: 10,
                 alignContent: 'center',
                 borderRadius: 5,
@@ -529,6 +534,7 @@ const CartComponent = (props) => {
                 style={{
                   color: '#fff',
                   textAlign: 'center',
+                  fontSize: 16,
                   fontWeight: 'bold',
                 }}>
                 Proceed to checkout
@@ -550,12 +556,15 @@ const CartComponent = (props) => {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </>
+      </View>
     );
   }
 };
 
 const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFill,
+  },
   itemContent: {
     fontSize: 10,
   },
@@ -598,9 +607,8 @@ const styles = StyleSheet.create({
   thiredSection: {
     justifyContent: 'space-between',
     flexDirection: 'row',
-    width: width / 2,
+    width: width / 1.2,
     alignSelf: 'flex-end',
-    paddingVertical: 2,
   },
   borderBottomBox: {
     borderBottomWidth: 1,
@@ -668,18 +676,14 @@ const styles = StyleSheet.create({
   },
 });
 
-// const actionProps = {
-//   ListOfItems: cartActions.ListOfItems,
-// };
-
 const mapStateToProps = (state) => {
   return {
     paymentData: state.paymentReducer.paymentData,
   };
 };
 const actionCreators = {
+  pathAction: commonActions.pathFinder,
   paymentAction: paymentActions.paymentAction,
   ListOfItems: cartActions.ListOfItems,
 };
 export default connect(mapStateToProps, actionCreators)(CartComponent);
-// export default connect(null, actionProps)(CartComponent);

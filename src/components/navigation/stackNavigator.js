@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '../../screens/Auth/login';
 import OtpScreen from '../../screens/otp';
@@ -22,7 +22,9 @@ import Dietcompanies from '../../screens/dietcompanies';
 import Addresslist from '../../screens/Address/addresslist';
 import Addaddress from '../../screens/Address/addaddress';
 import Editaddress from '../../screens/Address/editaddress';
-import OneDayPlan from '../../screens/oneplan';
+import OneDayPlan from '../../screens/oneDayPlan/oneDayPlan';
+import PaymentView from '../../screens/paymentView';
+import PaymentResult from '../../screens/paymentResult';
 import MyOrders from '../../screens/myOrders';
 import MyOrderDetails from '../../screens/myOrderDetails';
 import EmailView from '../../screens/emailView';
@@ -95,7 +97,6 @@ const ContactStackNavigator = () => {
       screenOptions={screenOptionStyle}>
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Diet" component={Dietcompanies} />
-      <Stack.Screen name="OneDayPlan" component={OneDayPlan} />
     </Stack.Navigator>
   );
 };
@@ -193,6 +194,18 @@ const TermConditionStackNavigator = () => {
   );
 };
 
+const CartStackNavigator = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName={'CartComponent'}
+      screenOptions={screenOptionStyle}>
+      <Stack.Screen name="CartComponent" component={CartComponent} />
+      <Stack.Screen name="PaymentView" component={PaymentView} />
+      <Stack.Screen name="PaymentResult" component={PaymentResult} />
+    </Stack.Navigator>
+  );
+};
+
 const ProgramsStackNavigator = () => {
   return (
     <Stack.Navigator
@@ -243,6 +256,7 @@ export {
   FaqSupportStackNavigator,
   TermConditionStackNavigator,
   PrivacyPolicyStackNavigator,
+  CartStackNavigator,
   CommonCalendarStackNavigator,
   MyOrdersStackNavigator,
   EmailExportStackNavigator,

@@ -12,6 +12,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.MEAL_LIST_REQUEST:
       return {
+        ...state,
         loading: true,
       };
     case userConstants.MEAL_LIST_SUCCESS:

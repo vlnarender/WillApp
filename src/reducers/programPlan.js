@@ -17,6 +17,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.PROGRAMS_PLAN_REQUEST:
       return {
+        ...state,
         loading: true,
       };
     case userConstants.PROGRAMS_PLAN_SUCCESS:

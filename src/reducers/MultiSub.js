@@ -21,6 +21,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.MULTI_SUB_REQUEST:
       return {
+        ...state,
         loading: true,
       };
     case userConstants.MULTI_SUB_ADD_SELECTED_DATA:

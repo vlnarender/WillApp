@@ -4,14 +4,12 @@ import {
   Image,
   Text,
   ScrollView,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
 let styleCss = require('../../GlobalStyle');
 import {addressListActions} from '../../actions/addresslist';
 import {addressSetActions} from '../../actions/addressset';
-import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import {
@@ -21,30 +19,16 @@ import {
   LOGO,
   CHECKED,
 } from '../../_helpers/ImageProvide';
+import SubHeader from '../../components/Header/SubHeader';
 
 const Addresslist = (props) => {
-  const [checked, setChecked] = useState(0);
-  const [token, setToken] = useState('');
-  const [lan_guage, setLanguage] = useState('en');
   useEffect(() => {
     getValue();
   }, []);
   const getValue = async () => {
     try {
-      const Token = await AsyncStorage.getItem('token');
-      const language = await AsyncStorage.getItem('language');
-      setToken(Token);
-      setLanguage(language);
-      var add = {};
-      add.token = Token;
-      if (language == 'ar') {
-        add.language = lan_guage;
-      } else {
-        add.language = lan_guage;
-      }
       props.addressListAction();
     } catch (e) {
-      //  error
       console.error(e);
     }
   };
@@ -65,24 +49,8 @@ const Addresslist = (props) => {
             style={{backgroundColor: 'white', flex: 1}}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="interactive">
+            <SubHeader />
             <View style={styleCss.mainContainer}>
-              <View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: 30,
-                  }}>
-                  <Image style={{width: 50, height: 40}} source={LOGO} />
-                </View>
-                <View style={{flex: 1, alignItems: 'flex-end', marginTop: 20}}>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate('Home')}>
-                    <Image style={{width: 20, height: 20}} source={CROSS} />
-                  </TouchableOpacity>
-                </View>
-              </View>
               <View>
                 <Text style={styleCss.headingPro}>My addresses</Text>
               </View>
@@ -122,7 +90,7 @@ const Addresslist = (props) => {
                               <Text
                                 numberOfLines={1}
                                 style={styles.radioSubText}>
-                                {item.area.substring(1, 30)}
+                                {item.area.substring(0, 30)}
                                 {' ...'}
                               </Text>
                             </View>
@@ -145,7 +113,11 @@ const Addresslist = (props) => {
                                 name: item.name,
                                 additional_direction: item.additional_direction,
                                 is_default_address: item.is_default_address,
+                                id: item.id,
+                                is_active: item.is_active,
+                                user_id: item.user_id,
                               },
+                              Action: 'update-address',
                             });
                           }}>
                           <Text style={{fontSize: 14, color: '#f2ae88'}}>
@@ -281,6 +253,7 @@ const mapStateToProps = (state) => {
     addressStatus: state.addresslistReducer.addressStatus,
     addressSetData: state.addresssetReducer.addressSetData,
     addressSetStatus: state.addresssetReducer.addressSetStatus,
+    pathFinder: state.commonReducer.pathFinder,
   };
 };
 const actionCreators = {

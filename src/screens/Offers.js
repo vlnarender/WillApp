@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import Swiper from 'react-native-swiper';
 import {ScrollView} from 'react-native-gesture-handler';
-import MealListing from './MealListing';
+import MealListing from './oneDayPlan/MealListing';
 const Offers = (props) => {
   if (props.labelData) {
     return (
@@ -39,7 +39,7 @@ const Offers = (props) => {
               />
             </Swiper>
             <View style={styles.back}>
-              <Text style={{color: 'red', fontSize: 11}}>Back</Text>
+              <Text style={{color: '#f2ae88', fontSize: 11}}>Back</Text>
             </View>
           </View>
           <MealListing />

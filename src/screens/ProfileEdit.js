@@ -8,13 +8,14 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import {connect} from 'react-redux';
 let styleCss = require('../GlobalStyle');
 import {profileActions} from '../actions/profile';
 import AsyncStorage from '@react-native-community/async-storage';
-import {connect} from 'react-redux';
 import {CHECKED, CROSS, HEADER_unchecked} from '../_helpers/ImageProvide';
 import Toast from 'react-native-simple-toast';
-import {COOMMON_API, PROFILE_API} from '../util/api';
+import {PROFILE_API} from '../util/api';
+import SubHeader from '../components/Header/SubHeader';
 const ProfileEdit = (props) => {
   const [token, setToken] = useState('');
   const [first, setFirst] = useState('');
@@ -106,17 +107,7 @@ const ProfileEdit = (props) => {
       keyboardShouldPersistTaps="handled"
       keyboardDismissMode="interactive">
       <View style={styleCss.mainContainer}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            marginTop: 30,
-          }}>
-          <TouchableOpacity
-            onPress={() => props.navigation.navigate('Profile')}>
-            <Image style={{width: 20, height: 20}} source={CROSS} />
-          </TouchableOpacity>
-        </View>
+        <SubHeader />
         <View style={{paddingBottom: 40}}>
           <View style={styleCss.inputStyles}>
             <View style={styles.imgStyle}>
@@ -165,7 +156,7 @@ const ProfileEdit = (props) => {
               />
             </View>
           </View>
-          <View style={{marginTop: 35}}>
+          {/* <View style={{marginTop: 35}}>
             {address.map((item, key) => {
               return (
                 <View key={key}>
@@ -218,6 +209,7 @@ const ProfileEdit = (props) => {
               );
             })}
           </View>
+           */}
           <TouchableOpacity style={styleCss.btnButton} onPress={handleSubmit}>
             <Text style={styles.text}>Submit</Text>
           </TouchableOpacity>

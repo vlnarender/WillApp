@@ -12,6 +12,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.MYORDERS_REQUEST:
       return {
+        ...state,
         myOrdersLoading: true,
       };
     case userConstants.MYORDERS_SUCCESS:

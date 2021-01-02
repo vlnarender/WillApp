@@ -12,6 +12,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.ADDRESS_SET_REQUEST:
       return {
+        ...state,
         loading: true,
       };
     case userConstants.ADDRESS_SET_SUCCESS:

@@ -11,7 +11,6 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {CURSOR_ICON, PINMARKER} from '../../_helpers/ImageProvide';
-import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Geocoder from 'react-native-geocoding';
 import {GOOGLE_API_KEY} from '../../_helpers/globalVeriable';
@@ -277,6 +276,7 @@ const LocationPicker = (props) => {
                   additional_direction: '',
                   is_default_address: '',
                 },
+                Action: 'add-address',
               });
             }}
             style={{

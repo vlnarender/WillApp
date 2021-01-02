@@ -18,6 +18,7 @@ import {
 import {COOMMON_API} from '../../util/api';
 import Toast from 'react-native-simple-toast';
 import AsyncStorage from '@react-native-community/async-storage';
+import OneDayPlan from '../../screens/oneDayPlan/oneDayPlan';
 import {DrawerActions, CommonActions} from '@react-navigation/native';
 import {
   SettingStackNavigator,
@@ -26,7 +27,7 @@ import {
   TermConditionStackNavigator,
   PrivacyPolicyStackNavigator,
   FaqSupportStackNavigator,
-  PaymentStackNavigator,
+  CartStackNavigator,
   ProgramsStackNavigator,
   CommonCalendarStackNavigator,
   PaymentStatusStackNavigator,
@@ -34,12 +35,12 @@ import {
 } from './stackNavigator';
 import HomeScreen from '../../screens/home';
 import BottomTabNavigator from './navigation';
-import OneDayCalender from '../../screens/calendar';
+import OneDayCalender from '../../screens/oneDayPlan/calendar';
 import MultiSubs from '../../screens/multiSub/multiSubs';
 import PlanList from '../../screens/multiSub/PlanList';
 import PlanListProgram from '../../screens/programs/PlanListProgram';
 import MultiSubCalendar from '../../screens/multiSub/multisubcalendar';
-import OneDayPlanMealListing from '../../screens/onedayplanmeallisting';
+import OneDayPlanMealListing from '../../screens/oneDayPlan/onedayplanmeallisting';
 import LocationPicker from '../../screens/Address/LocationPicker';
 import MealSelection from '../../screens/programs/MealSelection';
 import CartComponent from '../../components/CartComponent';
@@ -56,6 +57,9 @@ import PushNotification from '../PushNotification/PushNotification';
 import LogOut from '../../screens/Auth/logOut';
 import paymentView from '../../screens/paymentView';
 import paymentResult from '../../screens/paymentResult';
+import dietcompanies from '../../screens/dietcompanies';
+import addaddress from '../../screens/Address/addaddress';
+import {commonActions} from '../../actions/common';
 let styleCss = require('../../GlobalStyle');
 const Drawer = createDrawerNavigator();
 function FocusAwareStatusBar(props) {
@@ -109,6 +113,7 @@ const signOut = async (props) => {
 };
 const DrawerNavigator = (props) => {
   const dimensions = useWindowDimensions();
+
   if (props.labelStatus) {
     const TPF = [
       {name: props.labelData.terms_condition, navigation: 'TermCondition'},
@@ -154,6 +159,8 @@ const DrawerNavigator = (props) => {
     ];
     const navigationAction = async (navigation) => {
       let userType = await AsyncStorage.getItem('UserType');
+      await props.pathAction('Address');
+
       switch (navigation) {
         case 'LogOut':
           Alert.alert(
@@ -280,6 +287,11 @@ const DrawerNavigator = (props) => {
           options={{swipeEnabled: false}}
         />
         <Drawer.Screen
+          name="Addaddress"
+          component={addaddress}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
           name="GetCardDetail"
           component={GetCardDetail}
           options={{swipeEnabled: false}}
@@ -289,13 +301,11 @@ const DrawerNavigator = (props) => {
           component={AddNewCard}
           options={{swipeEnabled: false}}
         />
-
         <Drawer.Screen
           name="emailView"
           component={EmailView}
           options={{swipeEnabled: false}}
         />
-
         <Drawer.Screen
           name="CartComponent"
           component={CartComponent}
@@ -306,16 +316,13 @@ const DrawerNavigator = (props) => {
           component={PaymentMethod}
           options={{swipeEnabled: false}}
         />
-        <Drawer.Screen
-          name="MultiMealSelection"
-          component={MultiMealSelection}
-          options={{swipeEnabled: false}}
-        />
+
         <Drawer.Screen
           name="PlanListProgram"
           component={PlanListProgram}
           options={{swipeEnabled: false}}
         />
+        {/* Start Multi sub Plan */}
         <Drawer.Screen
           name="MultiSubsCalendar"
           component={MultiSubCalendar}
@@ -331,6 +338,13 @@ const DrawerNavigator = (props) => {
           component={PlanList}
           options={{swipeEnabled: false}}
         />
+        <Drawer.Screen
+          name="MultiMealSelection"
+          component={MultiMealSelection}
+          options={{swipeEnabled: false}}
+        />
+        {/* End Multi sub Plan */}
+
         <Drawer.Screen
           name="OneMeal"
           component={OneDayPlanMealListing}
@@ -351,16 +365,24 @@ const DrawerNavigator = (props) => {
           component={AddressStackNavigator}
           options={{swipeEnabled: false}}
         />
-
         <Drawer.Screen
           name="LogOut"
           component={LogOut}
           options={{swipeEnabled: false}}
         />
-
         <Drawer.Screen
           name="Setting"
           component={SettingStackNavigator}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
+          name="Diet"
+          component={dietcompanies}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
+          name="OneDayPlan"
+          component={OneDayPlan}
           options={{swipeEnabled: false}}
         />
         <Drawer.Screen
@@ -429,6 +451,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    pathAction: commonActions.pathFinder,
     logout: () => dispatch({type: 'LOGOUT'}),
   };
 };

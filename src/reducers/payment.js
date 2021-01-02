@@ -12,6 +12,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.PAYMENT_INITIATION_REQUEST:
       return {
+        ...state,
         paymentLoading: true,
       };
     case userConstants.PAYMENT_INITIATION_SUCCESS:

@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "634363505435",
-    "project_id": "will-20254",
-    "storage_bucket": "will-20254.appspot.com"
+    "project_number": "393195718937",
+    "project_id": "will-75c18",
+    "storage_bucket": "will-75c18.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:634363505435:android:6bebddc65b568a3604c1be",
+        "mobilesdk_app_id": "1:393195718937:android:42ca9630455a7fa7eb1d88",
         "android_client_info": {
           "package_name": "com.will"
         }
       },
       "oauth_client": [
         {
-          "client_id": "634363505435-e24b6jc1g6oq3ahpguk1m3sf8mev98cg.apps.googleusercontent.com",
+          "client_id": "393195718937-3dgs6d6pe0bd25b5v29hmt5k8r5sb18f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.will",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "393195718937-sjamtnigo5jil5e8l7vg013g1512tdb9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD9aShU0IG8rl5IWnirWiL0QSqzCpodTcw"
+          "current_key": "AIzaSyCnr8PRGBkoF1vy9XNDXeplbrn6wTAOJQk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "634363505435-e24b6jc1g6oq3ahpguk1m3sf8mev98cg.apps.googleusercontent.com",
+              "client_id": "393195718937-sjamtnigo5jil5e8l7vg013g1512tdb9.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

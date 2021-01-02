@@ -13,6 +13,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:
       return {
+        ...state,
         loading: true,
       };
     case userConstants.LOGIN_SUCCESS:

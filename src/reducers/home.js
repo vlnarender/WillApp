@@ -12,6 +12,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.HOME_REQUEST:
       return {
+        ...state,
         loading: true,
       };
     case userConstants.HOME_SUCCESS:

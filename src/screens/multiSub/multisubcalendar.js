@@ -24,7 +24,7 @@ import {useNavigation} from '@react-navigation/native';
 import {CALANDER_CONFIG, WEEK_LIST} from '../../_helpers/globalVeriable';
 import AsyncStorage from '@react-native-community/async-storage';
 import Loader from '../../components/Loader/Loader';
-import {CROSS, UP_DOWN_ARROW} from '../../_helpers/ImageProvide';
+import {CROSS_WHITE, UP_DOWN_ARROW} from '../../_helpers/ImageProvide';
 const {width} = Dimensions.get('window');
 const MultiSubCalender = (props) => {
   const navigation = useNavigation();
@@ -48,8 +48,8 @@ const MultiSubCalender = (props) => {
       setValueone(null);
       setSelectWeek('Select');
     });
-    return unsubscribe;
-  }, []);
+    return () => unsubscribe;
+  }, [featureId, itemId]);
   const onDayPress = (day) => {
     if (valueone != null) {
       props.multiSubSelectedWeek(1);
@@ -113,7 +113,7 @@ const MultiSubCalender = (props) => {
                     onPress={() => {
                       props.navigation.goBack('Home');
                     }}>
-                    <Image style={styles.arrowImg} source={CROSS} />
+                    <Image style={styles.arrowImg} source={CROSS_WHITE} />
                   </TouchableOpacity>
                 </View>
 
@@ -149,7 +149,7 @@ const MultiSubCalender = (props) => {
                         color: '#fff',
                         fontWeight: '400',
                         fontSize: 18,
-                        marginTop:5
+                        marginTop: 5,
                       }}>
                       Week
                     </Text>

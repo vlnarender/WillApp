@@ -9,6 +9,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.NOTIFICATION_REQUEST:
       return {
+        ...state,
         status: true,
       };
     case userConstants.NOTIFICATION_SUCCESS:

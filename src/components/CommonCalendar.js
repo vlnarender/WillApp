@@ -70,7 +70,6 @@ const CommonCalendar = (props) => {
       });
   };
 
-  // var priorDate = new Date().setDate(today.getDate() + 3);
   const getDisabledDates = () => {
     const disabledDates = {};
     for (let i = 0; i < 3; i++) {
@@ -135,7 +134,6 @@ const CommonCalendar = (props) => {
             pagingEnabled={true}
             scrollEnabled={true}
             minDate={new Date()}
-            scrollEnabled={true}
             markingType={'period'}
             disableAllTouchEventsForDisabledDays
             rowHeight={5}
@@ -230,11 +228,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#393f5d',
   },
   close: {
-    ...StyleSheet.absoluteFillObject,
+    marginTop: 20,
     alignSelf: 'flex-end',
-    margin: 5,
-    left: width / 1.08,
-    position: 'absolute',
   },
   innerroundShap: {
     width: 140,
@@ -290,6 +285,7 @@ const styles = StyleSheet.create({
   },
 
   seleceted: {
+    marginTop: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 25,

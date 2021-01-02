@@ -17,6 +17,7 @@ import {WEEK_LIST} from '../../_helpers/globalVeriable';
 import {useNavigation} from '@react-navigation/native';
 import {multiSubActions} from '../../actions/multiSub';
 import {CHECK_GREEN, IMAGE_CDN, PLUS_ORANGE} from '../../_helpers/ImageProvide';
+import Loader from '../../components/Loader/Loader';
 
 const PlanList = (props) => {
   const {itemId, featureId, oneday, week} = props.route.params;
@@ -85,7 +86,8 @@ const PlanList = (props) => {
         <Header />
         <ScrollView
           keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="interactive">
+          keyboardDismissMode="interactive"
+          style={{backgroundColor: '#fff'}}>
           <View>
             <Swiper
               style={{height: 200}}
@@ -112,7 +114,7 @@ const PlanList = (props) => {
 
             <View style={styles.back}>
               <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                <Text style={{color: 'red', fontSize: 11}}>Back</Text>
+                <Text style={{color: '#f2ae88', fontSize: 11}}>Back</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -268,7 +270,7 @@ const PlanList = (props) => {
         </ScrollView>
       </>
     );
-  } else return null;
+  } else return <Loader />;
 };
 
 const styles = StyleSheet.create({

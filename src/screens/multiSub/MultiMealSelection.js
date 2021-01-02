@@ -150,7 +150,6 @@ const MultiMealSelection = (props) => {
               sendData.diet_company.splice(i, 1);
             }
           });
-          console.log(JSON.stringify(sendData));
           ADD_TO_THE_CART(sendData, 'user/addToCart').then((data) => {
             if (data.success) {
               props.ListOfItems();
@@ -206,7 +205,7 @@ const MultiMealSelection = (props) => {
             </Swiper>
             <View style={styles.back}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={{color: 'red', fontSize: 11}}>Back</Text>
+                <Text style={{color: '#f2ae88', fontSize: 11}}>Back</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -390,7 +389,7 @@ const MultiMealSelection = (props) => {
         </ScrollView>
       </>
     );
-  } else <Loader />;
+  } else return <Loader />;
 };
 
 const mapStateToProps = (state) => {

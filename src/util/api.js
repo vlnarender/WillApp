@@ -219,7 +219,6 @@ export const GET_MY_CART = async (API_NAME) => {
 
 export const PAYMENT_API = async (data, API_NAME) => {
   let localstorage = await getAsyncStorage();
-  // console.log(localstorage.bearer);
   return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
     method: 'POST',
     headers: {
@@ -259,7 +258,6 @@ export const MYORDERS_API = async (API_NAME) => {
 
 export const MYORDERDETAILS_API = async (API_NAME) => {
   let localstorage = await getAsyncStorage();
-  console.log(DEV_CONFIGS.url + '/' + API_NAME);
   return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
     method: 'POST',
     headers: {
@@ -269,7 +267,6 @@ export const MYORDERDETAILS_API = async (API_NAME) => {
   })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log('++++++++++++++++++' + responseJson);
       return responseJson;
     })
     .catch((error) => {
@@ -278,10 +275,7 @@ export const MYORDERDETAILS_API = async (API_NAME) => {
 };
 
 export const EXPORTEMAIL_API = async (data, API_NAME) => {
-  console.log(data);
   let localstorage = await getAsyncStorage();
-  console.log(DEV_CONFIGS.url + '/' + API_NAME);
-
   return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
     method: 'POST',
     headers: {

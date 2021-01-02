@@ -7,8 +7,11 @@ import {userConstants} from './actionTypes';
 export const commonActions = {
   multiSubWeek,
   multiSubSelectedWeek,
+  pathFinder,
 };
-
+function pathFinder(data) {
+  return {type: userConstants.PATH_FINDER, data};
+}
 function multiSubWeek(data) {
   return {type: userConstants.MULTI_SUB_WEEK, data};
 }

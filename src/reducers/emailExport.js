@@ -12,6 +12,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.EMAIL_INITIATION_REQUEST:
       return {
+        ...state,
         emailLoading: true,
       };
     case userConstants.EMAIL_INITIATION_SUCCESS:

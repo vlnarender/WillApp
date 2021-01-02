@@ -51,7 +51,6 @@ const PlanListProgram = (props) => {
   const [weekNumber, setweekNumber] = useState(1);
   const [SelectedPrice, setSelectedPrice] = useState('Select First');
   const [BasicInfo, setBasicInfo] = useState({});
-  console.log('----------------------', props.route.params);
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setplanId(0);
@@ -138,7 +137,7 @@ const PlanListProgram = (props) => {
             </Swiper>
             <View style={styles.back}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={{color: 'red', fontSize: 11}}>Back</Text>
+                <Text style={{color: '#f2ae88', fontSize: 11}}>Back</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -149,6 +148,7 @@ const PlanListProgram = (props) => {
               justifyContent: 'space-between',
               paddingHorizontal: 20,
               paddingVertical: 5,
+              backgroundColor: '#fff',
             }}>
             <TouchableOpacity
               style={{flexDirection: 'row'}}

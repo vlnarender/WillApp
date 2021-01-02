@@ -9,7 +9,6 @@ function emailAction(data) {
     dispatch(request());
     return EXPORTEMAIL_API(data, 'user/order/export').then(
       (data) => {
-        // console.log(data);
         if (data.success) {
           dispatch(success(data));
         } else {

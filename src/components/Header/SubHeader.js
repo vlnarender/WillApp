@@ -29,7 +29,7 @@ const SubHeader = (props) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image style={{height: 20, width: 20}} source={CROSS} />
         </TouchableOpacity>
       </View>

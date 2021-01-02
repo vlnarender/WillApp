@@ -92,7 +92,7 @@ module.exports = StyleSheet.create({
 
   header: {
     width: '100%',
-    height: 45,
+    height: 70,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -397,10 +397,9 @@ module.exports = StyleSheet.create({
     width: width / 2.2,
     margin: 5,
     padding: 10,
-    height:170,
-    marginBottom:10
+    height: 170,
+    marginBottom: 10,
   },
-
 
   homeCard2: {
     shadowOffset:
@@ -413,10 +412,9 @@ module.exports = StyleSheet.create({
     width: width / 2.2,
     margin: 5,
     padding: 10,
-    height:200,
-    marginBottom:10
+    height: 200,
+    marginBottom: 10,
   },
-
 
   scrollViewCard: {
     width: width,

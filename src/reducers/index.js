@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import {combineReducers} from 'redux';
 import * as types from '../actions/actionTypes';
+import oneDayMealListReducer from './OneDayMealList';
 import registrationReducer from './registration';
 import addresslistReducer from './addresslist';
 import editaddressReducer from './editaddress';
@@ -27,6 +28,7 @@ import paymentReducer from './payment';
 import myOrdersReducer from './myOrders';
 const AppReducer = combineReducers({
   registrationReducer: registrationReducer,
+  oneDayMealListReducer: oneDayMealListReducer,
   editaddressReducer: editaddressReducer,
   addresslistReducer: addresslistReducer,
   addresslistReducer: addresslistReducer,

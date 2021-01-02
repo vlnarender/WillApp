@@ -18,7 +18,6 @@ import Toast from 'react-native-simple-toast';
 import {addressListActions} from '../../actions/addresslist';
 import {addAddressActions} from '../../actions/addaddress';
 let styleCss = require('../../GlobalStyle');
-const {height} = Dimensions.get('window');
 import {
   ARROW_LEFT,
   CHECKED,
@@ -26,8 +25,9 @@ import {
   LOGO,
 } from '../../_helpers/ImageProvide';
 import {ADD_AND_UPDATE_API} from '../../util/api';
+import {addressSetActions} from '../../actions/addressset';
 const FieldWrapper = ({children, label, formikProps, formikKey}) => (
-  <View style={{ marginVertical: 1}}>
+  <View style={{marginVertical: 1}}>
     <Text style={{marginBottom: 3}}>{label}</Text>
     {children}
     <Text style={{color: 'red'}}>
@@ -43,6 +43,7 @@ const StyledInputName = ({
   icon,
   value,
   autoFocus,
+  keyboardType,
   ...rest
 }) => {
   const inputStyles = {
@@ -92,6 +93,7 @@ const StyledInputName = ({
         onBlur={formikProps.handleBlur(formikKey)}
         value={value}
         autoFocus={autoFocus}
+        keyboardType={keyboardType}
         {...rest}
       />
     </FieldWrapper>
@@ -143,17 +145,18 @@ const Addaddress = (props) => {
       .required('Please enter apartment number')
       .default(parseInt(formData.apartment_number)),
   });
-
   if (props.addaddressMessage) {
     Toast.showWithGravity(props.addaddressMessage, Toast.SHORT, Toast.CENTER);
   }
   useEffect(() => {
     setformData(props.route.params.formData);
-  }, []);
+    setChecked(props.route.params.formData.is_default_address);
+    setSelectedValue(props.route.params.formData.address_type);
+  }, [props.route.params.formData]);
   if (props.labelData) {
     return (
       <ScrollView
-        
+        style={{backgroundColor: '#fff'}}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive">
         <View style={styleCss.mainContainer}>
@@ -165,11 +168,14 @@ const Addaddress = (props) => {
               </TouchableOpacity>
             </View>
             <View style={{flex: 1, alignItems: 'center'}}>
-              <Image style={{width: 50, height: 40}} source={LOGO} />
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate('Home')}>
+                <Image style={{width: 50, height: 40}} source={LOGO} />
+              </TouchableOpacity>
             </View>
             <View style={{flex: 1}}></View>
           </View>
-          <View style={{marginVertical:12}}>
+          <View style={{marginVertical: 12}}>
             <Text style={styleCss.headingPro}> Address</Text>
           </View>
           <Formik
@@ -188,23 +194,33 @@ const Addaddress = (props) => {
               const data = formData;
               data.address_type = selectedValue;
               data.is_default_address = checked ? 1 : 0;
-
-              ADD_AND_UPDATE_API(formData, 'add-address').then((data) => {
-                actions.setSubmitting(true);
-                if (data.success) {
-                  Toast.showWithGravity(data.message, Toast.LONG, Toast.CENTER);
-                  props.addressListAction().then((data) => {
-                    props.navigation.navigate('Addresslist');
-                  });
-                } else {
-                  Toast.showWithGravity(data.message, Toast.LONG, Toast.CENTER);
-                }
-              });
+              ADD_AND_UPDATE_API(formData, props.route.params.Action).then(
+                (data) => {
+                  actions.setSubmitting(true);
+                  if (data.success) {
+                    Toast.showWithGravity(
+                      data.message,
+                      Toast.LONG,
+                      Toast.CENTER,
+                    );
+                    props.addressListAction().then((data) => {
+                      props.navigation.navigate('Addresslist');
+                    });
+                  } else {
+                    Toast.showWithGravity(
+                      data.message,
+                      Toast.LONG,
+                      Toast.CENTER,
+                    );
+                  }
+                },
+              );
             }}
             validationSchema={validationSchema}>
             {(formikProps) => (
               <React.Fragment>
                 <StyledInputName
+                  keyboardType="default"
                   formikProps={formikProps}
                   formikKey="name"
                   placeholder="Name"
@@ -214,6 +230,7 @@ const Addaddress = (props) => {
                   }}
                 />
                 <StyledInputName
+                  keyboardType="numeric"
                   formikProps={formikProps}
                   formikKey="floor"
                   placeholder="Floor"
@@ -223,6 +240,7 @@ const Addaddress = (props) => {
                   }}
                 />
                 <StyledInputName
+                  keyboardType="default"
                   formikProps={formikProps}
                   formikKey="block"
                   placeholder="Block"
@@ -232,6 +250,7 @@ const Addaddress = (props) => {
                   }}
                 />
                 <StyledInputName
+                  keyboardType="numeric"
                   formikProps={formikProps}
                   formikKey="apartment_number"
                   placeholder="Apartment Number"
@@ -243,6 +262,7 @@ const Addaddress = (props) => {
                   }}
                 />
                 <StyledInputName
+                  keyboardType="default"
                   formikProps={formikProps}
                   formikKey="street"
                   placeholder="Street"
@@ -252,6 +272,7 @@ const Addaddress = (props) => {
                   }}
                 />
                 <StyledInputName
+                  keyboardType="numeric"
                   formikProps={formikProps}
                   formikKey="building"
                   placeholder="Building"
@@ -261,6 +282,7 @@ const Addaddress = (props) => {
                   }}
                 />
                 <StyledInputName
+                  keyboardType="default"
                   formikProps={formikProps}
                   formikKey="area"
                   placeholder="Area"
@@ -288,6 +310,7 @@ const Addaddress = (props) => {
                   </Picker>
                 </View>
                 <StyledInputName
+                  keyboardType="default"
                   formikProps={formikProps}
                   formikKey="additional_direction"
                   placeholder="Additional Direction"
@@ -321,7 +344,6 @@ const Addaddress = (props) => {
                 </TouchableOpacity>
                 <View
                   style={{
-                    
                     paddingLeft: 15,
                     paddingRight: 15,
                     paddingVertical: 30,
@@ -387,7 +409,7 @@ var styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
     marginBottom: 10,
-   
+
     fontStyle: 'italic',
   },
 });
@@ -399,11 +421,13 @@ const mapStateToProps = (state) => {
     labelData: state.labelReducer.labelData,
     addaddressMessage: state.addaddressReducer.addaddressMessage,
     regError: state.registrationReducer.regError,
+    pathFinder: state.commonReducer.pathFinder,
     regResponse: state.registrationReducer.regResponse,
   };
 };
 const actionCreators = {
   addressListAction: addressListActions.addressListAction,
   addAddressAction: addAddressActions.addAddressAction,
+  addressSetAction: addressSetActions.addressSetAction,
 };
 export default connect(mapStateToProps, actionCreators)(Addaddress);
