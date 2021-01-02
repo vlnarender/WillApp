@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import {CROSS_WHITE} from '../../_helpers/ImageProvide';
-
+import {
+  CROSS_WHITE,
+  PLAN_ARROW_LEFT,
+  PLAN_ARROW_RIGHT,
+} from '../../_helpers/ImageProvide';
+import moment from 'moment';
+import {connect} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {CalendarList, LocaleConfig} from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {ADD_AND_UPDATE_API} from '../../util/api';
 import Toast from 'react-native-simple-toast';
 import {oneDayMealListActions} from '../../actions/oneDayMealList';
-import moment from 'moment';
-import {connect} from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import {CALANDER_CONFIG} from '../../_helpers/globalVeriable';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -153,7 +156,7 @@ const OneDayCalender = (props) => {
               <View style={styles.selectHeading}>
                 <Text style={styles.heading}>Select your Date</Text>
               </View>
-              <CalendarList
+              <Calendar
                 horizontal={true}
                 pagingEnabled={true}
                 scrollEnabled={true}
@@ -161,6 +164,21 @@ const OneDayCalender = (props) => {
                 markingType={'period'}
                 disableAllTouchEventsForDisabledDays
                 rowHeight={5}
+                hideExtraDays={true}
+                renderArrow={(direction) => (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      backgroundColor: '#f2ae88',
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                      borderRadius: 5,
+                    }}>
+                    <Text style={{color: '#fff'}}>
+                      {direction == 'left' ? 'Previous' : 'Next'}
+                    </Text>
+                  </View>
+                )}
                 theme={{
                   calendarBackground: '#343739',
                   todayTextColor: '#ffffff',

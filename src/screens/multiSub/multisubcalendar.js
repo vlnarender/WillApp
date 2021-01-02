@@ -15,7 +15,7 @@ import {
 import moment from 'moment';
 import {connect} from 'react-redux';
 import {ScrollView} from 'react-native-gesture-handler';
-import {CalendarList, LocaleConfig} from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-simple-toast';
 import {multiSubActions} from '../../actions/multiSub';
@@ -158,7 +158,7 @@ const MultiSubCalender = (props) => {
               </View>
 
               <View style={styles.calendarArea}>
-                <CalendarList
+                <Calendar
                   horizontal={true}
                   pagingEnabled={true}
                   scrollEnabled={true}
@@ -167,6 +167,21 @@ const MultiSubCalender = (props) => {
                   disableAllTouchEventsForDisabledDays
                   rowHeight={5}
                   onDayPress={onDayPress}
+                  hideExtraDays={true}
+                  renderArrow={(direction) => (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        backgroundColor: '#f2ae88',
+                        paddingVertical: 5,
+                        paddingHorizontal: 10,
+                        borderRadius: 5,
+                      }}>
+                      <Text style={{color: '#fff'}}>
+                        {direction == 'left' ? 'Previous' : 'Next'}
+                      </Text>
+                    </View>
+                  )}
                   theme={{
                     calendarBackground: '#343739',
                     todayTextColor: '#ffffff',

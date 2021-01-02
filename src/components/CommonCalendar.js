@@ -137,6 +137,21 @@ const CommonCalendar = (props) => {
             markingType={'period'}
             disableAllTouchEventsForDisabledDays
             rowHeight={5}
+            hideExtraDays={true}
+            renderArrow={(direction) => (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: '#f2ae88',
+                  paddingVertical: 5,
+                  paddingHorizontal: 10,
+                  borderRadius: 5,
+                }}>
+                <Text style={{color: '#fff'}}>
+                  {direction == 'left' ? 'Previous' : 'Next'}
+                </Text>
+              </View>
+            )}
             theme={{
               calendarBackground: '#343739',
               todayTextColor: '#ffffff',
