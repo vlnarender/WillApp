@@ -8,6 +8,7 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
+import {connect} from 'react-redux';
 import {MYORDERS_API} from '../util/api';
 import Header from '../components/Header/Header';
 import {PLAN_ARROW_RIGHT} from '../_helpers/ImageProvide';
@@ -54,7 +55,7 @@ const myOrders = (props) => {
                   justifyContent: 'space-between',
                 }}>
                 <Text style={{fontWeight: 'bold', fontSize: 30}}>
-                  My Orders
+                  {props.labelData.my_orders}
                 </Text>
                 <Text
                   style={{
@@ -237,4 +238,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default myOrders;
+const mapStateToProps = (state) => ({
+  labelData: state.labelReducer.labelData,
+});
+
+export default connect(mapStateToProps, null)(myOrders);

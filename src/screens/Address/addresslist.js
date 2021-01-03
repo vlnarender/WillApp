@@ -18,6 +18,8 @@ import {
   PAYMENT_noCredit,
   LOGO,
   CHECKED,
+  ARROW_LEFT,
+  HEADER_SMALL_LOGO,
 } from '../../_helpers/ImageProvide';
 import SubHeader from '../../components/Header/SubHeader';
 
@@ -49,10 +51,46 @@ const Addresslist = (props) => {
             style={{backgroundColor: 'white', flex: 1}}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="interactive">
-            <SubHeader />
+            <View style={styleCss.header}>
+              <View
+                style={{flex: 1, alignSelf: 'center', alignItems: 'center'}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    props.navigation.navigate(props.pathFinder);
+                  }}>
+                  <Image source={ARROW_LEFT} />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{flex: 4, alignItems: 'center', alignSelf: 'center'}}>
+                <TouchableOpacity
+                  onPress={() => props.navigation.navigate('Home')}>
+                  <Image
+                    style={{width: 50, height: 50}}
+                    source={HEADER_SMALL_LOGO}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    props.navigation.navigate(props.pathFinder);
+                  }}>
+                  <Image style={{height: 20, width: 20}} source={CROSS} />
+                </TouchableOpacity>
+              </View>
+            </View>
             <View style={styleCss.mainContainer}>
               <View>
-                <Text style={styleCss.headingPro}>My addresses</Text>
+                <Text style={styleCss.headingPro}>
+                  {props.labelData.my_add}
+                </Text>
               </View>
               <View style={{marginTop: 35}}>
                 {props.addressData.map((item, key) => {
@@ -65,9 +103,10 @@ const Addresslist = (props) => {
                       }}>
                       <TouchableOpacity
                         style={styles.radioAlign}
-                        onPress={() => {
-                          setDefaultAddress(item);
-                        }}>
+                        // onPress={() => {
+                        //   setDefaultAddress(item);
+                        // }}>
+                      >
                         <View style={{flexDirection: 'row'}}>
                           <View>
                             <Image
@@ -172,7 +211,9 @@ const Addresslist = (props) => {
               </View>
 
               <View style={{marginTop: 30}}>
-                <Text style={styleCss.headingPro}>My addresses</Text>
+                <Text style={styleCss.headingPro}>
+                  {props.labelData.my_add}
+                </Text>
               </View>
               <View
                 style={{
@@ -253,6 +294,7 @@ const mapStateToProps = (state) => {
     addressStatus: state.addresslistReducer.addressStatus,
     addressSetData: state.addresssetReducer.addressSetData,
     addressSetStatus: state.addresssetReducer.addressSetStatus,
+    labelData: state.labelReducer.labelData,
     pathFinder: state.commonReducer.pathFinder,
   };
 };

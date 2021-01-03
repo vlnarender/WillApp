@@ -285,7 +285,7 @@ const Home = (props) => {
                               padding: 5,
                               borderRadius: 5,
                             }}>
-                            <Text>All Program</Text>
+                            <Text>{props.labelData.all_program}</Text>
                             <Image
                               style={{
                                 width: 10,
@@ -402,7 +402,7 @@ const Home = (props) => {
                         marginHorizontal: 20,
                         alignItems: 'center',
                         marginTop: 20,
-                        marginBottom:10
+                        marginBottom: 10,
                       }}>
                       <View>
                         <Text style={{fontSize: 20, fontWeight: '700'}}>
@@ -447,8 +447,7 @@ const Home = (props) => {
                                   height: 170,
                                   margin: 5,
                                   padding: 5,
-                                  marginBottom:10
-
+                                  marginBottom: 10,
                                 }}>
                                 <Image
                                   source={{
@@ -465,15 +464,14 @@ const Home = (props) => {
                   </View>
                 )}
                 {viewall && (
-                  <View style={{ paddingBottom:80}}>
+                  <View style={{paddingBottom: 80}}>
                     <Text
                       style={{
                         textAlign: 'center',
                         fontSize: 24,
                         fontWeight: '500',
                         marginTop: 20,
-                        marginBottom:20  
-                  
+                        marginBottom: 20,
                       }}>
                       {props.labelData.diet_companies}
                     </Text>

@@ -109,8 +109,15 @@ const ProgramsComponent = (props) => {
               </View>
             </View>
             <View style={styles.body}>
-              <Text style={{alignSelf: 'flex-start', fontSize:18, marginBottom:15, marginTop:10}}>
-                Restaurents Offer {props.programData.program_deatils.name}
+              <Text
+                style={{
+                  alignSelf: 'flex-start',
+                  fontSize: 18,
+                  marginBottom: 15,
+                  marginTop: 10,
+                }}>
+                {props.labelData.restaurents_offer}{' '}
+                {props.programData.program_deatils.name}
               </Text>
               <View style={styles.grid}>
                 {props.programData.diet_company.length === 0 ? (
@@ -132,7 +139,9 @@ const ProgramsComponent = (props) => {
                             style={styleCss.programImage}
                           />
                           <View style={{padding: 5}}>
-                            <Text>Name : {item.name}</Text>
+                            <Text>
+                              {props.labelData.name} : {item.name}
+                            </Text>
                             <Text>{item.iban}</Text>
                           </View>
                         </View>
@@ -155,6 +164,7 @@ const mapStateToProps = (state) => {
     programMessage: state.programReducer.programMessage,
     programData: state.programReducer.programData,
     programStatus: state.programReducer.programStatus,
+    labelData: state.labelReducer.labelData,
   };
 };
 const actionCreators = {

@@ -22,7 +22,6 @@ export default function (state = initialState, action) {
         userData: action.user.data,
         loading: false,
         showOtp: true,
-        //userToken: action.user.accessToken,
         loginMessage: action.user.message,
       };
     case userConstants.LOGIN_SUCCESS_VERIFY:

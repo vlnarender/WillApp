@@ -205,7 +205,9 @@ const MultiMealSelection = (props) => {
             </Swiper>
             <View style={styles.back}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={{color: '#f2ae88', fontSize: 11}}>Back</Text>
+                <Text style={{color: '#f2ae88', fontSize: 11}}>
+                  {props.labelData.back}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -273,7 +275,8 @@ const MultiMealSelection = (props) => {
                                   }}>
                                   <View style={styles.borderBottomBox}>
                                     <Text style={styles.kd}>
-                                      Price : {mealListData.price} KD
+                                      {props.labelData.price} :{' '}
+                                      {mealListData.price} KD
                                     </Text>
 
                                     <View style={{flexDirection: 'row'}}>
@@ -381,7 +384,9 @@ const MultiMealSelection = (props) => {
                 <Text style={styles.checkoutText}>
                   {daysNumber != 7 && `${daysNumber} / 7`}
                   {'   '}
-                  {daysNumber === 7 ? 'Next' : 'Continue'}
+                  {daysNumber === 7
+                    ? props.labelData.next
+                    : props.labelData.continue}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -398,6 +403,7 @@ const mapStateToProps = (state) => {
     selectedWeek: state.commonReducer.selectedWeek,
     selectedMeals: state.multiSubReducer.selectedMeal,
     LIST_ITEMS: state.multiSubReducer.list_items,
+    labelData: state.labelReducer.labelData,
     selectedDate: state.cartReducer.selectedDate,
   };
 };

@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  AppRegistry,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {connect} from 'react-redux';
 import Swiper from 'react-native-swiper';
 import {ScrollView} from 'react-native-gesture-handler';
 import MealListing from './MealListing';
@@ -48,7 +42,9 @@ const OneDayPlanMealListing = (props) => {
 
           <View style={styles.back}>
             <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
-              <Text style={{color: '#f2ae88', fontSize: 11}}>Back</Text>
+              <Text style={{color: '#f2ae88', fontSize: 11}}>
+                {props.labelData.back}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -87,4 +83,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OneDayPlanMealListing;
+const mapStateToProps = (state) => ({
+  labelData: state.labelReducer.labelData,
+});
+export default connect(mapStateToProps, null)(OneDayPlanMealListing);

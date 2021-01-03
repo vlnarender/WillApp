@@ -23,17 +23,19 @@ const OneDayCart = (props) => {
         </View>
         <View>
           <View style={styles.thiredSection}>
-            <Text>Total</Text>
+            <Text style={{paddingRight: 10}}>{props.labelData.total}</Text>
             <Text>KD {props.mealList.total_amount}</Text>
           </View>
 
           <View style={styles.thiredSection}>
-            <Text>Delivery</Text>
+            <Text style={{paddingRight: 10}}>{props.labelData.delivery}</Text>
             <Text>KD {props.mealList.delivery_amount}</Text>
           </View>
 
           <View style={styles.thiredSection}>
-            <Text style={styles.total}>Total</Text>
+            <Text style={[styles.total, {paddingRight: 10}]}>
+              {props.labelData.total}
+            </Text>
             <Text style={styles.total}>KD {props.mealList.sub_amount}</Text>
           </View>
         </View>
@@ -49,8 +51,6 @@ const styles = StyleSheet.create({
   thiredSection: {
     justifyContent: 'space-between',
     flexDirection: 'row',
-    width: width / 2,
-    alignSelf: 'flex-end',
     paddingVertical: 2,
   },
 });

@@ -82,7 +82,9 @@ const OneDay = (props) => {
 
             <View style={styles.calendarArea}>
               <View style={styles.selectHeading}>
-                <Text style={styles.heading}>Select your Date</Text>
+                <Text style={styles.heading}>
+                  {props.labelData.select_you_week}{' '}
+                </Text>
               </View>
               <CalendarList
                 horizontal={true}

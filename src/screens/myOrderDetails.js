@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import {connect} from 'react-redux';
 import {
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   View,
@@ -63,12 +63,12 @@ const MyOrderDetails = ({navigation, route}) => {
                   justifyContent: 'space-between',
                 }}>
                 <Text style={{fontWeight: 'bold', fontSize: 30}}>
-                  Order #{orderlist.order_id}
+                  {props.labelData.order} #{orderlist.order_id}
                 </Text>
                 <Text
                   style={{fontSize: 20, paddingVertical: 8, marginBottom: 15}}>
                   {totalOrders.length == 1 ? (
-                    <Text>{totalOrders.length} order</Text>
+                    <Text>{totalOrders.length} </Text>
                   ) : (
                     <Text>{totalOrders.length} orders</Text>
                   )}
@@ -232,5 +232,8 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
 });
+const mapStateToProps = (state) => ({
+  labelData: state.labelReducer.labelData,
+});
 
-export default MyOrderDetails;
+export default connect(mapStateToProps, null)(MyOrderDetails);

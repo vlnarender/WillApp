@@ -149,7 +149,7 @@ const MultiSubs = (props) => {
               }}>
               <View style={{flex: 2}}>
                 <Text style={{fontSize: 18, fontWeight: '700'}}>
-                  Number of week:
+                  {props.labelData.select_you_date} :
                 </Text>
               </View>
               <View style={{flex: 1, alignItems: 'flex-end'}}>

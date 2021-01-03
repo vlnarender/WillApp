@@ -184,7 +184,7 @@ const ForgotScreen = (props) => {
             fontSize: 23,
             textAlign: 'center',
           }}>
-          Forgot Password
+          {props.labelData.forgot_pass}
         </Text>
 
         <Text
@@ -278,6 +278,7 @@ const mapStateToProps = (state) => ({
   forgotError: state.forgotReducer.forgotError,
   forgotMessage: state.forgotReducer.forgotMessage,
   forgotData: state.forgotReducer.forgotData,
+  labelData: state.labelReducer.labelData,
 });
 
 const actionCreators = {

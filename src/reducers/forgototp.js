@@ -21,26 +21,9 @@ export default function (state = initialState, action) {
         ...state,
         forgototpData: action.user.data,
         loading: false,
-        //showOtp: true,
-        //userToken: action.user.accessToken,
         forgototpMessage: action.user.message,
       };
 
-    /*  case userConstants.TOKEN_RESTORE:
-      return {
-        ...state,
-        userData: state.userData,
-        userToken: action.token,
-      };
-
-    case userConstants.LOGOUT_REQUEST:
-      return {
-        ...state,
-        userData: '',
-        loading: false,
-        showOtp: true,
-        userToken: '',
-      }; */
     case userConstants.FORGOT_OTP_FAILURE:
       return {
         ...state,

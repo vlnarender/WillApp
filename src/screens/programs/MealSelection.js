@@ -219,7 +219,9 @@ const MealSelection = React.memo((props) => {
             </Swiper>
             <View style={styles.back}>
               <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                <Text style={{color: '#f2ae88', fontSize: 11}}>Back</Text>
+                <Text style={{color: '#f2ae88', fontSize: 11}}>
+                  {props.labelData.back}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -396,7 +398,9 @@ const MealSelection = React.memo((props) => {
                   {daysNumber != week * 7 &&
                     `${daysNumber * NumberOfWeek} / ${week * 7}`}
                   {'   '}
-                  {daysNumber === week * 7 ? 'CheckOut' : 'Continue'}
+                  {daysNumber === week * 7
+                    ? props.labelData.checkout
+                    : props.labelData.continue}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -519,6 +523,7 @@ const mapStateToProps = (state) => {
     selectedDate: state.cartReducer.selectedDate,
     features_id: state.cartReducer.features_id,
     program_id: state.cartReducer.program_id,
+    labelData: state.labelReducer.labelData,
     imageUrl: state.cartReducer.imageUrl,
   };
 };

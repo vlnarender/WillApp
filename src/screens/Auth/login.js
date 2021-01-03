@@ -243,25 +243,6 @@ const LoginScreen = (props) => {
                     textAlign: 'center',
                     paddingBottom: 10,
                   }}>
-                  {/* <TouchableOpacity
-                    style={{
-                      flexDirection: 'row',
-                    }}
-                    onPress={async () => {
-                      await AsyncStorage.setItem(
-                        'remember',
-                        selected ? 'no' : 'yes',
-                      );
-                      setSelected(!selected);
-                    }}>
-                    <Image
-                      source={selected ? REC_SELECTED : REC}
-                      style={{width: 13, height: 13}}
-                    />
-                    <Text style={{paddingLeft: 10, marginTop: -3}}>
-                      Remember Me
-                    </Text>
-                  </TouchableOpacity> */}
                   <TouchableOpacity>
                     <Text
                       style={{
@@ -271,7 +252,7 @@ const LoginScreen = (props) => {
                       onPress={() => {
                         props.navigation.navigate('Email');
                       }}>
-                      Forgot Password?
+                      {props.labelData.forgot_pass}?
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -292,7 +273,7 @@ const LoginScreen = (props) => {
                       fontSize: 15,
                       color: '#fff',
                     }}>
-                    Log In
+                    {props.labelData.log_in}
                   </Text>
                 </TouchableOpacity>
                 <Text style={{color: 'red'}}>{formikProps.errors.general}</Text>
@@ -317,7 +298,7 @@ const LoginScreen = (props) => {
                 color: '#f2ae88',
                 alignSelf: 'center',
               }}>
-              New User? Sign up
+              {props.labelData.new_user}
             </Text>
           </TouchableOpacity>
           <View
@@ -405,6 +386,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   loginError: state.loginReducer.loginError,
   loginMessage: state.loginReducer.loginMessage,
+  labelData: state.labelReducer.labelData,
   userData: state.loginReducer.userData,
 });
 

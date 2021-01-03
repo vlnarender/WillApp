@@ -31,7 +31,7 @@ const MultiSubCalender = (props) => {
   const {featureId, itemId} = props.route.params;
   const [visible, setVisible] = useState(false);
   const [valueone, setValueone] = useState(null);
-  const [selectWeek, setSelectWeek] = useState('Select');
+  const [selectWeek, setSelectWeek] = useState(props.labelData.select);
   const [PROP_ONE, SET_PROP_ONE] = useState();
   LocaleConfig.locales['ar'] = CALANDER_CONFIG['ar'];
   LocaleConfig.locales['en'] = CALANDER_CONFIG['en'];
@@ -46,7 +46,7 @@ const MultiSubCalender = (props) => {
       setVisible(false);
       setValueone(null);
       setValueone(null);
-      setSelectWeek('Select');
+      setSelectWeek(props.labelData.select);
     });
     return () => unsubscribe;
   }, [featureId, itemId]);
@@ -151,7 +151,7 @@ const MultiSubCalender = (props) => {
                         fontSize: 18,
                         marginTop: 5,
                       }}>
-                      Week
+                      {props.labelData.week}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -178,7 +178,9 @@ const MultiSubCalender = (props) => {
                         borderRadius: 5,
                       }}>
                       <Text style={{color: '#fff'}}>
-                        {direction == 'left' ? 'Previous' : 'Next'}
+                        {direction == 'left'
+                          ? 'Previous'
+                          : props.labelData.next}
                       </Text>
                     </View>
                   )}
@@ -202,7 +204,9 @@ const MultiSubCalender = (props) => {
                 <View style={styles.rowSpace}>
                   <View style={styles.colorBox1}></View>
                   <View>
-                    <Text style={styles.textColor}>Selected days</Text>
+                    <Text style={styles.textColor}>
+                      {props.labelData.selected_days}
+                    </Text>
                   </View>
                 </View>
                 <View>
@@ -210,7 +214,7 @@ const MultiSubCalender = (props) => {
                     <View style={styles.colorBox2}></View>
                     <View>
                       <Text style={styles.textColor}>
-                        Available for Selection
+                        {props.labelData.available_for_selection}
                       </Text>
                     </View>
                   </View>
@@ -220,7 +224,7 @@ const MultiSubCalender = (props) => {
                 <View style={styles.rowSpace}>
                   <View style={styles.colorBox3}></View>
                   <Text style={styles.textColor}>
-                    Unavailable for Selection
+                    {props.labelData.unavailable_selected}
                   </Text>
                 </View>
               </View>
@@ -241,7 +245,7 @@ const MultiSubCalender = (props) => {
                     paddingVertical: 15,
                     fontWeight: '700',
                   }}>
-                  Select Your Week
+                  {props.labelData.select_you_week}{' '}
                 </Text>
                 <View style={styles.container}>
                   {PROP_ONE.map((res, index) => {
@@ -285,7 +289,10 @@ const actionCreators = {
   multiSubSelectedWeek: multiSubActions.multiSubSelectedWeek,
   selectedDate: cartActions.selectedDate,
 };
-export default connect(null, actionCreators)(MultiSubCalender);
+const mapStateToProps = (state) => ({
+  labelData: state.labelReducer.labelData,
+});
+export default connect(mapStateToProps, actionCreators)(MultiSubCalender);
 const styles = StyleSheet.create({
   calendar: {
     marginBottom: 10,

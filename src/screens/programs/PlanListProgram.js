@@ -44,12 +44,14 @@ const PlanListProgram = (props) => {
   // const {itemId, featureId, date} = props.route.params;
   const [gender, setGender] = useState([
     {gender: 'ALL', checked: true},
-    {gender: 'Male', checked: false},
-    {gender: 'Female', checked: false},
+    {gender: props.labelData.male, checked: false},
+    {gender: props.labelData.female, checked: false},
   ]);
   const [gender_id, setgender_id] = useState(1);
   const [weekNumber, setweekNumber] = useState(1);
-  const [SelectedPrice, setSelectedPrice] = useState('Select First');
+  const [SelectedPrice, setSelectedPrice] = useState(
+    props.labelData.select_first,
+  );
   const [BasicInfo, setBasicInfo] = useState({});
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -57,12 +59,12 @@ const PlanListProgram = (props) => {
       setMeal(0);
       setGender([
         {gender: 'ALL', checked: true},
-        {gender: 'Male', checked: false},
-        {gender: 'Female', checked: false},
+        {gender: props.labelData.male, checked: false},
+        {gender: props.labelData.female, checked: false},
       ]);
       setgender_id(1);
       setweekNumber(1);
-      setSelectedPrice('Select First');
+      setSelectedPrice(props.labelData.select_first);
       setBasicInfo({});
     });
     return unsubscribe;
@@ -137,7 +139,9 @@ const PlanListProgram = (props) => {
             </Swiper>
             <View style={styles.back}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={{color: '#f2ae88', fontSize: 11}}>Back</Text>
+                <Text style={{color: '#f2ae88', fontSize: 11}}>
+                  {props.labelData.back}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -159,7 +163,9 @@ const PlanListProgram = (props) => {
               />
               <Text>{gender[1].gender}</Text>
             </TouchableOpacity>
-            <Text style={{fontWeight: 'bold', fontSize: 15}}>Plan</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 15}}>
+              {props.labelData.plans}
+            </Text>
             <TouchableOpacity
               style={{flexDirection: 'row'}}
               onPress={() => selectGender(2)}>
@@ -248,7 +254,7 @@ const PlanListProgram = (props) => {
                         alignSelf: 'flex-end',
                         color: '#ccc',
                       }}>
-                      Price : {SelectedPrice}
+                      {props.labelData.price} : {SelectedPrice}
                     </Text>
                     {programData.plan.map((data, index) => {
                       return (
@@ -375,7 +381,7 @@ const PlanListProgram = (props) => {
                         color: '#fff',
                         fontWeight: 'bold',
                       }}>
-                      Continue
+                      {props.labelData.continue}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -436,6 +442,7 @@ const mapStateToProps = (state) => {
     selectedPlan: state.cartReducer.selectedPlan,
     features_id: state.cartReducer.features_id,
     restaurant_id: state.cartReducer.restaurant_id,
+    labelData: state.labelReducer.labelData,
     program_id: state.cartReducer.program_id,
   };
 };

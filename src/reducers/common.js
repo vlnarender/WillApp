@@ -14,7 +14,10 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case userConstants.PATH_FINDER:
-      return {...state, pathFinder: action.data};
+      return {
+        ...state,
+        pathFinder: action.data,
+      };
     case userConstants.MULTI_SUB_SELECTED_WEEK:
       return {
         ...state,

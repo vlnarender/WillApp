@@ -18,9 +18,8 @@ import {connect} from 'react-redux';
 import Header from './Header/Header';
 import Loader from '../components/Loader/Loader';
 const {width} = Dimensions.get('window');
-import {ADD_AND_UPDATE_API, GET_MY_CART} from '../util/api';
+import {GET_MY_CART, ADD_AND_UPDATE_API} from '../util/api';
 import Toast from 'react-native-simple-toast';
-import {commonActions} from '../actions/common';
 import {
   CHECKED,
   EDIT_PENCIL,
@@ -41,7 +40,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import OneDayCart from './Cart/OneDay';
 import MultiSubCart from './Cart/MultiSub';
 import ProgramsCart from './Cart/Programs';
-
+import {commonAction} from '../actions/common';
 const CartComponent = (props) => {
   const weekConfig = CALANDER_CONFIG;
   const [weekModalVisible, setWeekModalVisible] = useState(false);
@@ -64,8 +63,9 @@ const CartComponent = (props) => {
       setMealList(null);
       setModalVisible(false);
       getData();
+      getlanguage();
     });
-    async () => {
+    const getlanguage = async () => {
       let ln = await AsyncStorage.getItem('language');
       setLan(ln);
     };
@@ -118,8 +118,10 @@ const CartComponent = (props) => {
   };
   const emptyYourCart = () => {
     setModalVisible(!modalVisible);
+
     ADD_AND_UPDATE_API({cart_id: MealList.cart_id}, 'user/remove-myCart').then(
-      () => {
+      (data) => {
+        console.log(data);
         props.ListOfItems();
         navigation.navigate('Home');
       },
@@ -169,7 +171,7 @@ const CartComponent = (props) => {
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Text style={{fontWeight: 'bold', fontSize: 20}}>
-                  My shopping bag
+                  {props.labelData.my_shopping_bag}
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
@@ -180,15 +182,20 @@ const CartComponent = (props) => {
               </View>
               <Text style={{fontSize: 15, paddingVertical: 8}}>
                 {MealList.plan_type
-                  ? `Selected Program `
+                  ? `${props.labelData.selected_program} `
                   : MealList.meal_list.length + ` items added`}
               </Text>
             </View>
-            {MealList.case == '1' ? <OneDayCart mealList={MealList} /> : null}
-            {MealList.case == '2' ? <MultiSubCart mealList={MealList} /> : null}
+            {MealList.case == '1' ? (
+              <OneDayCart mealList={MealList} labelData={props.labelData} />
+            ) : null}
+            {MealList.case == '2' ? (
+              <MultiSubCart mealList={MealList} labelData={props.labelData} />
+            ) : null}
             {MealList.case == '3' || MealList.case == '4' ? (
               <ProgramsCart
                 mealList={MealList}
+                labelData={props.labelData}
                 programName={MealList.case == 4 ? 'Diet Plan' : 'Programs'}
               />
             ) : null}
@@ -201,7 +208,7 @@ const CartComponent = (props) => {
                   justifyContent: 'space-between',
                 },
               ]}>
-              <Text style={{fontSize: 25}}>coupon</Text>
+              <Text style={{fontSize: 25}}>{props.labelData.coupon}</Text>
               <TextInput
                 style={{
                   borderWidth: 1,
@@ -211,7 +218,7 @@ const CartComponent = (props) => {
                   paddingHorizontal: 20,
                   marginHorizontal: 10,
                 }}
-                placeholder="coupan">
+                placeholder={props.labelData.enter_code}>
                 {MealList.coupon == null ? '' : MealList.coupon}
               </TextInput>
               <TouchableOpacity
@@ -221,11 +228,15 @@ const CartComponent = (props) => {
                   paddingHorizontal: 20,
                   borderRadius: 5,
                 }}>
-                <Text style={{color: '#fff', fontWeight: 'bold'}}>Apply</Text>
+                <Text style={{color: '#fff', fontWeight: 'bold'}}>
+                  {props.labelData.apply}
+                </Text>
               </TouchableOpacity>
             </View>
             <View style={{paddingVertical: 10}}>
-              <Text style={styles.total}>Delivery Address</Text>
+              <Text style={styles.total}>
+                {props.labelData.delivery_address}
+              </Text>
               <View
                 style={{
                   flexDirection: 'column',
@@ -271,7 +282,7 @@ const CartComponent = (props) => {
                     }}>
                     <Text style={{fontWeight: 'bold', fontSize: 16}}>
                       {' '}
-                      + Add new Address
+                      + {props.labelData.add_new_address}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -283,7 +294,7 @@ const CartComponent = (props) => {
                 borderBottomColor: '#ccc',
                 borderBottomWidth: 0.5,
               }}>
-              <Text style={styles.total}>Delivery Time</Text>
+              <Text style={styles.total}>{props.labelData.delivery_time}</Text>
               <View
                 style={{
                   flexDirection: 'row',
@@ -304,7 +315,9 @@ const CartComponent = (props) => {
                       marginRight: 5,
                     }}
                   />
-                  <Text style={{color: 'gray', fontSize: 18}}>Morning</Text>
+                  <Text style={{color: 'gray', fontSize: 18}}>
+                    {props.labelData.morining}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -326,7 +339,7 @@ const CartComponent = (props) => {
                       color: 'gray',
                       fontSize: 18,
                     }}>
-                    Evening
+                    {props.labelData.evening}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -334,7 +347,9 @@ const CartComponent = (props) => {
             <View style={styles.parent}>
               <View style={styles.child}>
                 <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.textContent}>Height</Text>
+                  <Text style={styles.textContent}>
+                    {props.labelData.height}
+                  </Text>
                   <TextInput
                     placeholder="170 cm"
                     style={styles.textinputs}
@@ -346,7 +361,9 @@ const CartComponent = (props) => {
               </View>
               <View style={styles.child}>
                 <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.textContent}>Weight</Text>
+                  <Text style={styles.textContent}>
+                    {props.labelData.weight}
+                  </Text>
                   <TextInput
                     placeholder="80 kg"
                     style={styles.textinputs}
@@ -358,7 +375,7 @@ const CartComponent = (props) => {
               </View>
               <View style={styles.child}>
                 <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.textContent}>Age</Text>
+                  <Text style={styles.textContent}>{props.labelData.age}</Text>
                   <TextInput
                     placeholder="25 y"
                     style={styles.textinputs}
@@ -370,7 +387,9 @@ const CartComponent = (props) => {
               </View>
               <View style={styles.child}>
                 <View style={{flexDirection: 'row', paddingTop: 12}}>
-                  <Text style={styles.textContent}>Gender</Text>
+                  <Text style={styles.textContent}>
+                    {props.labelData.gender}
+                  </Text>
                   <View style={{flexDirection: 'row'}}>
                     <TouchableOpacity
                       style={{
@@ -386,7 +405,7 @@ const CartComponent = (props) => {
                           margin: 3,
                         }}
                       />
-                      <Text>Male</Text>
+                      <Text>{props.labelData.male}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{
@@ -402,7 +421,7 @@ const CartComponent = (props) => {
                           height: 13,
                         }}
                       />
-                      <Text>Female</Text>
+                      <Text>{props.labelData.female}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -415,7 +434,7 @@ const CartComponent = (props) => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={styles.total}>Days Off</Text>
+                  <Text style={styles.total}>{props.labelData.day_off}</Text>
                   <TouchableOpacity
                     onPress={() => {
                       setWeekModalVisible(true);
@@ -438,7 +457,9 @@ const CartComponent = (props) => {
                         marginRight: 5,
                       }}
                     />
-                    <Text style={{color: 'gray', fontSize: 18}}>Selected</Text>
+                    <Text style={{color: 'gray', fontSize: 18}}>
+                      {props.labelData.selected}
+                    </Text>
                   </TouchableOpacity>
                 </View>
                 <Text>Selected Days</Text>
@@ -498,11 +519,11 @@ const CartComponent = (props) => {
               </View>
             </Modal>
             <View style={[styles.parent, {flexDirection: 'column'}]}>
-              <Text style={styles.total}>Alergies</Text>
+              <Text style={styles.total}>{props.labelData.alergies}</Text>
               <TextInput
                 style={styles.textArea}
                 underlineColorAndroid="transparent"
-                placeholder="Type Info"
+                placeholder={props.labelData.type_info}
                 placeholderTextColor="grey"
                 numberOfLines={10}
                 multiline={true}
@@ -510,11 +531,13 @@ const CartComponent = (props) => {
               />
             </View>
             <View style={[styles.parent, {flexDirection: 'column'}]}>
-              <Text style={styles.total}>Best And Worst Meal</Text>
+              <Text style={styles.total}>
+                {props.labelData.best_and_worst_meal}
+              </Text>
               <TextInput
                 style={styles.textArea}
                 underlineColorAndroid="transparent"
-                placeholder="Example: I prefer meet and I hate seafood"
+                placeholder={props.labelData.i_prefer_meet_and_i_hage_seafood}
                 placeholderTextColor="grey"
                 numberOfLines={10}
                 multiline={true}
@@ -537,7 +560,7 @@ const CartComponent = (props) => {
                   fontSize: 16,
                   fontWeight: 'bold',
                 }}>
-                Proceed to checkout
+                {props.labelData.proceed_to_checkout}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity styl={{padding: 20, marginBottom: 10}}>
@@ -551,7 +574,7 @@ const CartComponent = (props) => {
                   fontSize: 15,
                   paddingVertical: 10,
                 }}>
-                Continue shopping
+                {props.labelData.continue_shopping}
               </Text>
             </TouchableOpacity>
           </View>
@@ -679,11 +702,12 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     paymentData: state.paymentReducer.paymentData,
+    labelData: state.labelReducer.labelData,
   };
 };
 const actionCreators = {
-  pathAction: commonActions.pathFinder,
   paymentAction: paymentActions.paymentAction,
   ListOfItems: cartActions.ListOfItems,
+  pathAction: commonAction.pathFinder,
 };
 export default connect(mapStateToProps, actionCreators)(CartComponent);

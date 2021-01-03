@@ -17,6 +17,7 @@ const {width, height} = Dimensions.get('window');
 import {connect} from 'react-redux';
 import {labelActions} from '../../actions/label';
 import {cartActions} from '../../actions/cart';
+import Loader from '../../components/Loader/Loader';
 const logoWidth = (3 / 4) * width;
 
 class Main extends React.Component {
@@ -237,236 +238,256 @@ class Main extends React.Component {
   };
 
   render() {
-    return (
-      <View style={styles.container}>
-        <ImageBackground source={{uri: IMG.BG}} style={styles.bgImage}>
-          <BlackShade />
-          <FirstScreen
-            on
-            text={'The Journey to Your Health Starts With'}
-            screen={this.state.screen}
-            navigation={this.props.navigation}
-            log={this.state.login}
-          />
-          <Animated.View
-            style={[
-              styles.whiteAbsoluteCenterAlignView,
-              {opacity: this.state.opacity4},
-            ]}>
-            <View
-              style={{
-                height: verticleScale(210),
-                width: verticleScale(260),
-                marginTop: verticleScale(70),
-              }}>
-              <Image
-                resizeMode="contain"
-                source={{uri: IMG.WELCOME_SCREEN}}
-                style={{height: '100%'}}
-              />
-            </View>
-            <View
+    if (this.props.labelStatus) {
+      return (
+        <View style={styles.container}>
+          <ImageBackground source={{uri: IMG.BG}} style={styles.bgImage}>
+            <BlackShade />
+            <FirstScreen
+              on
+              text={
+                this.props.labelData['the_journey_to your_health_starts_with']
+              }
+              screen={this.state.screen}
+              navigation={this.props.navigation}
+              log={this.state.login}
+              labelData={this.props.labelData}
+            />
+            <Animated.View
               style={[
-                {
-                  position: 'absolute',
-                  width,
-                  top:
-                    verticleScale(STEP5.top) +
-                    verticleScale(STEP3.logosize) / 2,
-                  height: verticleScale(STEP3.logosize),
-                },
+                styles.whiteAbsoluteCenterAlignView,
+                {opacity: this.state.opacity4},
               ]}>
-              <Text style={[styles.swiperScreen1TextTitle, {marginTop: 0}]}>
-                Welcome to
-              </Text>
-              <Text style={styles.swiperScreen1TextSubTitle}>
-                Craving for your favourite food? Takeaway will deliver it,
-                wherever you are!
-              </Text>
-            </View>
-          </Animated.View>
-
-          {/* SWIPER SCREENS STARTS */}
-          <Animated.View
-            style={[styles.swiperView, {opacity: this.state.opacity}]}>
-            {/* swiper screen 1 start */}
-            <Animated.View
-              style={[styles.absoluteTop0View, {opacity: this.state.opacity1}]}>
-              <View style={{paddingTop: this.state.topPadding}}>
-                <View style={{height: verticleScale(200)}}>
-                  <Image
-                    resizeMode="contain"
-                    source={{uri: IMG.SWIPER_SCREEN_1}}
-                    style={styles.fullHeight}
-                  />
-                </View>
-                <Text style={styles.swiperScreen1TextTitle}>
-                  All Kinds of healthy food
-                </Text>
-                <Text style={styles.swiperScreen1TextSubTitle}>
-                  Subscribe for one day, week or month. We have you covered.
-                </Text>
-              </View>
-            </Animated.View>
-            {/* swiper screen 1 ends */}
-
-            {/* swiper screen 2 start */}
-            <Animated.View
-              style={[styles.absoluteTop0View, {opacity: this.state.opacity2}]}>
-              <View style={{paddingTop: this.state.topPadding}}>
-                <View
-                  style={{flexDirection: 'row', height: verticleScale(200)}}>
-                  <View
-                    style={{
-                      flex: 1,
-                      height: verticleScale(100),
-                      marginTop: verticleScale(40),
-                    }}>
-                    <Image
-                      resizeMode="contain"
-                      source={{uri: IMG.SWIPER_SCREEN_2.LEFT}}
-                      style={styles.fullHeight}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flex: 1,
-                      height: verticleScale(100),
-                      marginBottom: verticleScale(40),
-                    }}>
-                    <Image
-                      resizeMode="contain"
-                      source={{uri: IMG.SWIPER_SCREEN_2.MID}}
-                      style={styles.fullHeight}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flex: 1,
-                      height: verticleScale(100),
-                      marginTop: verticleScale(40),
-                    }}>
-                    <Image
-                      resizeMode="contain"
-                      source={{uri: IMG.SWIPER_SCREEN_2.RIGHT}}
-                      style={styles.fullHeight}
-                    />
-                  </View>
-                </View>
-                <Text style={styles.swiperScreen1TextTitle}>
-                  Try our healthy programs
-                </Text>
-                <Text style={styles.swiperScreen1TextSubTitle}>
-                  Feel like going for keto, Vegan or even more...
-                </Text>
-              </View>
-            </Animated.View>
-            {/* swiper screen 2 ends */}
-
-            {/* swiper screen 3 start */}
-            <Animated.View
-              style={[styles.absoluteTop0View, {opacity: this.state.opacity3}]}>
               <View
                 style={{
-                  height: verticleScale(300),
-                  marginTop: verticleScale(STEP4.top - 90),
+                  height: verticleScale(210),
+                  width: verticleScale(260),
+                  marginTop: verticleScale(70),
                 }}>
-                <Text style={styles.swiper3ScreenText}>WHERE THERE'S A</Text>
-                <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                  <View style={{flex: 1, height: verticleScale(80)}}>
-                    <Image
-                      resizeMode="contain"
-                      source={{uri: IMG.SWIPER_SCREEN_3.LEFT}}
-                      style={styles.fullHeight}
-                    />
-                  </View>
-                  <View style={{flex: 1}} />
-                  <View style={{flex: 1, height: verticleScale(120)}}>
-                    <Image
-                      resizeMode="contain"
-                      source={{uri: IMG.SWIPER_SCREEN_3.LEFT}}
-                      style={styles.fullHeight}
-                    />
-                  </View>
-                </View>
-                <Text
-                  style={[
-                    styles.swiper3ScreenText,
-                    {marginTop: verticleScale(10)},
-                  ]}>
-                  THERE IS A WAY
+                <Image
+                  resizeMode="contain"
+                  source={{uri: IMG.WELCOME_SCREEN}}
+                  style={{height: '100%'}}
+                />
+              </View>
+              <View
+                style={[
+                  {
+                    position: 'absolute',
+                    width,
+                    top:
+                      verticleScale(STEP5.top) +
+                      verticleScale(STEP3.logosize) / 2,
+                    height: verticleScale(STEP3.logosize),
+                  },
+                ]}>
+                <Text style={[styles.swiperScreen1TextTitle, {marginTop: 0}]}>
+                  {this.props.labelData.welcome_to
+                    ? this.props.labelData.welcome_to
+                    : 'Welcome to'}
+                </Text>
+                <Text style={styles.swiperScreen1TextSubTitle}>
+                  Craving for your favourite food? Takeaway will deliver it,
+                  wherever you are!
                 </Text>
               </View>
             </Animated.View>
-            {/* swiper screen 3 start */}
 
-            <View style={{marginTop: verticleScale(400)}}>
+            {/* SWIPER SCREENS STARTS */}
+            <Animated.View
+              style={[styles.swiperView, {opacity: this.state.opacity}]}>
+              {/* swiper screen 1 start */}
               <Animated.View
                 style={[
-                  styles.swiperDotWrapper,
-                  {opacity: this.state.opacity},
+                  styles.absoluteTop0View,
+                  {opacity: this.state.opacity1},
                 ]}>
-                {[1, 2, 3].map((item, index) => {
-                  return (
-                    <Animated.View
-                      key={index}
-                      style={[
-                        styles.swiperDot,
-                        {
-                          backgroundColor:
-                            this.state.screen == `${item}`
-                              ? COLOR.ACTIVE_SWIPER_DOT
-                              : COLOR.INACTIVE_SWIPER_DOT,
-                        },
-                      ]}
+                <View style={{paddingTop: this.state.topPadding}}>
+                  <View style={{height: verticleScale(200)}}>
+                    <Image
+                      resizeMode="contain"
+                      source={{uri: IMG.SWIPER_SCREEN_1}}
+                      style={styles.fullHeight}
                     />
-                  );
-                })}
+                  </View>
+                  <Text style={styles.swiperScreen1TextTitle}>
+                    {this.props.labelData.all_kind_of_healthy_food}
+                  </Text>
+                  <Text style={styles.swiperScreen1TextSubTitle}>
+                    {this.props.labelData.subscribe_for_one_day_week}
+                  </Text>
+                </View>
               </Animated.View>
-              <Btn
-                lable={'Next'}
-                onPress={this.onNext}
-                btnTextStyle={styles.nextBtnText}
-              />
-              <Btn
-                lable={'Skip'}
-                onPress={this.onSkip}
-                btnTextStyle={styles.skipBtnText}
-                fill={false}
-              />
-            </View>
-          </Animated.View>
-          {/* SWIPER SCREENS ENDS */}
+              {/* swiper screen 1 ends */}
 
-          {/* ANIMATED LOGO STARTS */}
-          <Animated.View
-            style={{
-              height: this.state.logoDimensions,
-              width: this.state.logoDimensions,
-              position: 'absolute',
-              top: this.state.top,
-              left: this.state.left,
-              transform: [
-                {
-                  scale: this.state.scale,
-                },
-              ],
-            }}>
-            <Image
-              source={{uri: this.state.logoImage}}
-              style={{height: '100%'}}
-            />
-          </Animated.View>
-          {/* ANIMATED LOGO STARTS */}
-        </ImageBackground>
-      </View>
-    );
+              {/* swiper screen 2 start */}
+              <Animated.View
+                style={[
+                  styles.absoluteTop0View,
+                  {opacity: this.state.opacity2},
+                ]}>
+                <View style={{paddingTop: this.state.topPadding}}>
+                  <View
+                    style={{flexDirection: 'row', height: verticleScale(200)}}>
+                    <View
+                      style={{
+                        flex: 1,
+                        height: verticleScale(100),
+                        marginTop: verticleScale(40),
+                      }}>
+                      <Image
+                        resizeMode="contain"
+                        source={{uri: IMG.SWIPER_SCREEN_2.LEFT}}
+                        style={styles.fullHeight}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flex: 1,
+                        height: verticleScale(100),
+                        marginBottom: verticleScale(40),
+                      }}>
+                      <Image
+                        resizeMode="contain"
+                        source={{uri: IMG.SWIPER_SCREEN_2.MID}}
+                        style={styles.fullHeight}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flex: 1,
+                        height: verticleScale(100),
+                        marginTop: verticleScale(40),
+                      }}>
+                      <Image
+                        resizeMode="contain"
+                        source={{uri: IMG.SWIPER_SCREEN_2.RIGHT}}
+                        style={styles.fullHeight}
+                      />
+                    </View>
+                  </View>
+                  <Text style={styles.swiperScreen1TextTitle}>
+                    {this.props.labelData.try_our_healthy_programs}
+                  </Text>
+                  <Text style={styles.swiperScreen1TextSubTitle}>
+                    {this.props.labelData.feel_like_going_for_deto}
+                  </Text>
+                </View>
+              </Animated.View>
+              {/* swiper screen 2 ends */}
+
+              {/* swiper screen 3 start */}
+              <Animated.View
+                style={[
+                  styles.absoluteTop0View,
+                  {opacity: this.state.opacity3},
+                ]}>
+                <View
+                  style={{
+                    height: verticleScale(300),
+                    marginTop: verticleScale(STEP4.top - 90),
+                  }}>
+                  <Text style={styles.swiper3ScreenText}>
+                    {this.props.labelData.where_there_a}
+                  </Text>
+                  <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                    <View style={{flex: 1, height: verticleScale(80)}}>
+                      <Image
+                        resizeMode="contain"
+                        source={{uri: IMG.SWIPER_SCREEN_3.LEFT}}
+                        style={styles.fullHeight}
+                      />
+                    </View>
+                    <View style={{flex: 1}} />
+                    <View style={{flex: 1, height: verticleScale(120)}}>
+                      <Image
+                        resizeMode="contain"
+                        source={{uri: IMG.SWIPER_SCREEN_3.LEFT}}
+                        style={styles.fullHeight}
+                      />
+                    </View>
+                  </View>
+                  <Text
+                    style={[
+                      styles.swiper3ScreenText,
+                      {marginTop: verticleScale(10)},
+                    ]}>
+                    {this.props.labelData.there_is_a_way}
+                  </Text>
+                </View>
+              </Animated.View>
+              {/* swiper screen 3 start */}
+
+              <View style={{marginTop: verticleScale(400)}}>
+                <Animated.View
+                  style={[
+                    styles.swiperDotWrapper,
+                    {opacity: this.state.opacity},
+                  ]}>
+                  {[1, 2, 3].map((item, index) => {
+                    return (
+                      <Animated.View
+                        key={index}
+                        style={[
+                          styles.swiperDot,
+                          {
+                            backgroundColor:
+                              this.state.screen == `${item}`
+                                ? COLOR.ACTIVE_SWIPER_DOT
+                                : COLOR.INACTIVE_SWIPER_DOT,
+                          },
+                        ]}
+                      />
+                    );
+                  })}
+                </Animated.View>
+                <Btn
+                  lable={this.props.labelData.next}
+                  onPress={this.onNext}
+                  btnTextStyle={styles.nextBtnText}
+                />
+                <Btn
+                  lable={this.props.labelData.skip}
+                  onPress={this.onSkip}
+                  btnTextStyle={styles.skipBtnText}
+                  fill={false}
+                />
+              </View>
+            </Animated.View>
+            {/* SWIPER SCREENS ENDS */}
+
+            {/* ANIMATED LOGO STARTS */}
+            <Animated.View
+              style={{
+                height: this.state.logoDimensions,
+                width: this.state.logoDimensions,
+                position: 'absolute',
+                top: this.state.top,
+                left: this.state.left,
+                transform: [
+                  {
+                    scale: this.state.scale,
+                  },
+                ],
+              }}>
+              <Image
+                source={{uri: this.state.logoImage}}
+                style={{height: '100%'}}
+              />
+            </Animated.View>
+            {/* ANIMATED LOGO STARTS */}
+          </ImageBackground>
+        </View>
+      );
+    } else {
+      return <Loader />;
+    }
   }
 }
 
 const BlackShade = () => <View style={[styles.container, styles.blackShade]} />;
 
-const FirstScreen = ({text, screen, navigation, log}) => {
+const FirstScreen = ({text, screen, navigation, log, labelData}) => {
   return (
     <View style={[styles.container, {justifyContent: 'space-between'}]}>
       <Text style={styles.firstScreenTextStyle}>{text}</Text>
@@ -479,7 +500,7 @@ const FirstScreen = ({text, screen, navigation, log}) => {
               zIndex: 999,
             }}
             btnTextStyle={styles.startBtnText}
-            lable={'Get start here'}
+            lable={labelData.get_start_here}
             onPress={() => {
               navigation.navigate(log ? 'Drawer' : 'Login');
             }}
@@ -514,9 +535,15 @@ const Btn = ({
     </TouchableOpacity>
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+    labelStatus: state.labelReducer.labelStatus,
+  };
+};
 
 const actionCreators = {
   labelAction: labelActions.labelAction,
   ListOfItems: cartActions.ListOfItems,
 };
-export default connect(null, actionCreators)(Main);
+export default connect(mapStateToProps, actionCreators)(Main);

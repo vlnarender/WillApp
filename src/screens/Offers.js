@@ -39,7 +39,9 @@ const Offers = (props) => {
               />
             </Swiper>
             <View style={styles.back}>
-              <Text style={{color: '#f2ae88', fontSize: 11}}>Back</Text>
+              <Text style={{color: '#f2ae88', fontSize: 11}}>
+                {props.labelData.back}
+              </Text>
             </View>
           </View>
           <MealListing />

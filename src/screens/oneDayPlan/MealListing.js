@@ -291,7 +291,9 @@ const MealListing = (props) => {
               <TouchableOpacity
                 style={styleCss.btnButton}
                 onPress={() => checkoutList()}>
-                <Text style={styles.checkoutText}>Checkout</Text>
+                <Text style={styles.checkoutText}>
+                  {props.labelData.checkout}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -410,6 +412,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     mealListData: state.oneDayMealListReducer.mealListData,
+    labelData: state.labelReducer.labelData,
   };
 };
 const actionProps = {

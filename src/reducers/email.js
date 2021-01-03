@@ -19,8 +19,6 @@ export default function (state = initialState, action) {
         ...state,
         emailData: action.user.data,
         loading: false,
-        //showOtp: true,
-        //userToken: action.user.accessToken,
         emailMessage: action.user.message,
       };
     case userConstants.EMAIL_SENT_SUCCESS:
@@ -28,25 +26,9 @@ export default function (state = initialState, action) {
         ...state,
         emailData: action.user.data,
         loading: false,
-        //showOtp: true,
-        //userToken: action.user.accessToken,
         emailMessage: 'Please try after sometime',
       };
-    /*  case userConstants.TOKEN_RESTORE:
-      return {
-        ...state,
-        userData: state.userData,
-        userToken: action.token,
-      };
 
-    case userConstants.LOGOUT_REQUEST:
-      return {
-        ...state,
-        userData: '',
-        loading: false,
-        showOtp: true,
-        userToken: '',
-      }; */
     case userConstants.EMAIL_FAILURE:
       return {
         ...state,

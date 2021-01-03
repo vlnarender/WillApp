@@ -102,7 +102,7 @@ const MyPaymentMethod = (props) => {
                 </View>
                 <View style={{marginTop: 30}}>
                   <Text style={styleCss.methodHeadtext}>
-                    My payment methods
+                    {props.labelData.my_payment_methods}
                   </Text>
                 </View>
                 <View style={{marginTop: 35}}>
@@ -214,7 +214,7 @@ const MyPaymentMethod = (props) => {
 
                 <View style={{marginTop: 30}}>
                   <Text style={styleCss.methodHeadtext}>
-                    My payment methods
+                    {props.labelData.my_payment_methods}
                   </Text>
                 </View>
 

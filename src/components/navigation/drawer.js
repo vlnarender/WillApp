@@ -59,7 +59,7 @@ import paymentView from '../../screens/paymentView';
 import paymentResult from '../../screens/paymentResult';
 import dietcompanies from '../../screens/dietcompanies';
 import addaddress from '../../screens/Address/addaddress';
-import {commonActions} from '../../actions/common';
+import {commonAction} from '../../actions/common';
 let styleCss = require('../../GlobalStyle');
 const Drawer = createDrawerNavigator();
 function FocusAwareStatusBar(props) {
@@ -112,8 +112,6 @@ const signOut = async (props) => {
   });
 };
 const DrawerNavigator = (props) => {
-  const dimensions = useWindowDimensions();
-
   if (props.labelStatus) {
     const TPF = [
       {name: props.labelData.terms_condition, navigation: 'TermCondition'},
@@ -154,12 +152,12 @@ const DrawerNavigator = (props) => {
       {
         lable: props.labelData.lout_out,
         image: require('../../../assets/image/menu/logout.png'),
-        navigation: 'LogOut',
+        navigation: props.labelData.lout_out,
       },
     ];
     const navigationAction = async (navigation) => {
       let userType = await AsyncStorage.getItem('UserType');
-      await props.pathAction('Address');
+      props.pathAction('Home');
 
       switch (navigation) {
         case 'LogOut':
@@ -451,7 +449,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    pathAction: commonActions.pathFinder,
+    pathAction: (data) => dispatch({type: 'PATH_FINDER', data}),
     logout: () => dispatch({type: 'LOGOUT'}),
   };
 };

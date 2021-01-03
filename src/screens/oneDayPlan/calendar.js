@@ -154,7 +154,9 @@ const OneDayCalender = (props) => {
 
             <View style={styles.calendarArea}>
               <View style={styles.selectHeading}>
-                <Text style={styles.heading}>Select your Date</Text>
+                <Text style={styles.heading}>
+                  {props.labelData.select_you_week}{' '}
+                </Text>
               </View>
               <Calendar
                 horizontal={true}
@@ -175,7 +177,7 @@ const OneDayCalender = (props) => {
                       borderRadius: 5,
                     }}>
                     <Text style={{color: '#fff'}}>
-                      {direction == 'left' ? 'Previous' : 'Next'}
+                      {direction == 'left' ? 'Previous' : props.labelData.next}
                     </Text>
                   </View>
                 )}
@@ -200,7 +202,9 @@ const OneDayCalender = (props) => {
               <View style={styles.rowSpace}>
                 <View style={styles.colorBox1}></View>
                 <View>
-                  <Text style={styles.textColor}>Selected days</Text>
+                  <Text style={styles.textColor}>
+                    {props.labelData.selected_days}
+                  </Text>
                 </View>
               </View>
               <View>
@@ -208,7 +212,7 @@ const OneDayCalender = (props) => {
                   <View style={styles.colorBox2}></View>
                   <View>
                     <Text style={styles.textColor}>
-                      Available for Selection
+                      {props.labelData.available_for_selection}
                     </Text>
                   </View>
                 </View>
@@ -217,7 +221,9 @@ const OneDayCalender = (props) => {
             <View style={styles.rowTwo}>
               <View style={styles.rowSpace}>
                 <View style={styles.colorBox3}></View>
-                <Text style={styles.textColor}>Unavailable for Selection</Text>
+                <Text style={styles.textColor}>
+                  {props.labelData.unavailable_selected}{' '}
+                </Text>
               </View>
             </View>
           </ScrollView>
@@ -235,7 +241,10 @@ const OneDayCalender = (props) => {
 const actionCreators = {
   mealListAction: oneDayMealListActions.oneDayMealListAction,
 };
-export default connect(null, actionCreators)(OneDayCalender);
+const mapStateToProps = (state) => ({
+  labelData: state.labelReducer.labelData,
+});
+export default connect(mapStateToProps, actionCreators)(OneDayCalender);
 
 const styles = StyleSheet.create({
   calendar: {

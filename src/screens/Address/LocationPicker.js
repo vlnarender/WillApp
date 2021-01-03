@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   PermissionsAndroid,
 } from 'react-native';
+import Loader from '../../components/Loader/Loader';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
@@ -36,14 +37,6 @@ const LocationPicker = (props) => {
   const [listViewDisplayed, setlistViewDisplayed] = useState('auto');
   useEffect(() => {
     getGeoLocation();
-    // RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
-    //   interval: 10000,
-    //   fastInterval: 5000,
-    // })
-    //   .then((data) => {
-    //   })
-    //   .catch((err) => {
-    //   });
   }, []);
   const GeocoderLocation = async (latitude, longitude) => {
     await Geocoder.init(GOOGLE_API_KEY);
@@ -70,7 +63,7 @@ const LocationPicker = (props) => {
           ).replace(/"/g, ''),
         });
       })
-      .catch((error) => console.warn(error));
+      .catch((error) => console.warn('GeocoderLocation', error));
   };
   const getGeoLocation = async () => {
     const result = await PermissionsAndroid.requestMultiple([
@@ -85,11 +78,11 @@ const LocationPicker = (props) => {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           });
-          // GeocoderLocation(position.coords.latitude, position.coords.longitude);
-          getCurrentAddress(
-            position.coords.latitude,
-            position.coords.longitude,
-          );
+          GeocoderLocation(position.coords.latitude, position.coords.longitude);
+          // getCurrentAddress(
+          //   position.coords.latitude,
+          //   position.coords.longitude,
+          // );
         },
         (error) => {
           // See error code charts below.
@@ -104,42 +97,42 @@ const LocationPicker = (props) => {
       );
     }
   };
-  const getCurrentAddress = (latitude, longitude) => {
-    fetch(
-      'https://maps.googleapis.com/maps/api/geocode/json?key=' +
-        GOOGLE_API_KEY +
-        '&latlng=' +
-        latitude +
-        ',' +
-        longitude,
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setaddress(
-          JSON.stringify(responseJson.results[0].formatted_address).replace(
-            /"/g,
-            '',
-          ),
-        );
-        onRegionChange({
-          ...region,
-          latitude: responseJson.results[0].geometry.location.lat,
-          longitude: responseJson.results[0].geometry.location.lng,
-        });
-        setMarkers({
-          coordinate: {
-            latitude: responseJson.results[0].geometry.location.lat,
-            longitude: responseJson.results[0].geometry.location.lng,
-          },
-          title: JSON.stringify(
-            responseJson.results[0].address_components[0].long_name,
-          ).replace(/"/g, ''),
-          description: JSON.stringify(
-            responseJson.results[0].formatted_address,
-          ).replace(/"/g, ''),
-        });
-      });
-  };
+  // const getCurrentAddress = (latitude, longitude) => {
+  //   fetch(
+  //     'https://maps.googleapis.com/maps/api/geocode/json?key=' +
+  //       GOOGLE_API_KEY +
+  //       '&latlng=' +
+  //       latitude +
+  //       ',' +
+  //       longitude,
+  //   )
+  //     .then((response) => response.json())
+  //     .then((responseJson) => {
+  //       setaddress(
+  //         JSON.stringify(responseJson.results[0].formatted_address).replace(
+  //           /"/g,
+  //           '',
+  //         ),
+  //       );
+  //       onRegionChange({
+  //         ...region,
+  //         latitude: responseJson.results[0].geometry.location.lat,
+  //         longitude: responseJson.results[0].geometry.location.lng,
+  //       });
+  //       setMarkers({
+  //         coordinate: {
+  //           latitude: responseJson.results[0].geometry.location.lat,
+  //           longitude: responseJson.results[0].geometry.location.lng,
+  //         },
+  //         title: JSON.stringify(
+  //           responseJson.results[0].address_components[0].long_name,
+  //         ).replace(/"/g, ''),
+  //         description: JSON.stringify(
+  //           responseJson.results[0].formatted_address,
+  //         ).replace(/"/g, ''),
+  //       });
+  //     });
+  // };
 
   const goToInitialLocation = (region) => {
     let initialRegion = Object.assign({}, region);
@@ -149,162 +142,163 @@ const LocationPicker = (props) => {
   const onRegionChange = (region) => {
     GeocoderLocation(region.latitude, region.longitude);
   };
-
-  return (
-    <View style={styles.map}>
-      <MapView
-        provider={PROVIDER_GOOGLE}
-        onMapReady={() => goToInitialLocation(region)}
-        style={styles.map}
-        initialRegion={region}
-        region={region}
-        onRegionChangeComplete={(ref) => onRegionChange(ref)}
-        showsUserLocation={true}>
-        <Marker
-          coordinate={markers.coordinate}
-          title={markers.title}
-          description={markers.description}
-          draggable
-          pinColor="#f2ae88"
-        />
-      </MapView>
-      <View style={styles.panel}>
-        <View style={listViewDisplayed ? styles.panelFill : styles.panel}>
-          <GooglePlacesAutocomplete
-            currentLocation={false}
-            enableHighAccuracyLocation={true}
-            placeholder="Search for a location"
-            minLength={2} // minimum length of text to search
-            autoFocus={false}
-            returnKeyType={'search'}
-            listViewDisplayed={listViewDisplayed}
-            fetchDetails={true}
-            renderDescription={(row) => row.description}
-            enablePoweredByContainer={false}
-            listUnderlayColor="lightgrey"
-            onPress={(data, details) => {
-              setlistViewDisplayed(null);
-              setaddress(data.description);
-              setRegion({
-                latitudeDelta,
-                longitudeDelta,
-                latitude: details.geometry.location.lat,
-                longitude: details.geometry.location.lng,
-              });
-              goToInitialLocation(region);
-            }}
-            textInputProps={{
-              onChangeText: (text) => {
-                setlistViewDisplayed(null);
-              },
-            }}
-            getDefaultValue={() => {
-              return ''; // text input default value
-            }}
-            query={{
-              key: GOOGLE_API_KEY,
-              language: 'en', // language of the results
-              components: 'country:ind',
-            }}
-            styles={{
-              description: {
-                fontFamily: 'Calibri',
-                color: 'black',
-                fontSize: 12,
-              },
-              predefinedPlacesDescription: {
-                color: 'black',
-              },
-              listView: {
-                position: 'absolute',
-                marginTop: 44,
-                backgroundColor: 'white',
-                borderBottomEndRadius: 15,
-                elevation: 2,
-              },
-            }}
-            nearbyPlacesAPI="GooglePlacesSearch"
-            GooglePlacesSearchQuery={{
-              rankby: 'distance',
-              types: 'building',
-            }}
-            filterReverseGeocodingByTypes={[
-              'locality',
-              'administrative_area_level_3',
-            ]}
-            debounce={200}
+  if (region.latitude != 0 && region.longitude != 0) {
+    return (
+      <View style={styles.map}>
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          onMapReady={() => goToInitialLocation(region)}
+          style={styles.map}
+          initialRegion={region}
+          region={region}
+          onRegionChangeComplete={(ref) => onRegionChange(ref)}
+          showsUserLocation={true}>
+          <Marker
+            coordinate={markers.coordinate}
+            title={markers.title}
+            description={markers.description}
+            draggable
+            pinColor="#f2ae88"
           />
-        </View>
-      </View>
-
-      {address && (
-        <KeyboardAvoidingView style={styles.footer}>
-          <View style={{flexDirection: 'column', margin: 20}}>
-            <Text style={styles.addressText}>
-              Select your location from map
-            </Text>
-            {address && (
-              <View style={{flexDirection: 'row'}}>
-                <Image
-                  source={CURSOR_ICON}
-                  style={{width: 20, height: 20, padding: 10, margin: 10}}
-                />
-                <Text
-                  style={{
-                    width: '100%',
-                    alignSelf: 'center',
-                    flex: 0.9,
-                    alignContent: 'flex-start',
-                  }}>
-                  {address}
-                </Text>
-              </View>
-            )}
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              props.navigation.navigate('Addaddress', {
-                formData: {
-                  address_type: '',
-                  area: address,
-                  block: '',
-                  street: '',
-                  building: '',
-                  floor: '',
-                  apartment_number: '',
-                  name: '',
-                  additional_direction: '',
-                  is_default_address: '',
+        </MapView>
+        <View style={styles.panel}>
+          <View style={listViewDisplayed ? styles.panelFill : styles.panel}>
+            <GooglePlacesAutocomplete
+              currentLocation={false}
+              enableHighAccuracyLocation={true}
+              placeholder="Search for a location"
+              minLength={2} // minimum length of text to search
+              autoFocus={false}
+              returnKeyType={'search'}
+              listViewDisplayed={listViewDisplayed}
+              fetchDetails={true}
+              renderDescription={(row) => row.description}
+              enablePoweredByContainer={false}
+              listUnderlayColor="lightgrey"
+              onPress={(data, details) => {
+                setlistViewDisplayed(null);
+                setaddress(data.description);
+                setRegion({
+                  latitudeDelta,
+                  longitudeDelta,
+                  latitude: details.geometry.location.lat,
+                  longitude: details.geometry.location.lng,
+                });
+                goToInitialLocation(region);
+              }}
+              textInputProps={{
+                onChangeText: (text) => {
+                  setlistViewDisplayed(null);
                 },
-                Action: 'add-address',
-              });
-            }}
-            style={{
-              width: '90%',
-              alignSelf: 'center',
-              alignItems: 'center',
-              backgroundColor: '#f2ae88',
-              borderRadius: 10,
-              shadowColor: 'rgba(0,0,0, .4)', // IOS
-              shadowOffset: {height: 1, width: 1}, // IOS
-              shadowOpacity: 1, // IOS
-              shadowRadius: 1, //IOS
-              elevation: 2, // Android
-            }}>
-            <Text
+              }}
+              getDefaultValue={() => {
+                return ''; // text input default value
+              }}
+              query={{
+                key: GOOGLE_API_KEY,
+                language: 'en', // language of the results
+                components: 'country:ind',
+              }}
+              styles={{
+                description: {
+                  fontFamily: 'Calibri',
+                  color: 'black',
+                  fontSize: 12,
+                },
+                predefinedPlacesDescription: {
+                  color: 'black',
+                },
+                listView: {
+                  position: 'absolute',
+                  marginTop: 44,
+                  backgroundColor: 'white',
+                  borderBottomEndRadius: 15,
+                  elevation: 2,
+                },
+              }}
+              nearbyPlacesAPI="GooglePlacesSearch"
+              GooglePlacesSearchQuery={{
+                rankby: 'distance',
+                types: 'building',
+              }}
+              filterReverseGeocodingByTypes={[
+                'locality',
+                'administrative_area_level_3',
+              ]}
+              debounce={200}
+            />
+          </View>
+        </View>
+
+        {address && (
+          <KeyboardAvoidingView style={styles.footer}>
+            <View style={{flexDirection: 'column', margin: 20}}>
+              <Text style={styles.addressText}>
+                Select your location from map
+              </Text>
+              {address && (
+                <View style={{flexDirection: 'row'}}>
+                  <Image
+                    source={CURSOR_ICON}
+                    style={{width: 20, height: 20, padding: 10, margin: 10}}
+                  />
+                  <Text
+                    style={{
+                      width: '100%',
+                      alignSelf: 'center',
+                      flex: 0.9,
+                      alignContent: 'flex-start',
+                    }}>
+                    {address}
+                  </Text>
+                </View>
+              )}
+            </View>
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate('Addaddress', {
+                  formData: {
+                    address_type: '',
+                    area: address,
+                    block: '',
+                    street: '',
+                    building: '',
+                    floor: '',
+                    apartment_number: '',
+                    name: '',
+                    additional_direction: '',
+                    is_default_address: '',
+                  },
+                  Action: 'add-address',
+                });
+              }}
               style={{
-                color: 'white',
-                fontSize: 12,
-                fontWeight: 'bold',
-                paddingVertical: 15,
+                width: '90%',
+                alignSelf: 'center',
+                alignItems: 'center',
+                backgroundColor: '#f2ae88',
+                borderRadius: 10,
+                shadowColor: 'rgba(0,0,0, .4)', // IOS
+                shadowOffset: {height: 1, width: 1}, // IOS
+                shadowOpacity: 1, // IOS
+                shadowRadius: 1, //IOS
+                elevation: 2, // Android
               }}>
-              Next
-            </Text>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
-      )}
-    </View>
-  );
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: 12,
+                  fontWeight: 'bold',
+                  paddingVertical: 15,
+                }}>
+                Next
+              </Text>
+            </TouchableOpacity>
+          </KeyboardAvoidingView>
+        )}
+      </View>
+    );
+  } else return <Loader />;
 };
 
 export default LocationPicker;
@@ -337,11 +331,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },
-
   panel: {
     position: 'absolute',
     alignSelf: 'stretch',
-    top: 10,
+    top: 18,
     left: 0,
     right: 0,
     padding: 20,

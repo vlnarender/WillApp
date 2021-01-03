@@ -30,7 +30,9 @@ const PlanList = (props) => {
   });
   const [finalSelection, setFinalSelection] = useState();
   const [selectedIndex, setSelectedIndex] = useState([]);
-  const [selectedPrice, setSelectedPrice] = useState('Select First');
+  const [selectedPrice, setSelectedPrice] = useState(
+    props.labelData.select_first,
+  );
   const [selectedIndexRestaurent, setSelectedIndexRestaurent] = useState([]);
   const [LOCAL_WEEK_LIST, setLOCAL_WEEK_LIST] = useState(WEEK_LIST['en']);
   useEffect(() => {
@@ -40,7 +42,7 @@ const PlanList = (props) => {
     };
     lC();
     const unsubscribe = navigation.addListener('focus', () => {
-      setSelectedPrice('Select First');
+      setSelectedPrice(props.labelData.select_first);
       setFinalSelection();
       setSelectedIndex([]);
       setSelectedIndexRestaurent([]);
@@ -114,14 +116,16 @@ const PlanList = (props) => {
 
             <View style={styles.back}>
               <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                <Text style={{color: '#f2ae88', fontSize: 11}}>Back</Text>
+                <Text style={{color: '#f2ae88', fontSize: 11}}>
+                  {props.labelData.back}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={[{marginTop: 10}, styleCss.mainContainer]}>
             <Text
               style={{alignSelf: 'center', fontWeight: 'bold', fontSize: 15}}>
-              Plans
+              {props.labelData.plans}
             </Text>
             <View style={{flexDirection: 'row', paddingBottom: 5}}>
               {LOCAL_WEEK_LIST.map((item, index) => {
@@ -144,7 +148,7 @@ const PlanList = (props) => {
               <View>
                 <View style={styles.cardBox}>
                   <Text style={[{alignSelf: 'flex-end'}, styles.toppickText]}>
-                    Price : {selectedPrice}
+                    {props.labelData.price} : {selectedPrice}
                   </Text>
 
                   <View
@@ -262,7 +266,9 @@ const PlanList = (props) => {
                       props.navigation.navigate('MultiMealSelection');
                     }
                   }}>
-                  <Text style={styles.checkoutText}>Continue</Text>
+                  <Text style={styles.checkoutText}>
+                    {props.labelData.continue}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -423,6 +429,7 @@ const mapStateToProps = (state) => {
   return {
     mealListData: state.mealListReducer.mealListData,
     multiSubWeek: state.commonReducer.multiSubWeek,
+    labelData: state.labelReducer.labelData,
     selectedWeek: state.commonReducer.selectedWeek,
   };
 };

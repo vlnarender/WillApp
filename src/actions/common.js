@@ -4,17 +4,23 @@
  * @Owner Will
  */
 import {userConstants} from './actionTypes';
-export const commonActions = {
+export const commonAction = {
   multiSubWeek,
   multiSubSelectedWeek,
   pathFinder,
 };
 function pathFinder(data) {
-  return {type: userConstants.PATH_FINDER, data};
+  return (dispatch) => {
+    dispatch({type: userConstants.PATH_FINDER, data});
+  };
 }
 function multiSubWeek(data) {
-  return {type: userConstants.MULTI_SUB_WEEK, data};
+  return (dispatch) => {
+    dispatch({type: userConstants.MULTI_SUB_WEEK, data});
+  };
 }
 function multiSubSelectedWeek(data) {
-  return {type: userConstants.MULTI_SUB_SELECTED_WEEK, data};
+  return (dispatch) => {
+    dispatch({type: userConstants.MULTI_SUB_SELECTED_WEEK, data});
+  };
 }

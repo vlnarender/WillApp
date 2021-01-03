@@ -3,16 +3,12 @@ import {USER_API} from '../util/api';
 import AsyncStorage from '@react-native-community/async-storage';
 export const loginActions = {
   loginUserAction,
+  logOutAction,
 };
-/* const getValue = async () => {
-  try {
-    const token=await AsyncStorage.getItem('token')
-    const userid=await AsyncStorage.getItem('userid')
-  } catch(e) {
-    //  error
-    console.error(e)
-  }
-} */
+function logOutAction() {
+  return {type: userConstants.LOGOUT_REQUEST};
+}
+
 function loginUserAction(data, navigation) {
   return (dispatch) => {
     dispatch(request());

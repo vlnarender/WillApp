@@ -121,14 +121,16 @@ const CommonCalendar = (props) => {
             <Image style={{width: 20, height: 20}} source={CROSS_WHITE} />
           </TouchableOpacity>
         </View>
-        <View style={styles.circle}>
-          <View style={styles.innerroundShap}>
-            <Text style={styles.todayDate}>{new Date().getDate()}</Text>
-            <Text style={styles.todayMonth}>{monthName()}</Text>
+        <View style={{height: 80}}>
+          <View style={styles.circle}>
+            <View style={styles.innerroundShap}>
+              <Text style={styles.todayDate}>{new Date().getDate()}</Text>
+              <Text style={styles.todayMonth}>{monthName()}</Text>
+            </View>
           </View>
         </View>
         <View style={styles.Devision}>
-          <Text style={styles.heading}>Select your Date</Text>
+          <Text style={styles.heading}>{props.labelData.select_you_date} </Text>
           <Calendar
             horizontal={true}
             pagingEnabled={true}
@@ -148,7 +150,7 @@ const CommonCalendar = (props) => {
                   borderRadius: 5,
                 }}>
                 <Text style={{color: '#fff'}}>
-                  {direction == 'left' ? 'Previous' : 'Next'}
+                  {direction == 'left' ? 'Previous' : props.labelData.next}
                 </Text>
               </View>
             )}
@@ -176,14 +178,18 @@ const CommonCalendar = (props) => {
             <View style={styles.rowSpace}>
               <View style={styles.colorBox1}></View>
               <View>
-                <Text style={styles.textColor}>Selected days</Text>
+                <Text style={styles.textColor}>
+                  {props.labelData.selected_days}
+                </Text>
               </View>
             </View>
             <View>
               <View style={styles.rowSpace}>
                 <View style={styles.colorBox2}></View>
                 <View>
-                  <Text style={styles.textColor}>Available for Selection</Text>
+                  <Text style={styles.textColor}>
+                    {props.labelData.available_for_selection}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -191,7 +197,9 @@ const CommonCalendar = (props) => {
           <View style={styles.rowTwo}>
             <View style={styles.rowSpace}>
               <View style={styles.colorBox3}></View>
-              <Text style={styles.textColor}>Unavailable for Selection</Text>
+              <Text style={styles.textColor}>
+                {props.labelData.unavailable_selected}{' '}
+              </Text>
             </View>
           </View>
         </View>
@@ -211,6 +219,7 @@ const mapStateToProps = (state) => {
     restaurant_id: state.cartReducer.restaurant_id,
     features_id: state.cartReducer.features_id,
     programName: state.cartReducer.programName,
+    labelData: state.labelReducer.labelData,
     program_id: state.cartReducer.program_id,
   };
 };
@@ -237,13 +246,14 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 100,
     zIndex: 1,
-    top: '10%',
+    top: '3%',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#393f5d',
   },
   close: {
     marginTop: 20,
+    height: 20,
     alignSelf: 'flex-end',
   },
   innerroundShap: {
@@ -259,6 +269,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   Devision: {
+    paddingTop: 30,
     flex: 3,
     backgroundColor: '#343739',
     width: width,
