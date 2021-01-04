@@ -121,7 +121,6 @@ const CartComponent = (props) => {
 
     ADD_AND_UPDATE_API({cart_id: MealList.cart_id}, 'user/remove-myCart').then(
       (data) => {
-        console.log(data);
         props.ListOfItems();
         navigation.navigate('Home');
       },

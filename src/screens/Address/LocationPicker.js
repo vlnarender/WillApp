@@ -36,7 +36,28 @@ const LocationPicker = (props) => {
   });
   const [listViewDisplayed, setlistViewDisplayed] = useState('auto');
   useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getGeoLocation();
+      setRegion({
+        latitudeDelta,
+        longitudeDelta,
+        latitude: 0,
+        longitude: 0,
+      });
+      setaddress('');
+      setMarkers({
+        coordinate: {
+          latitude: 0,
+          longitude: 0,
+        },
+        title: 'Best Place',
+        description: 'Description',
+        id: 1,
+      });
+    });
     getGeoLocation();
+
+    return () => unsubscribe;
   }, []);
   const GeocoderLocation = async (latitude, longitude) => {
     await Geocoder.init(GOOGLE_API_KEY);
@@ -78,61 +99,55 @@ const LocationPicker = (props) => {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           });
-          GeocoderLocation(position.coords.latitude, position.coords.longitude);
-          // getCurrentAddress(
-          //   position.coords.latitude,
-          //   position.coords.longitude,
-          // );
+          getCurrentAddress(
+            position.coords.latitude,
+            position.coords.longitude,
+          );
         },
         (error) => {
           // See error code charts below.
-          console.error(
-            'See error code ',
-            error.code,
-            '\n\n\nSee error message\n\n\n',
-            error.message,
-          );
+          props.navigation.navigate('Address');
         },
         {enableHighAccuracy: false, timeout: 15000},
       );
     }
   };
-  // const getCurrentAddress = (latitude, longitude) => {
-  //   fetch(
-  //     'https://maps.googleapis.com/maps/api/geocode/json?key=' +
-  //       GOOGLE_API_KEY +
-  //       '&latlng=' +
-  //       latitude +
-  //       ',' +
-  //       longitude,
-  //   )
-  //     .then((response) => response.json())
-  //     .then((responseJson) => {
-  //       setaddress(
-  //         JSON.stringify(responseJson.results[0].formatted_address).replace(
-  //           /"/g,
-  //           '',
-  //         ),
-  //       );
-  //       onRegionChange({
-  //         ...region,
-  //         latitude: responseJson.results[0].geometry.location.lat,
-  //         longitude: responseJson.results[0].geometry.location.lng,
-  //       });
-  //       setMarkers({
-  //         coordinate: {
-  //           latitude: responseJson.results[0].geometry.location.lat,
-  //           longitude: responseJson.results[0].geometry.location.lng,
-  //         },
-  //         title: JSON.stringify(
-  //           responseJson.results[0].address_components[0].long_name,
-  //         ).replace(/"/g, ''),
-  //         description: JSON.stringify(
-  //           responseJson.results[0].formatted_address,
-  //         ).replace(/"/g, ''),
-  //       });
-  //     });
-  // };
+  const getCurrentAddress = (latitude, longitude) => {
+    fetch(
+      'https://maps.googleapis.com/maps/api/geocode/json?key=' +
+        GOOGLE_API_KEY +
+        '&latlng=' +
+        latitude +
+        ',' +
+        longitude,
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setaddress(
+          JSON.stringify(responseJson.results[0].formatted_address).replace(
+            /"/g,
+            '',
+          ),
+        );
+        onRegionChange({
+          ...region,
+          latitude: responseJson.results[0].geometry.location.lat,
+          longitude: responseJson.results[0].geometry.location.lng,
+        });
+        setMarkers({
+          coordinate: {
+            latitude: responseJson.results[0].geometry.location.lat,
+            longitude: responseJson.results[0].geometry.location.lng,
+          },
+          title: JSON.stringify(
+            responseJson.results[0].address_components[0].long_name,
+          ).replace(/"/g, ''),
+          description: JSON.stringify(
+            responseJson.results[0].formatted_address,
+          ).replace(/"/g, ''),
+        });
+      });
+  };
 
   const goToInitialLocation = (region) => {
     let initialRegion = Object.assign({}, region);
@@ -331,6 +346,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },
+
   panel: {
     position: 'absolute',
     alignSelf: 'stretch',

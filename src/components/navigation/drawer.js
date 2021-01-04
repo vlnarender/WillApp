@@ -152,7 +152,7 @@ const DrawerNavigator = (props) => {
       {
         lable: props.labelData.lout_out,
         image: require('../../../assets/image/menu/logout.png'),
-        navigation: props.labelData.lout_out,
+        navigation: 'LogOut',
       },
     ];
     const navigationAction = async (navigation) => {

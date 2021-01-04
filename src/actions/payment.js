@@ -14,7 +14,6 @@ function paymentAction(data) {
     dispatch(request());
     return PAYMENT_API(data, 'user/add/order').then(
       (data) => {
-        console.log(data);
         if (data.success) {
           dispatch(success(data));
         } else {
