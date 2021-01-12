@@ -8,7 +8,6 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
 const {width, height} = Dimensions.get('window');
 import {
-  ARROW_LEFT,
   CONGRATULATION,
   CROSS,
   HEADER_SMALL_LOGO,
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingHorizontal: 80,
     alignSelf: 'center',
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     borderRadius: 5,
     fontSize: 18,
   },

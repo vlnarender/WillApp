@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  I18nManager,
 } from 'react-native';
 let styleCss = require('../../GlobalStyle');
 import {addressListActions} from '../../actions/addresslist';
@@ -19,11 +20,12 @@ import {
   LOGO,
   CHECKED,
   ARROW_LEFT,
+  ARROW_RIGHT,
   HEADER_SMALL_LOGO,
 } from '../../_helpers/ImageProvide';
-import SubHeader from '../../components/Header/SubHeader';
 
 const Addresslist = (props) => {
+  const [address_type] = useState(['home', 'office', 'other']);
   useEffect(() => {
     getValue();
   }, []);
@@ -47,45 +49,43 @@ const Addresslist = (props) => {
     if (props.addressData.length > 0) {
       return (
         <>
+          <View style={styleCss.header}>
+            <View style={{flex: 1, alignSelf: 'center', alignItems: 'center'}}>
+              <TouchableOpacity
+                onPress={() => {
+                  props.navigation.navigate(props.pathFinder);
+                }}>
+                <Image source={I18nManager.isRTL ? ARROW_RIGHT : ARROW_LEFT} />
+              </TouchableOpacity>
+            </View>
+            <View style={{flex: 4, alignItems: 'center', alignSelf: 'center'}}>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate('Home')}>
+                <Image
+                  style={{width: 50, height: 50}}
+                  source={HEADER_SMALL_LOGO}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  props.navigation.navigate(props.pathFinder);
+                }}>
+                <Image style={{height: 20, width: 20}} source={CROSS} />
+              </TouchableOpacity>
+            </View>
+          </View>
           <ScrollView
             style={{backgroundColor: 'white', flex: 1}}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="interactive">
-            <View style={styleCss.header}>
-              <View
-                style={{flex: 1, alignSelf: 'center', alignItems: 'center'}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    props.navigation.navigate(props.pathFinder);
-                  }}>
-                  <Image source={ARROW_LEFT} />
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{flex: 4, alignItems: 'center', alignSelf: 'center'}}>
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate('Home')}>
-                  <Image
-                    style={{width: 50, height: 50}}
-                    source={HEADER_SMALL_LOGO}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  alignSelf: 'center',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    props.navigation.navigate(props.pathFinder);
-                  }}>
-                  <Image style={{height: 20, width: 20}} source={CROSS} />
-                </TouchableOpacity>
-              </View>
-            </View>
             <View style={styleCss.mainContainer}>
               <View>
                 <Text style={styleCss.headingPro}>
@@ -103,12 +103,11 @@ const Addresslist = (props) => {
                       }}>
                       <TouchableOpacity
                         style={styles.radioAlign}
-                        // onPress={() => {
-                        //   setDefaultAddress(item);
-                        // }}>
-                      >
+                        onPress={() => {
+                          setDefaultAddress(item);
+                        }}>
                         <View style={{flexDirection: 'row'}}>
-                          <View>
+                          <View style={{paddingHorizontal: 5}}>
                             <Image
                               style={styles.imgSize}
                               source={
@@ -120,15 +119,25 @@ const Addresslist = (props) => {
                           </View>
                           <View>
                             <View style={{flexDirection: 'column'}}>
-                              <Text style={styles.radioTextHeading}>
-                                {item.address_type}{' '}
+                              <Text
+                                style={[
+                                  styles.radioTextHeading,
+                                  {alignSelf: 'flex-start'},
+                                ]}>
+                                {
+                                  props.labelData[
+                                    address_type[
+                                      parseInt(item.address_type) - 1
+                                    ]
+                                  ]
+                                }{' '}
                                 {item.is_default_address
-                                  ? '(My Default)'
+                                  ? `(${props.labelData.my_default})`
                                   : null}
                               </Text>
                               <Text
                                 numberOfLines={1}
-                                style={styles.radioSubText}>
+                                style={[styles.radioSubText]}>
                                 {item.area.substring(0, 30)}
                                 {' ...'}
                               </Text>
@@ -159,8 +168,8 @@ const Addresslist = (props) => {
                               Action: 'update-address',
                             });
                           }}>
-                          <Text style={{fontSize: 14, color: '#f2ae88'}}>
-                            Change
+                          <Text style={{fontSize: 14, color: '#f2A884'}}>
+                            {props.labelData.change}
                           </Text>
                         </TouchableOpacity>
                       </View>
@@ -170,7 +179,6 @@ const Addresslist = (props) => {
               </View>
             </View>
           </ScrollView>
-
           <View
             style={{
               backgroundColor: 'white',
@@ -180,7 +188,9 @@ const Addresslist = (props) => {
             <TouchableOpacity
               style={[styleCss.btnButton, styleCss.mrTop]}
               onPress={() => props.navigation.navigate('LocationPicker')}>
-              <Text style={styles.text}>Add another address</Text>
+              <Text style={styles.text}>
+                {props.labelData.add_another_address}
+              </Text>
             </TouchableOpacity>
           </View>
         </>
@@ -209,7 +219,6 @@ const Addresslist = (props) => {
                   </TouchableOpacity>
                 </View>
               </View>
-
               <View style={{marginTop: 30}}>
                 <Text style={styleCss.headingPro}>
                   {props.labelData.my_add}
@@ -228,21 +237,23 @@ const Addresslist = (props) => {
                 />
 
                 <Text style={styleCss.creditCardHeading}>
-                  No Address Present
+                  {props.labelData.no_address_present}
                 </Text>
                 <Text style={styleCss.creditText}>
-                  You don't have any address associated with your account
+                  {props.labelData.you_do_not_have_any_address_associated}
                 </Text>
               </View>
             </View>
           </ScrollView>
-
           <TouchableOpacity
             style={[styleCss.btnButton, styleCss.mrTop]}
             onPress={() => {
               props.navigation.navigate('LocationPicker');
             }}>
-            <Text style={styles.text}>Add Another address</Text>
+            <Text style={styles.text}>
+              Add Address
+              {/* {props.labelData.add_another_address} */}
+            </Text>
           </TouchableOpacity>
         </View>
       );

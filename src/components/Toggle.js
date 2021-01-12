@@ -8,13 +8,13 @@ const Toggle = ({booleanValue}) => {
     <>
       {/* <ToggleSwitch
         isOn={bool}
-        onColor="#f2ae88"
+        onColor="#f2A884"
         offColor="#d0d0d2"
         size="small"
         onToggle={(isOn) => setBool(isOn)}
       /> */}
       <Switch
-        trackColor={{false: '#d0d0d2', true: '#f2ae88'}}
+        trackColor={{false: '#d0d0d2', true: '#f2A884'}}
         thumbColor={'#ffffff'}
         ios_backgroundColor="#3e3e3e"
         onValueChange={toggleSwitch}

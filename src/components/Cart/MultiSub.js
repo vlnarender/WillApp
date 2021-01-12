@@ -9,14 +9,18 @@ import {View, Text, StyleSheet, Dimensions, Image} from 'react-native';
 const MultiSubCart = (props) => {
   return (
     <View style={{flexDirection: 'column'}}>
-      <Text style={{fontSize: 15, fontWeight: 'bold'}}>Multi Sub Plan</Text>
+      <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+        {props.labelData.Multi_Sub_Plan}
+      </Text>
       <View style={{flexDirection: 'column'}}>
         {props.mealList.week_package.map((e, i) => {
           return (
             <View
               key={i}
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text>Week {e.week}</Text>
+              <Text>
+                {props.labelData.week} {e.week}
+              </Text>
               <Text>{e.program_name}</Text>
               <Text>{e.plan_packages_name}</Text>
               <Text> {e.program_price} KD</Text>
@@ -50,7 +54,7 @@ const MultiSubCart = (props) => {
 
 export default MultiSubCart;
 const styles = StyleSheet.create({
-  total: {color: '#F2AE88', fontSize: 20, fontWeight: 'bold'},
+  total: {color: '#f2A884', fontSize: 20, fontWeight: 'bold'},
   thiredSection: {
     justifyContent: 'space-between',
     flexDirection: 'row',

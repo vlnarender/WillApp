@@ -3,7 +3,7 @@ import {userConstants} from '../actions/actionTypes';
 const initialState = {
   userData: {},
   loading: false,
-  isSignout: false,
+  isSignOut: true,
   userToken: null,
   loginError: '',
   loginMessage: '',
@@ -30,14 +30,13 @@ export default function (state = initialState, action) {
         userData: action.user.data,
         loading: false,
         showOtp: true,
-        //userToken: action.user.accessToken,
         loginMessage: 'please verify you OTP sent in your Email',
       };
     case userConstants.TOKEN_RESTORE:
       return {
         ...state,
-        userData: state.userData,
-        userToken: action.token,
+        userToken: action.user.token,
+        isSignOut: action.user.isSignOut,
       };
 
     case userConstants.LOGOUT_REQUEST:

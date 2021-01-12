@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     //backgroundColor: 'red',
     width: '100%',
     shadowOffset: {width: 10, height: 5},
-    shadowColor: 'gray',
+    shadowColor: '#F2A884',
     shadowOpacity: 8,
     elevation: 3,
     backgroundColor: 'white', // invisible color
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'white',
     paddingHorizontal: 10,
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     flexDirection: 'row',
     width: width * 0.88,
     shadowOpacity: 5,
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
   },
 
   checkout: {
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     bottom: 0,
     borderRadius: 5,
     marginHorizontal: 5,

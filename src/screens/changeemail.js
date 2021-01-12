@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
+import {connect} from 'react-redux';
 import {
   View,
   Image,
   Text,
-  ScrollView,
   TextInput,
   StyleSheet,
   TouchableOpacity,
@@ -36,7 +36,7 @@ const ChangeEmail = (props) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (email == null || email == undefined || email == '') {
       Toast.showWithGravity(
-        'please enter email address',
+        props.labelData.please_enter_email_address,
         Toast.SHORT,
         Toast.CENTER,
       );
@@ -77,8 +77,10 @@ const ChangeEmail = (props) => {
           <Image style={{width: 220, height: 220}} source={LOGIN_logo} />
         </View>
         <View style={{alignItems: 'center', marginBottom: 30}}>
-          <Text style={styles.heading}>Change Email</Text>
-          <Text style={styles.text}>Please enter your email id</Text>
+          <Text style={styles.heading}>{props.labelData.change_email}</Text>
+          <Text style={styles.text}>
+            {props.labelData.please_enter_your_email_id}
+          </Text>
         </View>
 
         <View style={styleCss.inputStylesPass}>
@@ -87,8 +89,12 @@ const ChangeEmail = (props) => {
           </View>
           <View style={{flex: 5}}>
             <TextInput
-              style={{height: 50, paddingLeft: 5}}
-              placeholder="Enter New Email Id"
+              style={{
+                height: 50,
+                paddingLeft: 5,
+                alignSelf: 'flex-start',
+              }}
+              placeholder={props.labelData.enter_new_email_id}
               onChangeText={(text) => setEmail(text)}
               value={email}
               //autoFocus
@@ -97,7 +103,7 @@ const ChangeEmail = (props) => {
         </View>
         <View style={{marginBottom: 20}}>
           <TouchableOpacity onPress={handleSubmit} style={styleCss.btnButton}>
-            <Text style={styles.buttontext}>Submit</Text>
+            <Text style={styles.buttontext}>{props.labelData.submit}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -113,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    color: '#f2ae88',
+    color: '#f2A884',
     fontSize: 14,
     marginTop: 10,
   },
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#f2ae88',
+    color: '#f2A884',
   },
   inputLabel: {
     fontSize: 16,
@@ -137,4 +143,9 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
 });
-export default ChangeEmail;
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
+export default connect(mapStateToProps, null)(ChangeEmail);

@@ -32,13 +32,13 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     padding: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: 8,
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
 
@@ -140,7 +140,6 @@ const EmailScreen = (props) => {
           }}
           onSubmit={(values, actions) => {
             Keyboard.dismiss();
-
             props.emailAction({email: values.email}, props.navigation);
             actions.setSubmitting(true);
           }}
@@ -165,7 +164,7 @@ const EmailScreen = (props) => {
                   <TouchableOpacity onPress={formikProps.handleSubmit}>
                     <View
                       style={{
-                        backgroundColor: '#f2ae88',
+                        backgroundColor: '#f2A884',
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: 15,
@@ -194,15 +193,17 @@ const EmailScreen = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  emailError: state.emailReducer.emailError,
-  emailMessage: state.emailReducer.emailMessage,
-  emailData: state.emailReducer.emailData,
-});
+const mapStateToProps = (state) => {
+  return {
+    emailError: state.emailReducer.emailError,
+    emailMessage: state.emailReducer.emailMessage,
+    emailData: state.emailReducer.emailData,
+    labelData: state.labelReducer.labelData,
+  };
+};
 
 const actionCreators = {
   emailAction: emailActions.emailUserAction,
 };
 
 export default connect(mapStateToProps, actionCreators)(EmailScreen);
-//export default EmailScreen;

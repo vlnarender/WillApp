@@ -1,14 +1,21 @@
 import {userConstants} from './actionTypes';
+import RNRestart from 'react-native-restart';
 import {USER_API} from '../util/api';
 import AsyncStorage from '@react-native-community/async-storage';
+import {useContext} from 'react';
 export const loginActions = {
   loginUserAction,
   logOutAction,
+  storeToken,
 };
 function logOutAction() {
   return {type: userConstants.LOGOUT_REQUEST};
 }
-
+function storeToken(user) {
+  return (dispatch) => {
+    dispatch({type: userConstants.TOKEN_RESTORE, user});
+  };
+}
 function loginUserAction(data, navigation) {
   return (dispatch) => {
     dispatch(request());
@@ -26,7 +33,14 @@ function loginUserAction(data, navigation) {
             AsyncStorage.setItem('token', data.data.authorization_token);
             AsyncStorage.setItem('email', data.data.userdetails.email);
             AsyncStorage.setItem('verify', 'yes');
-            navigation.navigate('Drawer');
+            dispatch(
+              tokenStore({
+                isSignOut: false,
+                token: data.data.authorization_token,
+              }),
+            );
+            // navigation.navigate('Drawer');
+            // RNRestart.Restart();
           }
           if (data.data.is_verified == 0) {
             dispatch(success_verify(data));
@@ -44,7 +58,14 @@ function loginUserAction(data, navigation) {
             AsyncStorage.setItem('token', data.data.authorization_token);
             AsyncStorage.setItem('email', data.data.userdetails.email);
             AsyncStorage.setItem('verify', 'yes');
-            navigation.navigate('Drawer');
+            dispatch(
+              tokenStore({
+                isSignOut: false,
+                token: data.data.authorization_token,
+              }),
+            );
+            // navigation.navigate('Drawer');
+            // RNRestart.Restart();
           }
         } else {
           dispatch(failure(data));
@@ -63,6 +84,9 @@ function loginUserAction(data, navigation) {
   }
   function clear() {
     return {type: userConstants.CLEAR};
+  }
+  function tokenStore(user) {
+    return {type: userConstants.TOKEN_RESTORE, user};
   }
   function success(user) {
     return {type: userConstants.LOGIN_SUCCESS, user};

@@ -120,7 +120,7 @@ const MyOrderDetails = ({navigation, route}) => {
                                 <View>
                                   <Text
                                     style={{
-                                      color: '#F2AE88',
+                                      color: '#f2A884',
                                       marginLeft: 130,
                                       fontSize: 17,
                                     }}>
@@ -153,7 +153,7 @@ const MyOrderDetails = ({navigation, route}) => {
                                 </Text>
                               ) : orderlist.status == 1 ? (
                                 <View>
-                                  <Text style={{color: '#F2AE88'}}>
+                                  <Text style={{color: '#f2A884'}}>
                                     On it's way
                                   </Text>
                                   <TouchableOpacity>
@@ -184,7 +184,7 @@ const MyOrderDetails = ({navigation, route}) => {
             <View style={{paddingTop: 30}}>
               <Button
                 title="Export Orders via Email"
-                color="#f2ae88"
+                color="#f2A884"
                 style={{}}></Button>
             </View>
           </View>
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
-  total: {color: '#F2AE88', fontSize: 20, fontWeight: 'bold'},
+  total: {color: '#f2A884', fontSize: 20, fontWeight: 'bold'},
 
   imgBox: {
     borderRadius: 5,
@@ -232,8 +232,9 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
 });
-const mapStateToProps = (state) => ({
-  labelData: state.labelReducer.labelData,
-});
-
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
 export default connect(mapStateToProps, null)(MyOrderDetails);

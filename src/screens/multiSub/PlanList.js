@@ -116,7 +116,7 @@ const PlanList = (props) => {
 
             <View style={styles.back}>
               <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                <Text style={{color: '#f2ae88', fontSize: 11}}>
+                <Text style={{color: '#f2A884', fontSize: 11}}>
                   {props.labelData.back}
                 </Text>
               </TouchableOpacity>
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     //backgroundColor: 'red',
     width: '100%',
     shadowOffset: {width: 10, height: 5},
-    shadowColor: 'gray',
+    shadowColor: '#F2A884',
     shadowOpacity: 8,
     elevation: 3,
     backgroundColor: 'white', // invisible color
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     width: 13,
     borderRadius: 50,
     borderWidth: 2,
-    borderColor: '#F2AE88',
+    borderColor: '#f2A884',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     width: 13,
     height: 13,
     borderRadius: 50,
-    backgroundColor: '#F2AE88',
+    backgroundColor: '#f2A884',
   },
   itemContent: {
     fontSize: 12,
@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'white',
     paddingHorizontal: 10,
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     flexDirection: 'row',
     width: width * 0.88,
     shadowOpacity: 5,
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
   },
 
   checkout: {
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     bottom: 0,
     borderRadius: 8,
     marginHorizontal: 5,

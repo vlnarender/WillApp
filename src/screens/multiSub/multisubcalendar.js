@@ -11,6 +11,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  I18nManager,
 } from 'react-native';
 import moment from 'moment';
 import {connect} from 'react-redux';
@@ -24,7 +25,12 @@ import {useNavigation} from '@react-navigation/native';
 import {CALANDER_CONFIG, WEEK_LIST} from '../../_helpers/globalVeriable';
 import AsyncStorage from '@react-native-community/async-storage';
 import Loader from '../../components/Loader/Loader';
-import {CROSS_WHITE, UP_DOWN_ARROW} from '../../_helpers/ImageProvide';
+import {
+  CROSS_WHITE,
+  UP_DOWN_ARROW,
+  CIRCLE_ARROW_LEFT,
+  CIRCLE_ARROW_RIGHT,
+} from '../../_helpers/ImageProvide';
 const {width} = Dimensions.get('window');
 const MultiSubCalender = (props) => {
   const navigation = useNavigation();
@@ -69,7 +75,7 @@ const MultiSubCalender = (props) => {
         });
     } else {
       Toast.showWithGravity(
-        'Please select number of week',
+        props.labelData.please_select_number_of_week,
         Toast.SHORT,
         Toast.CENTER,
       );
@@ -87,7 +93,7 @@ const MultiSubCalender = (props) => {
           container: {
             backgroundColor:
               new Date().getDate() === new Date(m).getDate()
-                ? '#f2ae88'
+                ? '#f2A884'
                 : '#75798e',
           },
           text: {
@@ -126,7 +132,7 @@ const MultiSubCalender = (props) => {
                         marginTop: 15,
                         paddingVertical: 5,
                         paddingHorizontal: 12,
-                        backgroundColor: '#F2AE88',
+                        backgroundColor: '#f2A884',
                         fontWeight: 'bold',
                         borderRadius: 5,
                         flexDirection: 'row',
@@ -169,25 +175,24 @@ const MultiSubCalender = (props) => {
                   onDayPress={onDayPress}
                   hideExtraDays={true}
                   renderArrow={(direction) => (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        backgroundColor: '#f2ae88',
-                        paddingVertical: 5,
-                        paddingHorizontal: 10,
-                        borderRadius: 5,
-                      }}>
-                      <Text style={{color: '#fff'}}>
-                        {direction == 'left'
-                          ? 'Previous'
-                          : props.labelData.next}
-                      </Text>
+                    <View>
+                      <Image
+                        source={
+                          direction == 'left'
+                            ? !I18nManager.isRTL
+                              ? CIRCLE_ARROW_LEFT
+                              : CIRCLE_ARROW_RIGHT
+                            : !I18nManager.isRTL
+                            ? CIRCLE_ARROW_RIGHT
+                            : CIRCLE_ARROW_LEFT
+                        }
+                      />
                     </View>
                   )}
                   theme={{
                     calendarBackground: '#343739',
                     todayTextColor: '#ffffff',
-                    todayBackgroundColor: '#f2ae88',
+                    todayBackgroundColor: '#f2A884',
                     textDisabledColor: '#6a6e7f',
                     dayTextColor: '#ffffff',
                     monthTextColor: '#ffffff',
@@ -289,9 +294,11 @@ const actionCreators = {
   multiSubSelectedWeek: multiSubActions.multiSubSelectedWeek,
   selectedDate: cartActions.selectedDate,
 };
-const mapStateToProps = (state) => ({
-  labelData: state.labelReducer.labelData,
-});
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
 export default connect(mapStateToProps, actionCreators)(MultiSubCalender);
 const styles = StyleSheet.create({
   calendar: {
@@ -310,7 +317,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   topBg: {
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     height: 150,
     alignItems: 'center',
   },
@@ -335,7 +342,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 100,
     shadowOffset: {width: 0, height: 0},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     elevation: 5,
     backgroundColor: '#0000', // invisible col
     alignSelf: 'center',
@@ -363,7 +370,7 @@ const styles = StyleSheet.create({
   colorBox1: {
     width: 20,
     height: 20,
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     marginRight: 10,
   },
 
@@ -382,7 +389,7 @@ const styles = StyleSheet.create({
   },
 
   textColor: {
-    color: '#f2ae88',
+    color: '#f2A884',
     fontSize: 14,
   },
 
@@ -444,7 +451,7 @@ const styles = StyleSheet.create({
     width: 13,
     borderRadius: 50,
     borderWidth: 2,
-    borderColor: '#F2AE88',
+    borderColor: '#f2A884',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -452,6 +459,6 @@ const styles = StyleSheet.create({
     width: 13,
     height: 13,
     borderRadius: 50,
-    backgroundColor: '#F2AE88',
+    backgroundColor: '#f2A884',
   },
 });

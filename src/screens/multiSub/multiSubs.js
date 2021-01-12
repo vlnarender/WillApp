@@ -162,7 +162,9 @@ const MultiSubs = (props) => {
                     padding: 5,
                   }}>
                   <View>
-                    <Text>Week {props.selectedWeek}</Text>
+                    <Text>
+                      {props.labelData.week} {props.selectedWeek}
+                    </Text>
                   </View>
                   <View style={{justifyContent: 'center', paddingLeft: 5}}>
                     <Image style={{width: 12, height: 16}} source={AR} />
@@ -334,7 +336,7 @@ export default connect(mapStateToProps, actionCreators)(MultiSubs);
 const styles = StyleSheet.create({
   cardBox: {
     shadowOffset: {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: 8,
     elevation: 6,
     borderRadius: 10,
@@ -399,7 +401,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'white',
     paddingHorizontal: 10,
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     flexDirection: 'row',
     width: width * 0.9,
     shadowOpacity: 5,
@@ -415,7 +417,7 @@ const styles = StyleSheet.create({
   },
 
   checkout: {
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     bottom: 0,
     borderRadius: 5,
     marginHorizontal: 5,

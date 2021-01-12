@@ -12,13 +12,18 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  I18nManager,
 } from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {useNavigation} from '@react-navigation/native';
 import {programPlanActions} from '../actions/programPlan';
 import {dietCompanyPlanActions} from '../actions/dietPlan';
 import {cartActions} from '../actions/cart';
-import {CROSS_WHITE} from '../_helpers/ImageProvide';
+import {
+  CROSS_WHITE,
+  CIRCLE_ARROW_LEFT,
+  CIRCLE_ARROW_RIGHT,
+} from '../_helpers/ImageProvide';
 const {width} = Dimensions.get('window');
 import {CALANDER_CONFIG} from '../_helpers/globalVeriable';
 import moment from 'moment';
@@ -81,7 +86,7 @@ const CommonCalendar = (props) => {
           container: {
             backgroundColor:
               new Date().getDate() === new Date(m_Day).getDate()
-                ? '#f2ae88'
+                ? '#f2A884'
                 : '#75798e',
           },
           text: {
@@ -141,23 +146,24 @@ const CommonCalendar = (props) => {
             rowHeight={5}
             hideExtraDays={true}
             renderArrow={(direction) => (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  backgroundColor: '#f2ae88',
-                  paddingVertical: 5,
-                  paddingHorizontal: 10,
-                  borderRadius: 5,
-                }}>
-                <Text style={{color: '#fff'}}>
-                  {direction == 'left' ? 'Previous' : props.labelData.next}
-                </Text>
+              <View>
+                <Image
+                  source={
+                    direction == 'left'
+                      ? !I18nManager.isRTL
+                        ? CIRCLE_ARROW_LEFT
+                        : CIRCLE_ARROW_RIGHT
+                      : !I18nManager.isRTL
+                      ? CIRCLE_ARROW_RIGHT
+                      : CIRCLE_ARROW_LEFT
+                  }
+                />
               </View>
             )}
             theme={{
               calendarBackground: '#343739',
               todayTextColor: '#ffffff',
-              todayBackgroundColor: '#f2ae88',
+              todayBackgroundColor: '#f2A884',
               textDisabledColor: '#6a6e7f',
               dayTextColor: '#ffffff',
               monthTextColor: '#ffffff',
@@ -239,7 +245,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     paddingHorizontal: 30,
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
   },
   circle: {
     width: 150,
@@ -262,7 +268,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 0},
     borderRadius: 100,
     backgroundColor: '#393f5d',
-    shadowColor: '#000',
+    shadowColor: '#F2A884',
     elevation: 15,
     alignItems: 'center',
     shadowOpacity: 10,
@@ -284,7 +290,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   topBg: {
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     height: 150,
     alignItems: 'center',
   },
@@ -320,7 +326,7 @@ const styles = StyleSheet.create({
   colorBox1: {
     width: 20,
     height: 20,
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     marginRight: 10,
   },
 
@@ -339,7 +345,7 @@ const styles = StyleSheet.create({
   },
 
   textColor: {
-    color: '#f2ae88',
+    color: '#f2A884',
     fontSize: 14,
   },
 

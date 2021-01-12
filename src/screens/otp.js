@@ -15,7 +15,6 @@ import {
 import {Formik} from 'formik';
 import * as yup from 'yup'; // for everything
 import Toast from 'react-native-simple-toast';
-import {ScrollView} from 'react-native-gesture-handler';
 import {otpActions} from '../actions/otp';
 import AsyncStorage from '@react-native-community/async-storage';
 import {LOGIN_logo, LOGIN_pass} from '../_helpers/ImageProvide';
@@ -37,13 +36,13 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
@@ -84,18 +83,6 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
   );
 };
 
-const StyledSwitch = ({formikKey, formikProps, label, ...rest}) => (
-  <FieldWrapper label={label} formikKey={formikKey} formikProps={formikProps}>
-    <Switch
-      value={formikProps.values[formikKey]}
-      onValueChange={(value) => {
-        formikProps.setFieldValue(formikKey, value);
-      }}
-      {...rest}
-    />
-  </FieldWrapper>
-);
-
 const validationSchema = yup.object().shape({
   otp: yup.string().required(),
 });
@@ -119,13 +106,14 @@ const OtpScreen = (props) => {
     try {
       const email = await AsyncStorage.getItem('email');
       const id = await AsyncStorage.getItem('userid');
-      const userid = Number(id);
       const device_token = await AsyncStorage.getItem('device_token');
       const device_type = await AsyncStorage.getItem('device_type');
+      const userid = Number(id);
       setToken(device_token);
       setType(device_type);
       setEmail(email);
       setUserid(userid);
+      console.log('-------- OTP ----------');
     } catch (e) {
       console.error(e);
     }
@@ -142,7 +130,7 @@ const OtpScreen = (props) => {
         <Image source={LOGIN_logo} />
         <Text
           style={{
-            color: '#f2ae88',
+            color: '#f2A884',
             fontSize: 15,
             textAlign: 'center',
           }}>
@@ -155,7 +143,6 @@ const OtpScreen = (props) => {
           }}
           onSubmit={(values, actions) => {
             Keyboard.dismiss();
-
             var user = {};
             user.verification_code = values.otp;
             user.user_id = userid;
@@ -186,14 +173,14 @@ const OtpScreen = (props) => {
                   <TouchableOpacity onPress={formikProps.handleSubmit}>
                     <View
                       style={{
-                        backgroundColor: '#f2ae88',
+                        backgroundColor: '#f2A884',
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: 15,
                         padding: 10,
                         width: 300,
                         height: 50,
-                        shadowColor: 'red',
+                        shadowColor: '#F2A884',
                         shadowRadius: 16,
                         shadowOpacity: 10,
                         shadowOffset: {
@@ -202,7 +189,9 @@ const OtpScreen = (props) => {
                         },
                         elevation: 12,
                       }}>
-                      <Text style={{color: 'white'}}>Submit</Text>
+                      <Text style={{color: 'white'}}>
+                        {props.labelData.submit}
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -254,15 +243,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  otpError: state.otpReducer.otpError,
-  otpMessage: state.otpReducer.otpMessage,
-  otpData: state.otpReducer.otpData,
-});
+const mapStateToProps = (state) => {
+  return {
+    otpError: state.otpReducer.otpError,
+    otpMessage: state.otpReducer.otpMessage,
+    labelData: state.labelReducer.labelData,
+    otpData: state.otpReducer.otpData,
+  };
+};
 
 const actionCreators = {
   otpAction: otpActions.otpUserAction,
 };
 
 export default connect(mapStateToProps, actionCreators)(OtpScreen);
-//export default OtpScreen;

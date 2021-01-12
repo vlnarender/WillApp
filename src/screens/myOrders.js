@@ -13,7 +13,6 @@ import {MYORDERS_API} from '../util/api';
 import Header from '../components/Header/Header';
 import {PLAN_ARROW_RIGHT} from '../_helpers/ImageProvide';
 import Loader from '../components/Loader/Loader';
-import {CROSS} from '../_helpers/ImageProvide';
 
 const myOrders = (props) => {
   //   const {result} = route.params;
@@ -23,9 +22,12 @@ const myOrders = (props) => {
   const [orderStatus, setorderStatus] = useState(null);
 
   useEffect(() => {
-    setLoader(true);
-    // settotalOrders(null);
-    getData();
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      setLoader(true);
+      settotalOrders(null);
+      getData();
+    });
+    return () => unsubscribe;
   }, []);
 
   const getData = () => {
@@ -69,17 +71,6 @@ const myOrders = (props) => {
                   </Text>
                 </Text>
               </View>
-
-              <View
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  top: 15,
-                }}>
-                <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                  <Image style={{height: 14, width: 14}} source={CROSS}></Image>
-                </TouchableOpacity>
-              </View>
             </View>
             <View>
               {totalOrders.map((orderlist, index) => {
@@ -122,7 +113,7 @@ const myOrders = (props) => {
                                 <View>
                                   <Text
                                     style={{
-                                      color: '#F2AE88',
+                                      color: '#f2A884',
                                       marginLeft: 130,
                                       fontSize: 17,
                                     }}>
@@ -155,7 +146,7 @@ const myOrders = (props) => {
                                 </Text>
                               ) : orderlist.status == 1 ? (
                                 <View>
-                                  <Text style={{color: '#F2AE88'}}>
+                                  <Text style={{color: '#f2A884'}}>
                                     On it's way
                                   </Text>
                                   <TouchableOpacity>
@@ -189,7 +180,7 @@ const myOrders = (props) => {
             <View style={{paddingTop: 30}}>
               <Button
                 title="Export Orders via Email"
-                color="#f2ae88"
+                color="#f2A884"
                 style={{}}></Button>
             </View>
           </View>
@@ -221,7 +212,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
-  total: {color: '#F2AE88', fontSize: 20, fontWeight: 'bold'},
+  total: {color: '#f2A884', fontSize: 20, fontWeight: 'bold'},
 
   imgBox: {
     borderRadius: 5,
@@ -238,8 +229,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  labelData: state.labelReducer.labelData,
-});
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+    emailData: state.emailExportReducer.emailData,
+  };
+};
 
 export default connect(mapStateToProps, null)(myOrders);

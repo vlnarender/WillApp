@@ -4,6 +4,7 @@ import * as types from '../actions/actionTypes';
 import oneDayMealListReducer from './OneDayMealList';
 import registrationReducer from './registration';
 import addresslistReducer from './addresslist';
+import emailExportReducer from './emailExport';
 import editaddressReducer from './editaddress';
 import programPlanReduce from './programPlan';
 import addresssetReducer from './addressset';
@@ -32,6 +33,7 @@ const AppReducer = combineReducers({
   editaddressReducer: editaddressReducer,
   addresslistReducer: addresslistReducer,
   addresslistReducer: addresslistReducer,
+  emailExportReducer: emailExportReducer,
   addresssetReducer: addresssetReducer,
   addaddressReducer: addaddressReducer,
   onedayplanReducer: onedayplanReducer,

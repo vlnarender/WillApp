@@ -4,7 +4,7 @@ const LogOut = () => {
   return (
     <View
       style={{
-        backgroundColor: '#f2ae88',
+        backgroundColor: '#f2A884',
         width: '100%',
         height: '100%',
       }}></View>

@@ -139,7 +139,7 @@ const PlanListProgram = (props) => {
             </Swiper>
             <View style={styles.back}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={{color: '#f2ae88', fontSize: 11}}>
+                <Text style={{color: '#f2A884', fontSize: 11}}>
                   {props.labelData.back}
                 </Text>
               </TouchableOpacity>
@@ -183,7 +183,7 @@ const PlanListProgram = (props) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               paddingVertical: 5,
-              borderColor: '#f2ae88',
+              borderColor: '#f2A884',
               borderTopWidth: 1,
               borderBottomWidth: 1,
             }}>
@@ -239,10 +239,10 @@ const PlanListProgram = (props) => {
                   textAlign: 'center',
                   padding: 15,
                   margin: 15,
-                  backgroundColor: '#f2ae88',
+                  backgroundColor: '#f2A884',
                   borderRadius: 10,
                 }}>
-                No Recored Found
+                {props.labelData.no_recored_found}
               </Text>
             ) : (
               <>
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     shadowOffset: {width: 10, height: 5},
-    shadowColor: 'gray',
+    shadowColor: '#F2A884',
     shadowOpacity: 10,
     elevation: 5,
     backgroundColor: 'white', // invisible color

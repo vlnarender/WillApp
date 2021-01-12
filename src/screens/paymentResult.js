@@ -1,52 +1,64 @@
-import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  Button,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useEffect} from 'react';
+import {connect} from 'react-redux';
+import {View, Text, Image, TouchableOpacity, I18nManager} from 'react-native';
+import {cartActions} from '../actions/cart';
 import {CONGRATULATION, OOPS} from '../_helpers/ImageProvide';
-import {REGISTER_Artboard} from '../_helpers/ImageProvide';
-import {CROSS} from '../_helpers/ImageProvide';
-
-const paymentResult = ({navigation, route}) => {
-  const {result, status} = route.params;
+let styleCss = require('../GlobalStyle');
+import {
+  ARROW_LEFT,
+  ARROW_RIGHT,
+  CROSS,
+  HEADER_SMALL_LOGO,
+} from '../_helpers/ImageProvide';
+const paymentResult = (props) => {
+  const {navigation} = props;
+  const {status} = props.route.params;
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      props.ListOfItems();
+    });
+    return unsubscribe;
+  }, []);
   return (
     <>
+      <View style={styleCss.header}>
+        <View style={{flex: 1, alignSelf: 'center', alignItems: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Image source={I18nManager.isRTL ? ARROW_RIGHT : ARROW_LEFT} />
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 4, alignItems: 'center', alignSelf: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Image style={{width: 50, height: 50}} source={HEADER_SMALL_LOGO} />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            alignSelf: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Image style={{height: 20, width: 20}} source={CROSS} />
+          </TouchableOpacity>
+        </View>
+      </View>
       <View
         style={{
           flex: 1,
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: '#fff',
         }}>
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-          }}>
-          <Image source={REGISTER_Artboard}></Image>
-        </View>
-        <View
-          style={{
-            // alignSelf: 'flex-end',
-            position: 'absolute',
-            right: 10,
-            top: 30,
-          }}>
-          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-            <Image style={{height: 15, width: 15}} source={CROSS}></Image>
-          </TouchableOpacity>
-        </View>
         <Image
           style={{height: 300, width: 300}}
           source={status ? CONGRATULATION : OOPS}></Image>
         <View style={{width: 300, paddingTop: 30}}>
           <TouchableOpacity
             style={{
-              backgroundColor: '#f2ae88',
+              backgroundColor: '#f2A884',
               paddingVertical: 20,
               borderRadius: 10,
               justifyContent: 'center',
@@ -63,7 +75,7 @@ const paymentResult = ({navigation, route}) => {
                 fontSize: 15,
                 alignSelf: 'center',
               }}>
-              {status ? 'Track your order' : 'Make payment again'}
+              {status ? 'Track your order' : props.labelData.make_payment_again}
             </Text>
           </TouchableOpacity>
         </View>
@@ -71,5 +83,13 @@ const paymentResult = ({navigation, route}) => {
     </>
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
+const actionCreators = {
+  ListOfItems: cartActions.ListOfItems,
+};
 
-export default paymentResult;
+export default connect(mapStateToProps, actionCreators)(paymentResult);

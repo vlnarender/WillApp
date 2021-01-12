@@ -5,10 +5,10 @@ export const registerActions = {
   registerUserAction,
 };
 
-function registerUserAction(data, navigation) {
+function registerUserAction(data) {
   return (dispatch) => {
     dispatch(request());
-    USER_API(data, 'register').then(
+    return USER_API(data, 'register').then(
       (data) => {
         if (data.success) {
           dispatch(success(data));
@@ -22,12 +22,12 @@ function registerUserAction(data, navigation) {
             AsyncStorage.setItem('token', data.data.authorization_token);
             AsyncStorage.setItem('userid', id.toString());
             AsyncStorage.setItem('email', email);
-            navigation.navigate('Otp');
           }
         } else {
           dispatch(failure(data));
         }
         dispatch(clear());
+        return data;
       },
       (error) => {
         dispatch(failure(error));

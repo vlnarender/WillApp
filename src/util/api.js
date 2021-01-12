@@ -109,7 +109,6 @@ export const COOMMON_API = async (formBody, API_NAME) => {
 
 export const GET_API = async (API_NAME) => {
   const data = await getAsyncStorage();
-
   return fetch(`${DEV_CONFIGS.url}/${API_NAME}`, {
     method: 'POST',
     headers: {

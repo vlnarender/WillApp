@@ -66,7 +66,7 @@ const PaymentMethod = (props) => {
               }
             }}
             style={{
-              backgroundColor: '#F2AE88',
+              backgroundColor: '#f2A884',
               paddingVertical: 15,
               borderRadius: 10,
             }}>

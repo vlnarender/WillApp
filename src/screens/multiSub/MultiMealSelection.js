@@ -205,7 +205,7 @@ const MultiMealSelection = (props) => {
             </Swiper>
             <View style={styles.back}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={{color: '#f2ae88', fontSize: 11}}>
+                <Text style={{color: '#f2A884', fontSize: 11}}>
                   {props.labelData.back}
                 </Text>
               </TouchableOpacity>
@@ -225,7 +225,7 @@ const MultiMealSelection = (props) => {
                   borderRadius: 10,
                 }}>
                 <Text style={{fontWeight: 'bold', paddingRight: 5}}>
-                  Day {daysNumber}
+                  `${props.labelData.day} ${daysNumber}`
                 </Text>
                 <Image
                   source={UP_DOWN_ARROW_BLACK}
@@ -483,7 +483,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'white',
     paddingHorizontal: 10,
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     flexDirection: 'row',
     width: width * 0.88,
     shadowOpacity: 5,
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
   },
 
   checkout: {
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     bottom: 0,
     borderRadius: 5,
     marginHorizontal: 5,

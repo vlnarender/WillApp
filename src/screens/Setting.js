@@ -1,19 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Image, ScrollView, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import Toggle from '../components/Toggle';
 import AsyncStorage from '@react-native-community/async-storage';
 let styleCss = require('../GlobalStyle');
 import {profileActions} from '../actions/profile';
+import {addressListActions} from '../actions/addresslist';
 import {labelActions} from '../actions/label';
-import {
-  Switch,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from 'react-native-gesture-handler';
+import {Switch, TouchableOpacity} from 'react-native-gesture-handler';
 import Headers from '../components/Header/Header';
 import {languageRestart} from '../components/LanguageRestart';
-import {INFINITY} from '../_helpers/ImageProvide';
+import {commonAction} from '../actions/common';
+import Loader from '../components/Loader/Loader';
 const Setting = (props) => {
   const [LocalLanguage, setLocalLanguage] = useState('');
   const [AllowLocation, setAllowLocation] = useState(true);
@@ -23,8 +21,10 @@ const Setting = (props) => {
   useEffect(() => {
     getValue();
   }, []);
+
   const getValue = async () => {
     try {
+      props.addressListAction();
       setLocalLanguage(await AsyncStorage.getItem('language'));
     } catch (e) {
       console.error(e);
@@ -37,7 +37,7 @@ const Setting = (props) => {
     languageRestart(isOn);
     setLocalLanguage(isOn ? 'en' : 'ar');
   };
-  if (props.settingStatus && props.labelStatus) {
+  if (props.settingStatus && props.labelStatus && props.addressStatus) {
     const length = props.settingData.email.indexOf('@');
     const email_1 = props.settingData.email.slice(0, length - 2);
     const email_2 = props.settingData.email.slice(length + 3);
@@ -67,7 +67,7 @@ const Setting = (props) => {
                 <Toggle booleanValue={LocalLanguage == 'en' ? true : false} />
                 {/* <ToggleSwitch
                   isOn={LocalLanguage == 'en' ? true : false}
-                  onColor="#f2ae88"
+                  onColor="#f2A884"
                   offColor="#d0d0d2"
                   size="small"
                   onToggle={(isOn) => languageChange(isOn)}
@@ -83,7 +83,9 @@ const Setting = (props) => {
             <View>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate('Changeemail')}>
-                <Text style={styles.setGreenText}>Change</Text>
+                <Text style={styles.setGreenText}>
+                  {props.labelData.change}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -98,30 +100,54 @@ const Setting = (props) => {
             <View>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate('UpdatePassword')}>
-                <Text style={styles.setGreenText}>Change</Text>
+                <Text style={styles.setGreenText}>
+                  {props.labelData.change}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.settingRow}>
+            <View>
+              <Text style={styles.setTextLight}>
+                {props.labelData.location}
+              </Text>
+              {props.addressData.length == 0 ? (
+                <Text>Please add new address</Text>
+              ) : (
+                props.addressData.map((item, key) => {
+                  return item.is_default_address ? (
+                    <Text style={styles.setTextDark} key={key}>
+                      {item.area.substring(0, 30)}
+                    </Text>
+                  ) : null;
+                })
+              )}
+            </View>
+            <View>
+              <TouchableOpacity
+                style={styles.setGreenText}
+                onPress={() => {
+                  props.pathAction('Setting');
+                  props.navigation.navigate('Address');
+                }}>
+                <Text>{props.labelData.edit}</Text>
               </TouchableOpacity>
             </View>
           </View>
 
           <View style={styles.settingRow}>
             <View>
-              <Text style={styles.setTextLight}>Location</Text>
-              <Text style={styles.setTextDark}>Ardyia, Kuwait</Text>
-            </View>
-            <View>
-              <Text style={styles.setGreenText}>Edit</Text>
-            </View>
-          </View>
-
-          <View style={styles.settingRow}>
-            <View>
-              <Text style={styles.setTextLight}>Receive notfication</Text>
+              <Text style={styles.setTextLight}>
+                {props.labelData.receive_notification}
+              </Text>
               <Text style={styles.setTextDark}>
-                {Notification ? 'Enabled' : 'Disabled'}
+                {Notification
+                  ? props.labelData.enabled
+                  : props.labelData.disabled}
               </Text>
             </View>
             <Switch
-              trackColor={{false: '#d0d0d2', true: '#f2ae88'}}
+              trackColor={{false: '#d0d0d2', true: '#f2A884'}}
               thumbColor={'#ffffff'}
               ios_backgroundColor="#3e3e3e"
               onValueChange={() => setNotification(!Notification)}
@@ -134,11 +160,13 @@ const Setting = (props) => {
                 {langChange.alow_location}
               </Text>
               <Text style={styles.setTextDark}>
-                {AllowLocation ? 'Enable' : 'Disable'}
+                {AllowLocation
+                  ? props.labelData.enabled
+                  : props.labelData.disabled}
               </Text>
             </View>
             <Switch
-              trackColor={{false: '#d0d0d2', true: '#f2ae88'}}
+              trackColor={{false: '#d0d0d2', true: '#f2A884'}}
               thumbColor={'#ffffff'}
               ios_backgroundColor="#3e3e3e"
               onValueChange={() => setAllowLocation(!AllowLocation)}
@@ -152,11 +180,13 @@ const Setting = (props) => {
                 {langChange.receive_specail_offers}
               </Text>
               <Text style={styles.setTextDark}>
-                {ReceiveOffer ? 'Enabled' : 'Disabled'}
+                {ReceiveOffer
+                  ? props.labelData.enabled
+                  : props.labelData.disabled}
               </Text>
             </View>
             <Switch
-              trackColor={{false: '#d0d0d2', true: '#f2ae88'}}
+              trackColor={{false: '#d0d0d2', true: '#f2A884'}}
               thumbColor={'#ffffff'}
               ios_backgroundColor="#3e3e3e"
               onValueChange={() => setReceiveOffer(!ReceiveOffer)}
@@ -167,11 +197,7 @@ const Setting = (props) => {
       </>
     );
   } else {
-    return (
-      <View>
-        <Image source={INFINITY} />
-      </View>
-    );
+    return <Loader />;
   }
 };
 
@@ -204,11 +230,15 @@ const mapStateToProps = (state) => {
     settingData: state.profileReducer.profileData,
     settingStatus: state.profileReducer.profileStatus,
     labelData: state.labelReducer.labelData,
+    addressData: state.addresslistReducer.addressData,
+    addressStatus: state.addresslistReducer.addressStatus,
     labelStatus: state.labelReducer.labelStatus,
   };
 };
 const actionCreators = {
   profileAction: profileActions.profileUserAction,
   labelAction: labelActions.labelAction,
+  addressListAction: addressListActions.addressListAction,
+  pathAction: commonAction.pathFinder,
 };
 export default connect(mapStateToProps, actionCreators)(Setting);

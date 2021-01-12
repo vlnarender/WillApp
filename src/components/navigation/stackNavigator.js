@@ -9,7 +9,7 @@ import HomeScreen from '../../screens/home';
 import EmailScreen from '../../screens/email';
 import Profile from '../../screens/Profile';
 import Favourite from '../../screens/Favourite';
-import Offers from '../../screens/Offers';
+import Offers from '../PushNotification/Offers';
 import Subscription from '../../screens/Subscription';
 import ProfileEdit from '../../screens/ProfileEdit';
 import Setting from '../../screens/Setting';
@@ -38,7 +38,7 @@ import ProgramsComponent from '../../screens/programs/Programs';
 import UpdatePassword from '../../screens/UpdatePassword';
 const Stack = createStackNavigator();
 const screenOptionStyle = {
-  cardStyle: {backgroundColor: '#fff', color: '#f2ae88'},
+  cardStyle: {backgroundColor: '#fff', color: '#f2A884'},
   headerShown: false,
   cardOverlayEnabled: true,
   cardStyleInterpolator: ({current: {progress}}) => ({
@@ -79,6 +79,21 @@ const CustomStackNavigator = () => {
   return (
     <Stack.Navigator
       initialRouteName={'Login'}
+      screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Otp" component={OtpScreen} />
+      <Stack.Screen name="Forgot" component={ForgotScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Email" component={EmailScreen} />
+      <Stack.Screen name="ForgotOtp" component={ForgotOtpScreen} />
+    </Stack.Navigator>
+  );
+};
+const RegisterStackNavigator = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName={'Register'}
       screenOptions={screenOptionStyle}>
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Otp" component={OtpScreen} />

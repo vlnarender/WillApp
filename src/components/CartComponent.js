@@ -56,6 +56,7 @@ const CartComponent = (props) => {
   const [gender, setGender] = useState('1');
   const [lan, setLan] = useState('en');
   const [age, setAge] = useState('');
+  const [userType, setUserType] = useState('');
   const navigation = useNavigation();
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -67,6 +68,8 @@ const CartComponent = (props) => {
     });
     const getlanguage = async () => {
       let ln = await AsyncStorage.getItem('language');
+      let uType = await AsyncStorage.getItem('UserType');
+      setUserType(uType);
       setLan(ln);
     };
     return unsubscribe;
@@ -78,7 +81,7 @@ const CartComponent = (props) => {
     });
   };
 
-  const checkOut = () => {
+  const checkOut = async () => {
     var data = {
       address_id: null,
       age: age,
@@ -99,28 +102,31 @@ const CartComponent = (props) => {
       }
     });
     if (data.address_id != null) {
-      props.paymentAction(data).then((data) => {
-        if (data.success) {
-          navigation.navigate('PaymentView', {
-            paymentUrl: data.data.data.paymenturl,
+      userType === 'Guest'
+        ? navigation.navigate('Register')
+        : props.paymentAction(data).then((data) => {
+            if (data.success) {
+              navigation.navigate('PaymentView', {
+                paymentUrl: data.data.data.paymenturl,
+              });
+            } else {
+              Toast.showWithGravity(data.message, Toast.SHORT, Toast.CENTER);
+            }
           });
-        } else {
-          Toast.showWithGravity(data.message, Toast.SHORT, Toast.CENTER);
-        }
-      });
     } else {
-      Toast.showWithGravity(
-        'Please add your address',
-        Toast.SHORT,
-        Toast.CENTER,
-      );
+      userType === 'Guest'
+        ? navigation.navigate('Register')
+        : Toast.showWithGravity(
+            'Please add your address',
+            Toast.SHORT,
+            Toast.CENTER,
+          );
     }
   };
   const emptyYourCart = () => {
     setModalVisible(!modalVisible);
-
     ADD_AND_UPDATE_API({cart_id: MealList.cart_id}, 'user/remove-myCart').then(
-      (data) => {
+      () => {
         props.ListOfItems();
         navigation.navigate('Home');
       },
@@ -142,9 +148,11 @@ const CartComponent = (props) => {
             visible={modalVisible}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text style={styles.modalText}>Are you sure?</Text>
                 <Text style={styles.modalText}>
-                  You want to delete the meal from your cart?
+                  {props.labelData.on_cart_message1}
+                </Text>
+                <Text style={styles.modalText}>
+                  {props.labelData.on_cart_message2}
                 </Text>
                 <View style={{flexDirection: 'row'}}>
                   <TouchableHighlight
@@ -152,14 +160,14 @@ const CartComponent = (props) => {
                     onPress={() => {
                       emptyYourCart();
                     }}>
-                    <Text style={styles.textStyle}>Yes</Text>
+                    <Text style={styles.textStyle}>{props.labelData.yes}</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
                     style={{...styles.openButton}}
                     onPress={() => {
                       setModalVisible(!modalVisible);
                     }}>
-                    <Text style={styles.textStyle}>No</Text>
+                    <Text style={styles.textStyle}>{props.labelData.no}</Text>
                   </TouchableHighlight>
                 </View>
               </View>
@@ -182,7 +190,8 @@ const CartComponent = (props) => {
               <Text style={{fontSize: 15, paddingVertical: 8}}>
                 {MealList.plan_type
                   ? `${props.labelData.selected_program} `
-                  : MealList.meal_list.length + ` items added`}
+                  : MealList.meal_list.length +
+                    ` ${props.labelData.items_added}`}
               </Text>
             </View>
             {MealList.case == '1' ? (
@@ -195,7 +204,11 @@ const CartComponent = (props) => {
               <ProgramsCart
                 mealList={MealList}
                 labelData={props.labelData}
-                programName={MealList.case == 4 ? 'Diet Plan' : 'Programs'}
+                programName={
+                  MealList.case == 4
+                    ? props.labelData.diet_plan
+                    : props.labelData.programs
+                }
               />
             ) : null}
 
@@ -216,13 +229,14 @@ const CartComponent = (props) => {
                   paddingVertical: 0,
                   paddingHorizontal: 20,
                   marginHorizontal: 10,
+                  alignSelf: 'flex-start',
                 }}
                 placeholder={props.labelData.enter_code}>
                 {MealList.coupon == null ? '' : MealList.coupon}
               </TextInput>
               <TouchableOpacity
                 style={{
-                  backgroundColor: '#f2ae88',
+                  backgroundColor: '#f2A884',
                   paddingVertical: 7,
                   paddingHorizontal: 20,
                   borderRadius: 5,
@@ -268,7 +282,9 @@ const CartComponent = (props) => {
                           props.pathAction('CartComponent');
                           navigation.navigate('Address');
                         }}>
-                        <Text style={{paddingHorizontal: 15}}>edit</Text>
+                        <Text style={{paddingHorizontal: 15}}>
+                          {props.labelData.edit}
+                        </Text>
                         <Image source={EDIT_PENCIL} style={{height: 15}} />
                       </TouchableOpacity>
                     </View>
@@ -277,7 +293,10 @@ const CartComponent = (props) => {
                 <View style={{justifyContent: 'space-between', paddingTop: 10}}>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate('LocationPicker');
+                      props.pathAction('CartComponent');
+                      userType === 'Guest'
+                        ? navigation.navigate('Register')
+                        : navigation.navigate('LocationPicker');
                     }}>
                     <Text style={{fontWeight: 'bold', fontSize: 16}}>
                       {' '}
@@ -352,8 +371,11 @@ const CartComponent = (props) => {
                   <TextInput
                     placeholder="170 cm"
                     style={styles.textinputs}
-                    onChangeText={(text) => setHeight(text)}
+                    onChangeText={(text) =>
+                      setHeight(text.replace(/[^0-9]/g, ''))
+                    }
                     value={height}
+                    maxLength={3}
                     keyboardType="numeric"
                   />
                 </View>
@@ -366,9 +388,12 @@ const CartComponent = (props) => {
                   <TextInput
                     placeholder="80 kg"
                     style={styles.textinputs}
-                    onChangeText={(text) => setWeight(text)}
+                    onChangeText={(text) =>
+                      setWeight(text.replace(/[^0-9]/g, ''))
+                    }
                     value={weight}
                     keyboardType="numeric"
+                    maxLength={3}
                   />
                 </View>
               </View>
@@ -378,18 +403,23 @@ const CartComponent = (props) => {
                   <TextInput
                     placeholder="25 y"
                     style={styles.textinputs}
-                    onChangeText={(text) => setAge(text)}
+                    onChangeText={(text) => setAge(text.replace(/[^0-9]/g, ''))}
                     value={age}
                     keyboardType="numeric"
+                    maxLength={2}
                   />
                 </View>
               </View>
               <View style={styles.child}>
-                <View style={{flexDirection: 'row', paddingTop: 12}}>
+                <View style={{flexDirection: 'row', paddingTop: 10}}>
                   <Text style={styles.textContent}>
                     {props.labelData.gender}
                   </Text>
-                  <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
                     <TouchableOpacity
                       style={{
                         flexDirection: 'row',
@@ -401,7 +431,7 @@ const CartComponent = (props) => {
                         style={{
                           width: 13,
                           height: 13,
-                          margin: 3,
+                          margin: 2,
                         }}
                       />
                       <Text>{props.labelData.male}</Text>
@@ -416,7 +446,7 @@ const CartComponent = (props) => {
                         source={gender === '3' ? REC_SELECTED : REC}
                         style={{
                           width: 13,
-                          margin: 3,
+                          margin: 2,
                           height: 13,
                         }}
                       />
@@ -546,7 +576,7 @@ const CartComponent = (props) => {
             <TouchableOpacity
               onPress={() => checkOut()}
               style={{
-                backgroundColor: '#f2ae88',
+                backgroundColor: '#f2A884',
                 paddingVertical: 15,
                 marginVertical: 10,
                 alignContent: 'center',
@@ -596,7 +626,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: '#F2A884',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -606,7 +636,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   openButton: {
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     borderRadius: 20,
     padding: 10,
     paddingHorizontal: 25,
@@ -638,7 +668,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     marginBottom: 10,
   },
-  total: {color: '#F2AE88', fontSize: 20, fontWeight: 'bold'},
+  total: {color: '#f2A884', fontSize: 20, fontWeight: 'bold'},
   imgBox: {
     borderRadius: 5,
     borderWidth: 1,
@@ -671,10 +701,10 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
   },
   child: {
-    flexBasis: '50%',
+    flexBasis: '46%',
   },
   textContent: {
-    width: 50,
+    width: 58,
     textAlign: 'right',
     textAlignVertical: 'center',
   },
@@ -682,7 +712,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 10,
-    width: 100,
+    width: 85,
     padding: 2,
     margin: 5,
     textAlign: 'center',

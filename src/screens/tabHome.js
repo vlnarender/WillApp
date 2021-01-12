@@ -11,6 +11,7 @@ import {
   Dimensions,
   BackHandler,
   Platform,
+  Alert,
 } from 'react-native';
 const {width} = Dimensions.get('window');
 import {onedayplanActions} from '../actions/oneplan';
@@ -19,7 +20,7 @@ import SearchbarFilter from '../components/SearchBarWithFilter';
 import {labelActions} from '../actions/label';
 import {homeActions} from '../actions/home';
 import {profileActions} from '../actions/profile';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import {programActions} from '../actions/program';
 import {cartActions} from '../actions/cart';
@@ -39,11 +40,36 @@ const Home = (props) => {
   const [viewall, setViewall] = useState(false);
   const [visible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  let currentCount = 0;
   const [box, setBox] = useState('1');
   const handleBackButtonClick = () => {
-    return false;
+    if (currentCount < 1) {
+      currentCount += 1;
+    } else {
+      Alert.alert(
+        'Exit App',
+        'Do you want to exiting the application?',
+        [
+          {
+            text: 'Yes',
+            onPress: () => BackHandler.exitApp(),
+          },
+          {
+            text: 'No',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+        ],
+        {
+          cancelable: false,
+        },
+      );
+    }
+    setTimeout(() => {
+      currentCount = 0;
+    }, 2000);
+    return true;
   };
-  const route = useRoute();
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     getValue();
@@ -75,7 +101,7 @@ const Home = (props) => {
       );
     } else {
       Toast.showWithGravity(
-        'You already have selected some on your card.Please remove it or compelte the process.',
+        props.labelData.already_meal_cart_message,
         Toast.SHORT,
         Toast.CENTER,
       );
@@ -155,7 +181,9 @@ const Home = (props) => {
                       onPress={() => {
                         BackHandler.exitApp();
                       }}>
-                      <Text style={styles.textStyle}>Yes</Text>
+                      <Text style={styles.textStyle}>
+                        {props.labelData.yes}
+                      </Text>
                     </TouchableHighlight>
 
                     <TouchableHighlight
@@ -163,7 +191,7 @@ const Home = (props) => {
                       onPress={() => {
                         setModalVisible(!modalVisible);
                       }}>
-                      <Text style={styles.textStyle}>No</Text>
+                      <Text style={styles.textStyle}>{props.labelData.no}</Text>
                     </TouchableHighlight>
                   </View>
                 </View>
@@ -179,6 +207,7 @@ const Home = (props) => {
                         setViewall(false);
                       }
                     }}
+                    style={{paddingTop: 15, paddingLeft: 7, paddingBottom: 10}}
                     key={index}>
                     <View
                       style={
@@ -188,7 +217,7 @@ const Home = (props) => {
                       }>
                       <Image
                         source={item.imageUrl}
-                        style={{width: 60, height: 60}}
+                        style={{width: 60, height: 60, borderRadius: 5}}
                       />
                       <View style={styleCss.textContainer}>
                         <Text style={styleCss.h2}>{item.title}</Text>
@@ -369,7 +398,7 @@ const Home = (props) => {
                         style={{
                           width: '40%',
                           height: '40%',
-                          borderColor: '#f2ae88',
+                          borderColor: '#f2A884',
                           borderWidth: 1,
                           backgroundColor: 'white',
                         }}>
@@ -438,22 +467,26 @@ const Home = (props) => {
                               <View
                                 style={{
                                   shadowOffset: {width: 20, height: 20},
-                                  shadowColor: 'black',
+                                  shadowColor: '#F2A884',
                                   shadowOpacity: 8,
                                   elevation: 6,
                                   borderRadius: 10,
                                   backgroundColor: '#FFFFFF',
-                                  width: width / 2.2,
+                                  width: width / 2.3,
                                   height: 170,
-                                  margin: 5,
                                   padding: 5,
-                                  marginBottom: 10,
+                                  margin: 5,
                                 }}>
                                 <Image
                                   source={{
                                     uri: item.image_url + item.image,
                                   }}
-                                  style={{width: '95%', height: 150, margin: 5}}
+                                  style={{
+                                    width: '95%',
+                                    height: 150,
+                                    margin: 5,
+                                    borderRadius: 5,
+                                  }}
                                 />
                               </View>
                             </TouchableOpacity>
@@ -489,7 +522,12 @@ const Home = (props) => {
                                 source={{
                                   uri: item.image_url + item.image,
                                 }}
-                                style={{width: '95%', height: 140, margin: 5}}
+                                style={{
+                                  width: '95%',
+                                  height: 140,
+                                  margin: 5,
+                                  borderRadius: 5,
+                                }}
                               />
                             </View>
                           </TouchableOpacity>
@@ -527,7 +565,7 @@ const Home = (props) => {
 const styles = StyleSheet.create({
   restorentBox: {
     shadowOffset: {width: 10, height: 10},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 5,
     elevation: 5,
     borderRadius: 10,
@@ -542,7 +580,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: '#F2A884',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -552,7 +590,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   openButton: {
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     borderRadius: 20,
     padding: 10,
     paddingHorizontal: 25,
@@ -581,7 +619,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     marginBottom: 10,
   },
-  total: {color: '#F2AE88', fontSize: 20, fontWeight: 'bold'},
+  total: {color: '#f2A884', fontSize: 20, fontWeight: 'bold'},
   imgBox: {
     borderRadius: 5,
     borderWidth: 1,

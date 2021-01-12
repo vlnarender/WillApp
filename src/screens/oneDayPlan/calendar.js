@@ -1,9 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  I18nManager,
+} from 'react-native';
 import {
   CROSS_WHITE,
-  PLAN_ARROW_LEFT,
-  PLAN_ARROW_RIGHT,
+  CIRCLE_ARROW_RIGHT,
+  CIRCLE_ARROW_LEFT,
 } from '../../_helpers/ImageProvide';
 import moment from 'moment';
 import {connect} from 'react-redux';
@@ -94,7 +101,7 @@ const OneDayCalender = (props) => {
           container: {
             backgroundColor:
               new Date().getDate() === new Date(m).getDate()
-                ? '#f2ae88'
+                ? '#f2A884'
                 : '#75798e',
           },
           text: {
@@ -168,23 +175,24 @@ const OneDayCalender = (props) => {
                 rowHeight={5}
                 hideExtraDays={true}
                 renderArrow={(direction) => (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      backgroundColor: '#f2ae88',
-                      paddingVertical: 5,
-                      paddingHorizontal: 10,
-                      borderRadius: 5,
-                    }}>
-                    <Text style={{color: '#fff'}}>
-                      {direction == 'left' ? 'Previous' : props.labelData.next}
-                    </Text>
+                  <View>
+                    <Image
+                      source={
+                        direction == 'left'
+                          ? !I18nManager.isRTL
+                            ? CIRCLE_ARROW_LEFT
+                            : CIRCLE_ARROW_RIGHT
+                          : !I18nManager.isRTL
+                          ? CIRCLE_ARROW_RIGHT
+                          : CIRCLE_ARROW_LEFT
+                      }
+                    />
                   </View>
                 )}
                 theme={{
                   calendarBackground: '#343739',
                   todayTextColor: '#ffffff',
-                  todayBackgroundColor: '#f2ae88',
+                  todayBackgroundColor: '#f2A884',
                   textDisabledColor: '#6a6e7f',
                   dayTextColor: '#ffffff',
                   monthTextColor: '#ffffff',
@@ -241,9 +249,11 @@ const OneDayCalender = (props) => {
 const actionCreators = {
   mealListAction: oneDayMealListActions.oneDayMealListAction,
 };
-const mapStateToProps = (state) => ({
-  labelData: state.labelReducer.labelData,
-});
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
 export default connect(mapStateToProps, actionCreators)(OneDayCalender);
 
 const styles = StyleSheet.create({
@@ -263,7 +273,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   topBg: {
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     height: 150,
     alignItems: 'center',
   },
@@ -289,7 +299,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 100,
     shadowOffset: {width: 0, height: 0},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: 8,
     elevation: 5,
     alignItems: 'center',
@@ -315,7 +325,7 @@ const styles = StyleSheet.create({
   colorBox1: {
     width: 20,
     height: 20,
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     marginRight: 10,
   },
 
@@ -334,7 +344,7 @@ const styles = StyleSheet.create({
   },
 
   textColor: {
-    color: '#f2ae88',
+    color: '#f2A884',
     fontSize: 14,
   },
 

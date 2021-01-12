@@ -1,4 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {cartActions} from '../actions/cart';
 import {
   View,
   TouchableOpacity,
@@ -7,7 +8,6 @@ import {
   Image,
   Text,
   Switch,
-  StyleSheet,
   BackHandler,
   Platform,
   Keyboard,
@@ -48,13 +48,13 @@ const StyledInputName = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
@@ -103,13 +103,13 @@ const StyledInputPhone = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
@@ -158,13 +158,13 @@ const StyledInput = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
@@ -205,7 +205,14 @@ const StyledInput = ({label, formikProps, formikKey, icon, ...rest}) => {
   );
 };
 
-const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
+const StyledInputPass = ({
+  label,
+  formikProps,
+  formikKey,
+  keyboardType,
+  icon,
+  ...rest
+}) => {
   const inputStyles = {
     borderColor: '#e0e0e0',
     padding: 10,
@@ -213,13 +220,13 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
@@ -254,6 +261,7 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
         inlineImageLeft="email"
         onChangeText={formikProps.handleChange(formikKey)}
         onBlur={formikProps.handleBlur(formikKey)}
+        keyboardType={keyboardType}
         {...rest}
       />
     </FieldWrapper>
@@ -272,52 +280,53 @@ const StyledSwitch = ({formikKey, formikProps, label, ...rest}) => (
   </FieldWrapper>
 );
 
-const validationSchema = yup.object().shape({
-  first_name: yup
-    .string()
-    .test('alphabets', 'Name must only contain alphabets', (value) => {
-      return /^[A-Za-z]+$/.test(value);
-    })
-    .required('Please enter first name'),
-
-  last_name: yup
-    .string()
-    .required('Please enter last name')
-    .test('alphabets', 'Name must only contain alphabets', (value) => {
-      return /^[A-Za-z]+$/.test(value);
-    }),
-  phone_number: yup
-    .number()
-    .test(
-      'len',
-      'Must be valid mobile number',
-      (val) => val && val.toString().length >= 8,
-    )
-    .typeError('Please enter a valid Mobile Number')
-    .required('Please enter a valid mobile number'),
-  email: yup
-    .string()
-    .email('Email is invalid')
-    .required('Please enter a valid email id'),
-  password: yup
-    .string()
-    .required('Please enter password')
-    .min(5, 'Password must have more than 5 characters '),
-  // .matches(
-  //   /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-  //   "Password must contain at least 8 characters, one uppercase, one number and one special case character"
-  // ),
-  confirm_password: yup
-    .string()
-    .required('Please confirm password')
-    .min(5, 'Password must have more than 5 characters ')
-    .oneOf([yup.ref('password'), null], "Passwords don't match."),
-});
-
 const RegisterScreen = (props) => {
   const [device_token, setToken] = useState('');
   const [device_type, setType] = useState('');
   const [selected, setSelected] = useState(false);
+  const [userType, setUserType] = useState();
+  const validationSchema = yup.object().shape({
+    first_name: yup
+      .string()
+      .test('alphabets', 'Name must only contain alphabets', (value) => {
+        return /^[A-Za-z]+$/.test(value);
+      })
+      .required('Please enter first name'),
+
+    last_name: yup
+      .string()
+      .required('Please enter last name')
+      .test('alphabets', 'Name must only contain alphabets', (value) => {
+        return /^[A-Za-z]+$/.test(value);
+      }),
+    phone_number: yup
+      .number()
+      .test(
+        'len',
+        props.labelData.must_be_valid_mobile_number,
+        (val) => val && val.toString().length >= 8,
+      )
+      .typeError('Please enter a valid Mobile Number')
+      .required('Please enter a valid mobile number'),
+    email: yup
+      .string()
+      .email('Email is invalid')
+      .required('Please enter a valid email id'),
+    password: yup
+      .string()
+      .required('Please enter password')
+      .min(5, 'Password must have more than 5 characters '),
+    // .matches(
+    //   /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+    //   "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+    // ),
+    confirm_password: yup
+      .string()
+      .required('Please confirm password')
+      .min(5, 'Password must have more than 5 characters ')
+      .oneOf([yup.ref('password'), null], "Passwords don't match."),
+  });
+
   useEffect(() => {
     BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
     getDeviceValue();
@@ -329,6 +338,9 @@ const RegisterScreen = (props) => {
   };
   const getDeviceValue = async () => {
     try {
+      formikKey.resetForm();
+      let uType = await AsyncStorage.getItem('UserType');
+      setUserType(uType);
       const device_token = await AsyncStorage.getItem('device_token');
       const device_type = await AsyncStorage.getItem('device_type');
       setToken(device_token);
@@ -374,10 +386,10 @@ const RegisterScreen = (props) => {
             alignItems: 'center',
           }}>
           <Image source={LOGIN_logo} />
-          <Text style={{color: '#f2ae88', fontSize: 25, fontWeight: 'bold'}}>
+          <Text style={{color: '#f2A884', fontSize: 25, fontWeight: 'bold'}}>
             Welcome !
           </Text>
-          <Text style={{color: '#f2ae88', fontSize: 20}}>
+          <Text style={{color: '#f2A884', fontSize: 20}}>
             Let's create account for you
           </Text>
 
@@ -392,19 +404,24 @@ const RegisterScreen = (props) => {
             }}
             onSubmit={(values, actions) => {
               Keyboard.dismiss();
-
               if (selected) {
-                var user = {};
-                user.first_name = values.first_name;
-                user.last_name = values.last_name;
-                user.phone_number = values.phone_number;
-                user.email = values.email;
-                user.password = values.password;
-                user.confirm_password = values.confirm_password;
-                user.device_token = device_token;
-                user.device_type = device_type;
-                user.language = 'en';
-                props.registerUserAction(user, props.navigation);
+                var user = {
+                  first_name: values.first_name,
+                  last_name: values.last_name,
+                  phone_number: values.phone_number,
+                  email: values.email,
+                  password: values.password,
+                  confirm_password: values.confirm_password,
+                  device_token: device_token,
+                  device_type: device_type,
+                  language: 'en',
+                  is_guest: userType === 'Guest' ? 1 : 0,
+                };
+                userType === 'Guest'
+                  ? (user.guest_id = props.profileData.id)
+                  : null;
+                props.registerUserAction(user, props.navigation, actions);
+                actions.resetForm();
                 actions.setSubmitting(true);
               } else {
                 Toast.showWithGravity(
@@ -418,28 +435,34 @@ const RegisterScreen = (props) => {
             {(formikProps) => (
               <React.Fragment>
                 <StyledInputName
+                  keyboardType="default"
                   formikProps={formikProps}
                   formikKey="first_name"
                   placeholder="First Name"
                   // autoFocus
                 />
                 <StyledInputName
+                  keyboardType="default"
                   formikProps={formikProps}
                   formikKey="last_name"
                   placeholder="Last Name"
                 />
                 <StyledInputPhone
+                  keyboardType="numeric"
                   formikProps={formikProps}
                   formikKey="phone_number"
+                  maxLength={8}
                   placeholder="Phone"
                 />
                 <StyledInput
+                  keyboardType="default"
                   icon={'email'}
                   formikProps={formikProps}
                   formikKey="email"
                   placeholder="Email"
                 />
                 <StyledInputPass
+                  keyboardType="default"
                   formikProps={formikProps}
                   formikKey="password"
                   placeholder="Password"
@@ -447,6 +470,7 @@ const RegisterScreen = (props) => {
                 />
 
                 <StyledInputPass
+                  keyboardType="default"
                   formikProps={formikProps}
                   formikKey="confirm_password"
                   placeholder="Confirm Password"
@@ -470,38 +494,41 @@ const RegisterScreen = (props) => {
                   <Text style={{color: 'red'}}>
                     {formikProps.errors.general}
                   </Text>
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                      flexDirection: 'row',
-                      zIndex: 1000,
-                      marginBottom: 0,
-                      marginTop: 0,
-                    }}>
-                    <TouchableOpacity
-                      style={{height: 50}}
-                      onPress={() => {
-                        props.logAction(
-                          {
-                            device_token: 'nnn',
-                            device_type: '2',
-                            language: 'en',
-                          },
-                          props.navigation,
-                        );
+                  {userType === 'Guest' ? null : (
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                        flexDirection: 'row',
+                        zIndex: 1000,
+                        marginBottom: 0,
+                        marginTop: 0,
                       }}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: '#f2ae88',
-                          fontWeight: 'bold',
+                      <TouchableOpacity
+                        style={{height: 50}}
+                        onPress={() => {
+                          props.ListOfItems();
+                          props.logAction(
+                            {
+                              device_token: 'nnn',
+                              device_type: '2',
+                              language: 'en',
+                            },
+                            props.navigation,
+                          );
                         }}>
-                        <Text> Continue as a guest</Text>
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            color: '#f2A884',
+                            fontWeight: 'bold',
+                          }}>
+                          <Text> Continue as a guest</Text>
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
                   <TouchableOpacity>
                     <View
                       style={{height: 50}}
@@ -509,7 +536,7 @@ const RegisterScreen = (props) => {
                         props.navigation.navigate('Login');
                       }}>
                       <Text
-                        style={{fontSize: 18, color: '#f2ae88'}}
+                        style={{fontSize: 18, color: '#f2A884'}}
                         onPress={() => {
                           props.navigation.navigate('Login');
                         }}>
@@ -540,7 +567,7 @@ const RegisterScreen = (props) => {
                           />
                         </View>
 
-                        <Text style={{fontSize: 15, color: '#f2ae88'}}>
+                        <Text style={{fontSize: 15, color: '#f2A884'}}>
                           I agree to the Terms and Conditions
                         </Text>
                       </TouchableOpacity>
@@ -556,15 +583,19 @@ const RegisterScreen = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  regError: state.registrationReducer.regError,
-  labelData: state.labelReducer.labelData,
-  regResponse: state.registrationReducer.regResponse,
-});
+const mapStateToProps = (state) => {
+  return {
+    regError: state.registrationReducer.regError,
+    labelData: state.labelReducer.labelData,
+    regResponse: state.registrationReducer.regResponse,
+    profileData: state.profileReducer.profileData,
+  };
+};
 
 const actionCreators = {
   logAction: loginActions.loginUserAction,
   registerUserAction: registerActions.registerUserAction,
+  ListOfItems: cartActions.ListOfItems,
 };
 
 export default connect(mapStateToProps, actionCreators)(RegisterScreen);

@@ -13,7 +13,6 @@ import {profileActions} from '../actions/profile';
 import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
 import Toast from 'react-native-simple-toast';
-import {DEV_CONFIGS} from '../util/constant';
 import {COOMMON_API} from '../util/api';
 import {LOGO} from '../_helpers/ImageProvide';
 const Otp = (props) => {
@@ -97,7 +96,7 @@ const Otp = (props) => {
         </View>
         <View style={{marginBottom: 20}}>
           <TouchableOpacity style={styleCss.btnButton} onPress={handleSubmit}>
-            <Text style={styles.buttontext}>Submit</Text>
+            <Text style={styles.buttontext}>{props.labelData.submit}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -107,7 +106,7 @@ const Otp = (props) => {
 
 const styles = StyleSheet.create({
   text: {
-    color: '#f2ae88',
+    color: '#f2A884',
     fontSize: 14,
     marginTop: 10,
     paddingHorizontal: 50,
@@ -120,10 +119,15 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#f2ae88',
+    color: '#f2A884',
   },
 });
 const actionCreators = {
   profileAction: profileActions.profileUserAction,
 };
-export default connect(null, actionCreators)(Otp);
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
+export default connect(mapStateToProps, actionCreators)(Otp);

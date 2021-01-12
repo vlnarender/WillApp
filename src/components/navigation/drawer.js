@@ -1,38 +1,36 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {
   View,
   Image,
-  useWindowDimensions,
   Text,
   TouchableOpacity,
-  StatusBar,
+  BackHandler,
   StyleSheet,
   Alert,
 } from 'react-native';
-import {
-  createDrawerNavigator,
-  DrawerItem,
-  useIsDrawerOpen,
-} from '@react-navigation/drawer';
+import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 import {COOMMON_API} from '../../util/api';
 import Toast from 'react-native-simple-toast';
 import AsyncStorage from '@react-native-community/async-storage';
 import OneDayPlan from '../../screens/oneDayPlan/oneDayPlan';
 import {DrawerActions, CommonActions} from '@react-navigation/native';
 import {
-  SettingStackNavigator,
   CardStackNavigator,
+  SettingStackNavigator,
   AddressStackNavigator,
+  RegisterStackNavigator,
+  ProgramsStackNavigator,
+  FaqSupportStackNavigator,
   TermConditionStackNavigator,
   PrivacyPolicyStackNavigator,
-  FaqSupportStackNavigator,
-  CartStackNavigator,
-  ProgramsStackNavigator,
   CommonCalendarStackNavigator,
-  PaymentStatusStackNavigator,
-  MyOrdersStackNavigator,
 } from './stackNavigator';
+import LoginScreen from '../../screens/Auth/login';
+import ForgotScreen from '../../screens/forgot';
+import EmailScreen from '../../screens/email';
+import ForgotOtpScreen from '../../screens/forgototp';
+import OtpScreen from '../../screens/otp';
 import HomeScreen from '../../screens/home';
 import BottomTabNavigator from './navigation';
 import OneDayCalender from '../../screens/oneDayPlan/calendar';
@@ -59,18 +57,10 @@ import paymentView from '../../screens/paymentView';
 import paymentResult from '../../screens/paymentResult';
 import dietcompanies from '../../screens/dietcompanies';
 import addaddress from '../../screens/Address/addaddress';
-import {commonAction} from '../../actions/common';
+import {languageRestart} from '../LanguageRestart';
+import addresslist from '../../screens/Address/addresslist';
 let styleCss = require('../../GlobalStyle');
 const Drawer = createDrawerNavigator();
-function FocusAwareStatusBar(props) {
-  const isDrawerOpen = useIsDrawerOpen();
-
-  return isDrawerOpen ? (
-    <StatusBar {...props} />
-  ) : (
-    <StatusBar barStyle="light-content" />
-  );
-}
 
 const signOut = async (props) => {
   const device_token = await AsyncStorage.getItem('device_token');
@@ -97,6 +87,7 @@ const signOut = async (props) => {
       keys.splice(keys.indexOf('device_token'), 1);
       keys.splice(keys.indexOf('device_type'), 1);
       await AsyncStorage.multiRemove(keys);
+      languageRestart(true);
       props.logout;
       Toast.showWithGravity(responseJson.message, Toast.SHORT, Toast.CENTER);
       props.navigation.dispatch(
@@ -105,6 +96,7 @@ const signOut = async (props) => {
           routes: [{name: 'Custom'}],
         }),
         DrawerActions.closeDrawer(),
+        BackHandler.exitApp(),
       );
     } else {
       Toast.showWithGravity(responseJson.message, Toast.SHORT, Toast.CENTER);
@@ -112,69 +104,90 @@ const signOut = async (props) => {
   });
 };
 const DrawerNavigator = (props) => {
+  const [userType, setUserType] = useState();
+  useEffect(() => {
+    getuserType();
+  });
+  const getuserType = async () => {
+    let tmp = await AsyncStorage.getItem('UserType');
+    setUserType(tmp);
+  };
   if (props.labelStatus) {
     const TPF = [
       {name: props.labelData.terms_condition, navigation: 'TermCondition'},
       {name: props.labelData.privacy_policy, navigation: 'FaqSupport'},
       {name: props.labelData.faq_support, navigation: 'PrivacyPolicy'},
     ];
-    const drowerList = [
-      {
-        lable: props.labelData.my_profile,
-        image: require('../../../assets/image/menu/user.png'),
-        navigation: 'Profile',
-      },
-      {
-        lable: props.labelData.my_orders,
-        image: require('../../../assets/image/menu/myorder.png'),
-        navigation: 'MyOrders',
-      },
-      {
-        lable: props.labelData.my_add,
-        image: require('../../../assets/image/menu/location.png'),
-        navigation: 'Address',
-      },
-      {
-        lable: props.labelData.my_payment_methods,
-        image: require('../../../assets/image/menu/card.png'),
-        navigation: 'Card',
-      },
-      {
-        lable: props.labelData.setting,
-        image: require('../../../assets/image/menu/settings.png'),
-        navigation: 'Setting',
-      },
-      {
-        lable: props.labelData.notification,
-        image: require('../../../assets/image/menu/bell.png'),
-        navigation: 'PushNotification',
-      },
-      {
-        lable: props.labelData.lout_out,
-        image: require('../../../assets/image/menu/logout.png'),
-        navigation: 'LogOut',
-      },
-    ];
-    const navigationAction = async (navigation) => {
-      let userType = await AsyncStorage.getItem('UserType');
-      props.pathAction('Home');
+    const drowerList =
+      userType === 'Guest'
+        ? [
+            {
+              lable: 'Register Now',
+              image: require('../../../assets/image/menu/user.png'),
+              navigation: 'Register',
+            },
 
+            {
+              lable: 'Alrady have account',
+              image: require('../../../assets/image/menu/logout.png'),
+              navigation: 'Login',
+            },
+          ]
+        : [
+            {
+              lable: props.labelData.my_profile,
+              image: require('../../../assets/image/menu/user.png'),
+              navigation: 'Profile',
+            },
+            {
+              lable: props.labelData.my_orders,
+              image: require('../../../assets/image/menu/myorder.png'),
+              navigation: 'MyOrders',
+            },
+            {
+              lable: props.labelData.my_add,
+              image: require('../../../assets/image/menu/location.png'),
+              navigation: 'Address',
+            },
+            {
+              lable: props.labelData.my_payment_methods,
+              image: require('../../../assets/image/menu/card.png'),
+              navigation: 'Card',
+            },
+            {
+              lable: props.labelData.setting,
+              image: require('../../../assets/image/menu/settings.png'),
+              navigation: 'Setting',
+            },
+            {
+              lable: props.labelData.notification,
+              image: require('../../../assets/image/menu/bell.png'),
+              navigation: 'PushNotification',
+            },
+            {
+              lable: props.labelData.lout_out,
+              image: require('../../../assets/image/menu/logout.png'),
+              navigation: 'LogOut',
+            },
+          ];
+    const navigationAction = async (navigation) => {
+      props.pathAction('Home');
       switch (navigation) {
         case 'LogOut':
           Alert.alert(
             props.labelData.lout_out,
             userType === 'Guest'
               ? 'Please register first'
-              : 'Do you want to logout?',
+              : props.labelData.do_you_want_to_logout,
             [
               {
-                text: 'Cancel',
+                text: props.labelData.cancel,
                 onPress: () => {
                   props.navigation.navigate('Home');
                 },
               },
               {
-                text: 'Confirm',
+                text: props.labelData.confirm,
                 onPress: () => {
                   userType === 'Guest'
                     ? props.navigation.navigate('Register')
@@ -196,9 +209,9 @@ const DrawerNavigator = (props) => {
             flexDirection: 'row',
             paddingVertical: '15%',
             ...StyleSheet.absoluteFill,
-            backgroundColor: '#f2ae88',
+            backgroundColor: '#f2A884',
           }}>
-          <View style={{flex: 3, marginVertical: 5}}>
+          <View style={{flex: 3, marginVertical: 5, justifyContent: 'center'}}>
             {drowerList.map((data, index) => {
               return (
                 <DrawerItem
@@ -262,6 +275,21 @@ const DrawerNavigator = (props) => {
         <Drawer.Screen
           name="MealSelection"
           component={MealSelection}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
+          name="Register"
+          component={RegisterStackNavigator}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
+          name="Addresslist"
+          component={addresslist}
           options={{swipeEnabled: false}}
         />
         <Drawer.Screen
@@ -426,6 +454,23 @@ const DrawerNavigator = (props) => {
         <Drawer.Screen
           name="MyOrders"
           component={MyOrders}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen name="Otp" component={OtpScreen} />
+        <Drawer.Screen
+          name="Forgot"
+          component={ForgotScreen}
+          options={{swipeEnabled: false}}
+        />
+
+        <Drawer.Screen
+          name="Email"
+          component={EmailScreen}
+          options={{swipeEnabled: false}}
+        />
+        <Drawer.Screen
+          name="ForgotOtp"
+          component={ForgotOtpScreen}
           options={{swipeEnabled: false}}
         />
         <Drawer.Screen

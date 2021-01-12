@@ -36,13 +36,13 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: 5,
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     backgroundColor: '#0000', // invisible color
@@ -129,7 +129,7 @@ const ForgotOtpScreen = (props) => {
         <Image source={LOGIN_logo} />
         <Text
           style={{
-            color: '#f2ae88',
+            color: '#f2A884',
             fontSize: 15,
             textAlign: 'center',
             paddingHorizontal: 50,
@@ -178,20 +178,20 @@ const ForgotOtpScreen = (props) => {
                   <TouchableOpacity onPress={formikProps.handleSubmit}>
                     <View
                       style={{
-                        backgroundColor: '#f2ae88',
+                        backgroundColor: '#f2A884',
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: 15,
                         padding: 10,
                         width: 300,
                         height: 50,
-                        shadowColor: 'red',
+                        shadowColor: '#F2A884',
                         shadowRadius: 10,
                         shadowOpacity: 5,
                         elevation: 2,
                       }}>
                       <Text style={{color: 'white', fontWeight: 'bold'}}>
-                        Submit
+                        {props.labelData.submit}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -205,11 +205,14 @@ const ForgotOtpScreen = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  forgototpError: state.forgototpReducer.forgototpError,
-  forgototpMessage: state.forgototpReducer.forgototpMessage,
-  forgototpData: state.forgototpReducer.forgototpData,
-});
+const mapStateToProps = (state) => {
+  return {
+    forgototpError: state.forgototpReducer.forgototpError,
+    forgototpMessage: state.forgototpReducer.forgototpMessage,
+    forgototpData: state.forgototpReducer.forgototpData,
+    labelData: state.labelReducer.labelData,
+  };
+};
 
 const actionCreators = {
   forgotOtpAction: forgotOtpActions.forgotOtpAction,

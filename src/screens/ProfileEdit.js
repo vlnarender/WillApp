@@ -56,13 +56,13 @@ const ProfileEdit = (props) => {
   const handleSubmit = async () => {
     if (first == null || first == undefined || first == '') {
       Toast.showWithGravity(
-        'First name can not be empty',
+        props.labelData.first_name_can_not_be_empty,
         Toast.SHORT,
         Toast.CENTER,
       );
     } else if (last == null || last == undefined || last == '') {
       Toast.showWithGravity(
-        'Last name can not be empty',
+        props.labelData.last_name_can_not_be_empty,
         Toast.SHORT,
         Toast.CENTER,
       );
@@ -73,13 +73,13 @@ const ProfileEdit = (props) => {
       isNaN(phone)
     ) {
       Toast.showWithGravity(
-        'Must be valid mobile number',
+        props.labelData.must_be_valid_mobile_number,
         Toast.SHORT,
         Toast.CENTER,
       );
     } else if (phone.length < 8) {
       Toast.showWithGravity(
-        'The phone number must be at least 8 digits',
+        props.labelData.the_phone_number_must,
         Toast.SHORT,
         Toast.CENTER,
       );
@@ -106,8 +106,9 @@ const ProfileEdit = (props) => {
       style={{backgroundColor: 'white', flex: 1}}
       keyboardShouldPersistTaps="handled"
       keyboardDismissMode="interactive">
+      <SubHeader />
+
       <View style={styleCss.mainContainer}>
-        <SubHeader />
         <View style={{paddingBottom: 40}}>
           <View style={styleCss.inputStyles}>
             <View style={styles.imgStyle}>
@@ -118,9 +119,10 @@ const ProfileEdit = (props) => {
             </View>
             <View style={{flex: 5}}>
               <TextInput
-                style={{height: 50, paddingLeft: 5}}
+                style={{height: 50, paddingLeft: 5, alignSelf: 'flex-start'}}
                 onChangeText={(text) => setFirst(text)}
                 value={first}
+                placeholder={props.labelData.first_name}
               />
             </View>
           </View>
@@ -134,9 +136,10 @@ const ProfileEdit = (props) => {
             </View>
             <View style={{flex: 5}}>
               <TextInput
-                style={{height: 50, paddingLeft: 5}}
+                style={{height: 50, paddingLeft: 5, alignSelf: 'flex-start'}}
                 onChangeText={(text) => setLast(text)}
                 value={last}
+                placeholder={props.labelData.last_name}
               />
             </View>
           </View>
@@ -149,69 +152,16 @@ const ProfileEdit = (props) => {
             </View>
             <View style={{flex: 5}}>
               <TextInput
-                style={{height: 50, paddingLeft: 5}}
+                style={{height: 50, paddingLeft: 5, alignSelf: 'flex-start'}}
                 keyboardType="numeric"
                 onChangeText={(text) => setPhone(text)}
                 value={phone}
+                placeholder={props.labelData.phone_no}
               />
             </View>
           </View>
-          {/* <View style={{marginTop: 35}}>
-            {address.map((item, key) => {
-              return (
-                <View key={key}>
-                  {checked === item.id ? (
-                    <TouchableOpacity style={styles.radioAlign}>
-                      <Image style={styles.imgSize} source={CHECKED} />
-                      <View>
-                        {checked === item.id ||
-                        (checked === item.id &&
-                          item.is_default_address === 1) ? (
-                          <Text style={styles.radioTextHeading}>
-                            {item.address_type} (My Default)
-                          </Text>
-                        ) : (
-                          <Text style={styles.radioTextHeading}>
-                            {item.address_type}
-                          </Text>
-                        )}
-                        <Text numberOfLines={1} style={styles.radioText}>
-                          {item.complete_address}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() => {
-                        setChecked(item.id);
-                      }}
-                      style={styles.radioAlign}>
-                      <Image style={styles.imgSize} source={HEADER_unchecked} />
-                      <View>
-                        {checked === item.id ||
-                        (checked === item.id &&
-                          item.is_default_address === 1) ? (
-                          <Text style={styles.radioTextHeading}>
-                            {item.address_type} (My Default)
-                          </Text>
-                        ) : (
-                          <Text style={styles.radioTextHeading}>
-                            {item.address_type}
-                          </Text>
-                        )}
-                        <Text numberOfLines={1} style={styles.radioText}>
-                          {item.complete_address}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              );
-            })}
-          </View>
-           */}
           <TouchableOpacity style={styleCss.btnButton} onPress={handleSubmit}>
-            <Text style={styles.text}>Submit</Text>
+            <Text style={styles.text}>{props.labelData.submit}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -247,7 +197,12 @@ const styles = StyleSheet.create({
     height: 25,
   },
 });
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
 const actionCreators = {
   profileAction: profileActions.profileUserAction,
 };
-export default connect(null, actionCreators)(ProfileEdit);
+export default connect(mapStateToProps, actionCreators)(ProfileEdit);

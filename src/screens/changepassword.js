@@ -114,12 +114,16 @@ const ChangePassword = (props) => {
               <Image style={{width: 120, height: 100}} source={LOGO} />
             </View>
             <View style={{alignItems: 'center'}}>
-              <Text style={styles.heading}>Change Password</Text>
+              <Text style={styles.heading}>
+                {props.labelData.change_password}
+              </Text>
             </View>
 
             <View style={styles.mrgTop}>
               <View>
-                <Text style={styles.inputLabel}>Old Password</Text>
+                <Text style={styles.inputLabel}>
+                  {props.labelData.old_password}
+                </Text>
               </View>
               <View style={styleCss.inputStylesPass}>
                 <View style={styles.imgStyle}>
@@ -127,8 +131,12 @@ const ChangePassword = (props) => {
                 </View>
                 <View style={{flex: 5}}>
                   <TextInput
-                    style={{height: 50, paddingLeft: 5}}
-                    placeholder="Old Password"
+                    style={{
+                      height: 50,
+                      paddingLeft: 5,
+                      alignSelf: 'flex-start',
+                    }}
+                    placeholder={props.labelData.old_password}
                     onChangeText={(text) => setOldpass(text)}
                     value={oldpass}
                     secureTextEntry={true}
@@ -148,7 +156,11 @@ const ChangePassword = (props) => {
                 </View>
                 <View style={{flex: 5}}>
                   <TextInput
-                    style={{height: 50, paddingLeft: 5}}
+                    style={{
+                      height: 50,
+                      alignSelf: 'flex-start',
+                      paddingLeft: 5,
+                    }}
                     placeholder="New Password"
                     onChangeText={(text) => setNewpass(text)}
                     value={newpass}
@@ -170,7 +182,10 @@ const ChangePassword = (props) => {
                 </View>
                 <View style={{flex: 5}}>
                   <TextInput
-                    style={{height: 50, paddingLeft: 5}}
+                    style={{
+                      height: 50,
+                      paddingLeft: 5,
+                    }}
                     placeholder={props.labelData.con_pass}
                     onChangeText={(text) => setConfirmpass(text)}
                     value={confirmpass}
@@ -181,7 +196,7 @@ const ChangePassword = (props) => {
             </View>
 
             <TouchableOpacity style={styleCss.btnButton} onPress={handleSubmit}>
-              <Text style={styles.text}>Submit</Text>
+              <Text style={styles.text}>{props.labelData.submit}</Text>
             </TouchableOpacity>
           </View>
         </View>

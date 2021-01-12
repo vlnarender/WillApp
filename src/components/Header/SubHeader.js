@@ -1,8 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {View, Image, TouchableOpacity} from 'react-native';
+import {View, Image, TouchableOpacity, I18nManager} from 'react-native';
 import {
   ARROW_LEFT,
+  ARROW_RIGHT,
   CROSS,
   HEADER_SMALL_LOGO,
 } from '../../_helpers/ImageProvide';
@@ -14,7 +15,7 @@ const SubHeader = (props) => {
     <View style={styleCss.header}>
       <View style={{flex: 1, alignSelf: 'center', alignItems: 'center'}}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={ARROW_LEFT} />
+          <Image source={I18nManager.isRTL ? ARROW_RIGHT : ARROW_LEFT} />
         </TouchableOpacity>
       </View>
       <View style={{flex: 4, alignItems: 'center', alignSelf: 'center'}}>

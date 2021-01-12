@@ -43,13 +43,12 @@ const StyledInput = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
@@ -95,13 +94,12 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
@@ -151,14 +149,6 @@ const StyledSwitch = ({formikKey, formikProps, label, ...rest}) => (
   </FieldWrapper>
 );
 
-const validationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email('please enter valid email id')
-    .required('Please enter a valid email id'),
-  password: yup.string().required(),
-});
-
 const signUp = ({values}) => {
   return values;
 };
@@ -166,9 +156,15 @@ const signUp = ({values}) => {
 const LoginScreen = (props) => {
   const [device_token, setToken] = useState('');
   const [device_type, setType] = useState('');
-  const [selected, setSelected] = useState(false);
   useEffect(() => {
     getDeviceValue();
+  });
+  const validationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email('please enter valid email id')
+      .required('Please enter a valid email id'),
+    password: yup.string().required(),
   });
   if (props.loginError) {
     Toast.showWithGravity(props.loginError, Toast.SHORT, Toast.CENTER);
@@ -188,17 +184,20 @@ const LoginScreen = (props) => {
     }
   };
   return (
-    <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
+    <SafeAreaView
+      style={{flex: 1, justifyContent: 'center', backgroundColor: '#fff'}}>
       <View
         style={{
           justifyContent: 'center',
           alignItems: 'center',
         }}>
         <Image source={LOGIN_logo} />
-        <Text style={{color: '#f2ae88', fontSize: 20, marginTop: -45}}>
-          Welcome
+        <Text style={{color: '#f2A884', fontSize: 20, marginTop: -45}}>
+          {props.labelData.welcome}
         </Text>
-        <Text style={{color: '#f2ae88', fontSize: 15}}>Login to Continue</Text>
+        <Text style={{color: '#f2A884', fontSize: 15}}>
+          {props.labelData.login_to_continue}
+        </Text>
 
         <Formik
           initialValues={{
@@ -220,19 +219,16 @@ const LoginScreen = (props) => {
           {(formikProps) => (
             <React.Fragment>
               <StyledInput
-                //label="Mobile"
                 icon={'email'}
                 formikProps={formikProps}
                 formikKey="email"
-                placeholder="Email"
-                // autoFocus
+                placeholder={props.labelData.email}
               />
               <StyledInputPass
-                //label="Password"
                 icon={'pass'}
                 formikProps={formikProps}
                 formikKey="password"
-                placeholder="Password"
+                placeholder={props.labelData.pass}
                 secureTextEntry
               />
 
@@ -246,7 +242,7 @@ const LoginScreen = (props) => {
                   <TouchableOpacity>
                     <Text
                       style={{
-                        color: '#f2ae88',
+                        color: '#f2A884',
                         textAlign: 'right',
                       }}
                       onPress={() => {
@@ -261,7 +257,7 @@ const LoginScreen = (props) => {
                 <TouchableOpacity
                   onPress={formikProps.handleSubmit}
                   style={{
-                    backgroundColor: '#f2ae88',
+                    backgroundColor: '#f2A884',
                     width: '70%',
                     borderRadius: 50,
                     paddingVertical: 15,
@@ -295,7 +291,7 @@ const LoginScreen = (props) => {
             <Text
               style={{
                 fontSize: 18,
-                color: '#f2ae88',
+                color: '#f2A884',
                 alignSelf: 'center',
               }}>
               {props.labelData.new_user}
@@ -319,8 +315,8 @@ const LoginScreen = (props) => {
                     props.navigation,
                   );
                 }}>
-                <Text style={{fontSize: 16, color: '#f2ae88'}}>
-                  continue as guest
+                <Text style={{fontSize: 16, color: '#f2A884'}}>
+                  {props.labelData.continue_as_guest}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -383,12 +379,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  loginError: state.loginReducer.loginError,
-  loginMessage: state.loginReducer.loginMessage,
-  labelData: state.labelReducer.labelData,
-  userData: state.loginReducer.userData,
-});
+const mapStateToProps = (state) => {
+  return {
+    loginError: state.loginReducer.loginError,
+    loginMessage: state.loginReducer.loginMessage,
+    labelData: state.labelReducer.labelData,
+    userData: state.loginReducer.userData,
+  };
+};
 
 const actionCreators = {
   logAction: loginActions.loginUserAction,

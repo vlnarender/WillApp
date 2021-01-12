@@ -25,6 +25,8 @@ export const COMMON_ARROW_LEFT = require('../../assets/image/arrows/arrowLeft.pn
 export const COMMON_ARROW_RIGHT = require('../../assets/image/arrows/arrowRight.png');
 export const PLAN_ARROW_LEFT = require('../../assets/image/arrows/left_arrow.png');
 export const PLAN_ARROW_RIGHT = require('../../assets/image/arrows/right_arrow.png');
+export const CIRCLE_ARROW_RIGHT = require('../../assets/image/arrows/next.png');
+export const CIRCLE_ARROW_LEFT = require('../../assets/image/arrows/prev.png');
 
 export const CAMERA_WHITE = require('../../assets/image/header/cameraWhite.png');
 export const CART = require('../../assets/image/header/cart.png');

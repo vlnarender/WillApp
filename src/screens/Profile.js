@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Platform,
   PermissionsAndroid,
+  I18nManager,
 } from 'react-native';
 import {profileActions} from '../actions/profile';
 import ImagePicker from 'react-native-image-picker';
@@ -19,7 +20,6 @@ import {
   CAMERA_WHITE,
   HEADER_EDIT_ORANGE,
   HEADER_PROFILE_IMG,
-  ARROW_LEFT,
   HEADER_SMALL_LOGO,
   CROSS,
 } from '../_helpers/ImageProvide';
@@ -31,14 +31,16 @@ const Profile = (props) => {
     try {
       props.profileAction();
     } catch (e) {
-      //  error
       console.error(e);
     }
   };
   const camera = async () => {
     var options = {
-      title: 'Select Image',
-
+      title: props.labelData.select_image,
+      cancelButtonTitle: props.labelData.cancel,
+      takePhotoButtonTitle: props.labelData.take_photo,
+      chooseFromLibraryButtonTitle: props.labelData.choose_from_library,
+      mediaType: 'photo',
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -145,9 +147,7 @@ const Profile = (props) => {
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive">
           <View style={styleCss.mainContainer}>
-          
-            <View style={{marginBottom: 30, position:'relative'}}>
-            
+            <View style={{marginBottom: 30, position: 'relative'}}>
               <View
                 style={{
                   flexDirection: 'column',
@@ -234,7 +234,7 @@ const Profile = (props) => {
               <View style={{marginTop: 20}}>
                 <View>
                   <Text style={styles.lable}>{props.labelData.first_name}</Text>
-                  <Text style={styles.text}>
+                  <Text style={[styles.text]}>
                     {props.profileData.first_name}
                   </Text>
                 </View>
@@ -258,7 +258,7 @@ const Profile = (props) => {
                     {props.labelData.my_add_list}
                   </Text>
                   <Text style={styles.text}>
-                    Default:
+                    {props.labelData.default} :
                     {props.profileData.default_address
                       ? props.profileData.default_address.area
                       : null}
@@ -281,7 +281,7 @@ const Profile = (props) => {
 };
 const styles = StyleSheet.create({
   lable: {fontSize: 13, color: '#a6a6a6'},
-  text: {fontSize: 16, color: '#000000'},
+  text: {fontSize: 16, color: '#000000', alignSelf: 'flex-start'},
   profileImage: {
     borderRadius: 100,
     borderWidth: 10,

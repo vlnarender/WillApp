@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Image, StyleSheet, ImagePropTypes} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {connect} from 'react-redux';
 import {CROSS} from '../_helpers/ImageProvide';
 import {Calendar, CalendarList} from 'react-native-calendars';
 import moment from 'moment';
@@ -40,7 +41,7 @@ const OneDay = (props) => {
       m_Day.add(1, 'days')
     ) {
       disabledDates[m_Day.format('YYYY-MM-DD')] = {
-        textColor: '#f2ae88',
+        textColor: '#f2A884',
         disabled: true,
         disableTouchEvent: true,
       };
@@ -99,7 +100,7 @@ const OneDay = (props) => {
                 theme={{
                   calendarBackground: '#343739',
                   todayTextColor: 'white',
-                  todayBackgroundColor: '#f2ae88',
+                  todayBackgroundColor: '#f2A884',
                   textDisabledColor: '#6a6e7f',
                   dayTextColor: 'white',
                   monthTextColor: 'white',
@@ -143,7 +144,12 @@ const OneDay = (props) => {
   //{renderCalendarWithSelectableDate(calender)}
   return <>{renderCalendarWithSelectableDate(calender)}</>;
 };
-export default OneDay;
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
+export default connect(mapStateToProps, null)(OneDay);
 const styles = StyleSheet.create({
   calendar: {
     marginBottom: 10,
@@ -161,7 +167,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   topBg: {
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     height: 150,
     alignItems: 'center',
   },
@@ -187,7 +193,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 100,
     shadowOffset: {width: 0, height: 0},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: 8,
     elevation: 5,
     backgroundColor: '#0000', // invisible col
@@ -214,7 +220,7 @@ const styles = StyleSheet.create({
   colorBox1: {
     width: 20,
     height: 20,
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     marginRight: 10,
   },
 
@@ -233,7 +239,7 @@ const styles = StyleSheet.create({
   },
 
   textColor: {
-    color: '#f2ae88',
+    color: '#f2A884',
     fontSize: 14,
   },
 

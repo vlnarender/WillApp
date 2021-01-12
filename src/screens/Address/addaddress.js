@@ -6,8 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
   Keyboard,
+  I18nManager,
 } from 'react-native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
@@ -20,6 +20,7 @@ import {addAddressActions} from '../../actions/addaddress';
 let styleCss = require('../../GlobalStyle');
 import {
   ARROW_LEFT,
+  ARROW_RIGHT,
   CHECKED,
   HEADER_unchecked,
   LOGO,
@@ -53,13 +54,13 @@ const StyledInputName = ({
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: '100%',
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,
@@ -102,7 +103,7 @@ const StyledInputName = ({
 
 const Addaddress = (props) => {
   const [checked, setChecked] = useState(false);
-  const [selectedValue, setSelectedValue] = useState('Home');
+  const [selectedValue, setSelectedValue] = useState(1);
   const [formData, setformData] = useState({
     address_type: '',
     area: '',
@@ -117,8 +118,14 @@ const Addaddress = (props) => {
   });
   const validationSchema = yup.object().shape({
     area: yup.string().required('Please enter area').default(formData.area),
-    name: yup.string().required('Please enter name').default(formData.name),
-    block: yup.string().required('Please enter block').default(formData.block),
+    name: yup
+      .string()
+      .required(props.labelData.please_enter_name)
+      .default(formData.name),
+    block: yup
+      .string()
+      .required(props.labelData.please_enter_block)
+      .default(formData.block),
     additional_direction: yup
       .string()
       .default(
@@ -128,20 +135,20 @@ const Addaddress = (props) => {
       ),
     street: yup
       .string()
-      .required('Please enter street')
+      .required(props.labelData.please_enter_street)
       .default(formData.street),
     building: yup
       .string()
-      .required('Please enter building')
+      .required(props.labelData.please_enter_building)
       .default(formData.building),
     floor: yup
       .number()
-      .typeError('Please enter a valid floor number')
+      .typeError(props.labelData.please_enter_valid_floor_number)
       .required('Please enter floor')
       .default(parseInt(formData.floor)),
     apartment_number: yup
       .number()
-      .typeError('Please enter a valid apartment number')
+      .typeError(props.labelData.please_enter_valid_apartment)
       .required('Please enter apartment number')
       .default(parseInt(formData.apartment_number)),
   });
@@ -151,7 +158,11 @@ const Addaddress = (props) => {
   useEffect(() => {
     setformData(props.route.params.formData);
     setChecked(props.route.params.formData.is_default_address);
-    setSelectedValue(props.route.params.formData.address_type);
+    setSelectedValue(
+      props.route.params.formData.address_type === ''
+        ? 1
+        : props.route.params.formData.address_type,
+    );
   }, [props.route.params.formData]);
   if (props.labelData) {
     return (
@@ -164,7 +175,10 @@ const Addaddress = (props) => {
             <View style={{flex: 1, alignItems: 'flex-start'}}>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate('Addresslist')}>
-                <Image style={{width: 36, height: 14}} source={ARROW_LEFT} />
+                <Image
+                  style={{width: 36, height: 14}}
+                  source={I18nManager.isRTL ? ARROW_RIGHT : ARROW_LEFT}
+                />
               </TouchableOpacity>
             </View>
             <View style={{flex: 1, alignItems: 'center'}}>
@@ -176,7 +190,7 @@ const Addaddress = (props) => {
             <View style={{flex: 1}}></View>
           </View>
           <View style={{marginVertical: 12}}>
-            <Text style={styleCss.headingPro}> Address</Text>
+            <Text style={styleCss.headingPro}> {props.labelData.address}</Text>
           </View>
           <Formik
             initialValues={{
@@ -223,7 +237,7 @@ const Addaddress = (props) => {
                   keyboardType="default"
                   formikProps={formikProps}
                   formikKey="name"
-                  placeholder="Name"
+                  placeholder={props.labelData.name}
                   value={formData.name ? formData.name : ''}
                   onChangeText={(e) => {
                     setformData({...formData, name: e});
@@ -233,7 +247,7 @@ const Addaddress = (props) => {
                   keyboardType="numeric"
                   formikProps={formikProps}
                   formikKey="floor"
-                  placeholder="Floor"
+                  placeholder={props.labelData.floor}
                   value={formData.floor ? formData.floor : ''}
                   onChangeText={(e) => {
                     setformData({...formData, floor: e});
@@ -243,7 +257,7 @@ const Addaddress = (props) => {
                   keyboardType="default"
                   formikProps={formikProps}
                   formikKey="block"
-                  placeholder="Block"
+                  placeholder={props.labelData.block}
                   value={formData.block ? formData.block : ''}
                   onChangeText={(e) => {
                     setformData({...formData, block: e});
@@ -253,7 +267,7 @@ const Addaddress = (props) => {
                   keyboardType="numeric"
                   formikProps={formikProps}
                   formikKey="apartment_number"
-                  placeholder="Apartment Number"
+                  placeholder={props.labelData.apartment_number}
                   value={
                     formData.apartment_number ? formData.apartment_number : ''
                   }
@@ -265,17 +279,17 @@ const Addaddress = (props) => {
                   keyboardType="default"
                   formikProps={formikProps}
                   formikKey="street"
-                  placeholder="Street"
+                  placeholder={props.labelData.street}
                   value={formData.street ? formData.street : ''}
                   onChangeText={(e) => {
                     setformData({...formData, street: e});
                   }}
                 />
                 <StyledInputName
-                  keyboardType="numeric"
+                  keyboardType="default"
                   formikProps={formikProps}
                   formikKey="building"
-                  placeholder="Building"
+                  placeholder={props.labelData.building}
                   value={formData.building ? formData.building : ''}
                   onChangeText={(e) => {
                     setformData({...formData, building: e});
@@ -285,7 +299,7 @@ const Addaddress = (props) => {
                   keyboardType="default"
                   formikProps={formikProps}
                   formikKey="area"
-                  placeholder="Area"
+                  placeholder={props.labelData.area}
                   value={formData.area ? formData.area : ''}
                   onChangeText={(e) => {
                     setformData({...formData, area: e});
@@ -304,18 +318,18 @@ const Addaddress = (props) => {
                   <Picker
                     selectedValue={selectedValue}
                     onValueChange={(itemValue) => setSelectedValue(itemValue)}>
-                    <Picker.Item label="Home" value="Home" />
-                    <Picker.Item label="Office" value="Office" />
-                    <Picker.Item label="Other" value="Other" />
+                    <Picker.Item label={props.labelData.home} value={1} />
+                    <Picker.Item label={props.labelData.office} value={2} />
+                    <Picker.Item label={props.labelData.other} value={3} />
                   </Picker>
                 </View>
                 <StyledInputName
                   keyboardType="default"
                   formikProps={formikProps}
                   formikKey="additional_direction"
-                  placeholder="Additional Direction"
+                  placeholder={props.labelData.additional_direction}
                   value={
-                    formData.additional_direction
+                    formData.additional_direction != 'null'
                       ? formData.additional_direction
                       : ''
                   }
@@ -338,7 +352,7 @@ const Addaddress = (props) => {
                   />
                   <View>
                     <Text numberOfLines={1} style={styles.radioText}>
-                      Make this my default address?
+                      {props.labelData.make_this_my_default_address}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -351,7 +365,7 @@ const Addaddress = (props) => {
                   <TouchableOpacity
                     onPress={formikProps.handleSubmit}
                     style={[styleCss.btnButton, styleCss.mrTop]}>
-                    <Text style={styles.text}>Submit</Text>
+                    <Text style={styles.text}>{props.labelData.submit}</Text>
                   </TouchableOpacity>
                   <Text style={{color: 'red'}}>
                     {formikProps.errors.general}
@@ -397,13 +411,13 @@ var styles = StyleSheet.create({
   inputStyles: {
     borderColor: '#e0e0e0',
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: '100%',
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 5,
     backgroundColor: '#0000', // invisible color
     borderRadius: 20,

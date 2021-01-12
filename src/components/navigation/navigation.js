@@ -8,11 +8,12 @@ import {
   OffersStackNavigator,
   SubscriptionStackNavigator,
 } from './stackNavigator';
+import myOrders from '../../screens/myOrders';
 import {connect} from 'react-redux';
 const Tab = createBottomTabNavigator();
 const BottomTabNavigator = (props) => {
   const customTabBarStyle = {
-    activeTintColor: '#f2ae88',
+    activeTintColor: '#f2A884',
     labelStyle: {fontSize: 12},
     inactiveTintColor: '#8e8e8e',
     style: {backgroundColor: 'white'},
@@ -29,7 +30,7 @@ const BottomTabNavigator = (props) => {
   if (props.labelStatus) {
     return (
       <Tab.Navigator
-        activeColor="#f2ae88"
+        activeColor="#f2A884"
         inactiveColor="#8e8e8e"
         initialRouteName="Home"
         tabBarOptions={customTabBarStyle}
@@ -42,7 +43,7 @@ const BottomTabNavigator = (props) => {
             tabBarLabel: props.labelData.profile,
             tabBarIcon: ({color}) => (
               <View>
-                {color === '#f2ae88' ? (
+                {color === '#f2A884' ? (
                   <Image
                     source={require('../../../assets/image/login/profileActive.png')}
                   />
@@ -62,7 +63,7 @@ const BottomTabNavigator = (props) => {
             tabBarLabel: props.labelData.favourites,
             tabBarIcon: ({color}) => (
               <View>
-                {color === '#f2ae88' ? (
+                {color === '#f2A884' ? (
                   <Image
                     source={require('../../../assets/image/login/favoriteActive.png')}
                   />
@@ -92,7 +93,7 @@ const BottomTabNavigator = (props) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: 'white',
-                  shadowColor: '#000',
+                  shadowColor: '#F2A884',
 
                   shadowOffset: {
                     width: 0,
@@ -102,7 +103,7 @@ const BottomTabNavigator = (props) => {
                   shadowRadius: 1,
                   elevation: 0,
                 }}>
-                {color === '#f2ae88' ? (
+                {color === '#f2A884' ? (
                   <Image
                     source={require('../../../assets/image/login/homeActive.png')}
                   />
@@ -119,10 +120,10 @@ const BottomTabNavigator = (props) => {
           name="Offers"
           component={OffersStackNavigator}
           options={{
-            tabBarLabel: 'Offers',
+            tabBarLabel: props.labelData.offers,
             tabBarIcon: ({color}) => (
               <View>
-                {color === '#f2ae88' ? (
+                {color === '#f2A884' ? (
                   <Image
                     source={require('../../../assets/image/login/offerActive.png')}
                   />
@@ -137,13 +138,13 @@ const BottomTabNavigator = (props) => {
         />
         <Tab.Screen
           name="Subscription"
-          component={SubscriptionStackNavigator}
+          component={myOrders}
           options={{
             tabBarLabel: props.labelData.subscription,
             tabBarVisible: false,
             tabBarIcon: ({color}) => (
               <View>
-                {color === '#f2ae88' ? (
+                {color === '#f2A884' ? (
                   <Image
                     source={require('../../../assets/image/login/subscriptionActive.png')}
                   />

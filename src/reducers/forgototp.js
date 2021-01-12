@@ -3,7 +3,7 @@ import {userConstants} from '../actions/actionTypes';
 const initialState = {
   forgototpData: {},
   loading: false,
-  //isSignout: false,
+  //isSignOut: false,
   //userToken: null,
   forgototpError: '',
   forgototpMessage: '',

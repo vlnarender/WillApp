@@ -56,13 +56,13 @@ const PushNotification = () => {
             <View style={styles.listHeader}>
               <View>
                 <Text
-                  style={{color: '#f2ae88', fontSize: 22, fontWeight: 'bold'}}>
+                  style={{color: '#f2A884', fontSize: 22, fontWeight: 'bold'}}>
                   Notifications
                 </Text>
               </View>
               <View style={{alignItems: 'flex-end'}}>
                 <TouchableOpacity onPress={() => cleanAll}>
-                  <Text style={{color: '#f2ae88', fontSize: 18}}>
+                  <Text style={{color: '#f2A884', fontSize: 18}}>
                     Clean All
                   </Text>
                 </TouchableOpacity>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderColor: '#ccc',
     borderWidth: 1,
-    shadowColor: '#000',
+    shadowColor: '#F2A884',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     height: 44,
     padding: 20,
   },
-  title: {fontSize: 18, fontWeight: '600', paddingTop: 10, color: '#f2ae88'},
+  title: {fontSize: 18, fontWeight: '600', paddingTop: 10, color: '#f2A884'},
   message: {
     fontSize: 13,
     paddingBottom: 15,

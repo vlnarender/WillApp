@@ -60,11 +60,12 @@ class Main extends React.Component {
       console.error(e);
     }
   }
-  componentDidMount() {
+  componentDidMount = async () => {
+    console.log(await AsyncStorage.getItem('token'));
     setTimeout(this.step1Animantion, 500);
     this._isMounted = true;
     this._isMounted && this.getRemem();
-  }
+  };
   componentWillUnmount() {
     this._isMounted = false;
   }
@@ -282,13 +283,10 @@ class Main extends React.Component {
                   },
                 ]}>
                 <Text style={[styles.swiperScreen1TextTitle, {marginTop: 0}]}>
-                  {this.props.labelData.welcome_to
-                    ? this.props.labelData.welcome_to
-                    : 'Welcome to'}
+                  {this.props.labelData.welcome2}
                 </Text>
                 <Text style={styles.swiperScreen1TextSubTitle}>
-                  Craving for your favourite food? Takeaway will deliver it,
-                  wherever you are!
+                  {this.props.labelData.takeaway}
                 </Text>
               </View>
             </Animated.View>

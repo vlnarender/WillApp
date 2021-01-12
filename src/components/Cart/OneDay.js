@@ -9,7 +9,9 @@ const {width} = Dimensions.get('window');
 const OneDayCart = (props) => {
   return (
     <View style={{flexDirection: 'column'}}>
-      <Text style={{fontSize: 15, fontWeight: 'bold'}}>One Day Plan</Text>
+      <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+        {props.labelData.one_day_plan}
+      </Text>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <View>
           {props.mealList.meal_list.map((e, i) => {
@@ -47,7 +49,7 @@ const OneDayCart = (props) => {
 export default OneDayCart;
 
 const styles = StyleSheet.create({
-  total: {color: '#F2AE88', fontSize: 20, fontWeight: 'bold'},
+  total: {color: '#f2A884', fontSize: 20, fontWeight: 'bold'},
   thiredSection: {
     justifyContent: 'space-between',
     flexDirection: 'row',

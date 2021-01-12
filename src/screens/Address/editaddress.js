@@ -18,6 +18,7 @@ let styleCss = require('../../GlobalStyle');
 import {
   LOGO,
   ARROW_LEFT,
+  ARROW_RIGHT,
   CHECKED,
   HEADER_unchecked,
 } from '../../_helpers/ImageProvide';
@@ -98,7 +99,10 @@ const Editaddress = (props) => {
               <View style={{flex: 1, alignItems: 'flex-start'}}>
                 <TouchableOpacity
                   onPress={() => props.navigation.navigate('Addresslist')}>
-                  <Image style={{width: 36, height: 14}} source={ARROW_LEFT} />
+                  <Image
+                    style={{width: 36, height: 14}}
+                    source={I18nManager.isRTL ? ARROW_RIGHT : ARROW_LEFT}
+                  />
                 </TouchableOpacity>
               </View>
               <View style={{flex: 1, alignItems: 'center'}}>
@@ -107,7 +111,9 @@ const Editaddress = (props) => {
               <View style={{flex: 1}}></View>
             </View>
             <View style={{marginVertical: 30}}>
-              <Text style={styleCss.headingPro}>Edit address</Text>
+              <Text style={styleCss.headingPro}>
+                `${props.labelData.edit} ${props.labelData.address}`
+              </Text>
             </View>
 
             <FloatingLabelInput
@@ -136,7 +142,7 @@ const Editaddress = (props) => {
                   <Image style={styles.imgSize} source={CHECKED} />
                   <View>
                     <Text numberOfLines={1} style={styles.radioText}>
-                      Make this my default address?
+                      {props.labelData.make_this_my_default_address}?
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -149,7 +155,7 @@ const Editaddress = (props) => {
                   <Image style={styles.imgSize} source={HEADER_unchecked} />
                   <View>
                     <Text numberOfLines={1} style={styles.radioText}>
-                      Make this my default address?
+                      {props.labelData.make_this_my_default_address}?
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -168,7 +174,7 @@ const Editaddress = (props) => {
           <TouchableOpacity
             style={[styleCss.btnButton, styleCss.mrTop]}
             onPress={handleSubmit}>
-            <Text style={styles.text}>Submit</Text>
+            <Text style={styles.text}>{props.labelData.submit}</Text>
           </TouchableOpacity>
         </View>
       </>

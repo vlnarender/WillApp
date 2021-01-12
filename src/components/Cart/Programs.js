@@ -26,7 +26,9 @@ const ProgramsCart = (props) => {
               <View
                 key={i}
                 style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-                <Text>Week {JSON.stringify(e.week)}</Text>
+                <Text>
+                  {props.labelData.week} {JSON.stringify(e.week)}
+                </Text>
                 <Text>{e.plan_package.package_name_en}</Text>
                 <Text>{e.plan_package.price} KD</Text>
               </View>
@@ -66,7 +68,7 @@ const ProgramsCart = (props) => {
 export default ProgramsCart;
 
 const styles = StyleSheet.create({
-  total: {color: '#F2AE88', fontSize: 20, fontWeight: 'bold'},
+  total: {color: '#f2A884', fontSize: 20, fontWeight: 'bold'},
   thiredSection: {
     justifyContent: 'space-between',
     flexDirection: 'row',

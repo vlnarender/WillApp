@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   restorentBox: {
     width: '45%',
     shadowOffset: {width: 10, height: 10},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: 1,
     elevation: 5,
     borderRadius: 10,

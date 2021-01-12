@@ -33,13 +33,13 @@ const StyledInput = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: 5,
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     backgroundColor: '#0000', // invisible color
@@ -86,13 +86,13 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: 5,
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     backgroundColor: '#0000', // invisible color
@@ -180,7 +180,7 @@ const ForgotScreen = (props) => {
         <Image source={LOGIN_logo} />
         <Text
           style={{
-            color: '#f2ae88',
+            color: '#f2A884',
             fontSize: 23,
             textAlign: 'center',
           }}>
@@ -190,11 +190,12 @@ const ForgotScreen = (props) => {
         <Text
           style={{
             width: '50%',
-            color: '#f2ae88',
+            color: '#f2A884',
             fontSize: 15,
             textAlign: 'center',
           }}>
-          Please enter a password and confirm new password
+          {props.labelData.plz_enter_your_pass} and{' '}
+          {props.labelData.confirm_new_password}
         </Text>
 
         <Formik
@@ -221,7 +222,7 @@ const ForgotScreen = (props) => {
                 icon={'pass'}
                 formikProps={formikProps}
                 formikKey="password"
-                placeholder="Type new password"
+                placeholder={props.labelData.type_new_password}
                 secureTextEntry
                 // autoFocus
               />
@@ -230,7 +231,7 @@ const ForgotScreen = (props) => {
                 icon={'pass'}
                 formikProps={formikProps}
                 formikKey="confirm_password"
-                placeholder="Confirm new password"
+                placeholder={props.labelData.confirm_new_password}
                 secureTextEntry
               />
 
@@ -243,14 +244,14 @@ const ForgotScreen = (props) => {
                   <TouchableOpacity onPress={formikProps.handleSubmit}>
                     <View
                       style={{
-                        backgroundColor: '#f2ae88',
+                        backgroundColor: '#f2A884',
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: 15,
                         padding: 10,
                         width: 300,
                         height: 50,
-                        shadowColor: 'red',
+                        shadowColor: '#F2A884',
                         shadowRadius: 16,
                         shadowOpacity: 10,
                         shadowOffset: {
@@ -260,7 +261,7 @@ const ForgotScreen = (props) => {
                         elevation: 2,
                       }}>
                       <Text style={{color: 'white', fontWeight: 'bold'}}>
-                        Submit
+                        {props.labelData.submit}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -274,12 +275,14 @@ const ForgotScreen = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  forgotError: state.forgotReducer.forgotError,
-  forgotMessage: state.forgotReducer.forgotMessage,
-  forgotData: state.forgotReducer.forgotData,
-  labelData: state.labelReducer.labelData,
-});
+const mapStateToProps = (state) => {
+  return {
+    forgotError: state.forgotReducer.forgotError,
+    forgotMessage: state.forgotReducer.forgotMessage,
+    forgotData: state.forgotReducer.forgotData,
+    labelData: state.labelReducer.labelData,
+  };
+};
 
 const actionCreators = {
   forgotAction: forgotActions.forgotUserAction,

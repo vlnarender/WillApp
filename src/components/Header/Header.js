@@ -37,7 +37,7 @@ const Header = (props) => {
               navigation.navigate('CartComponent');
             } else {
               Toast.showWithGravity(
-                'Please select your plan first.',
+                props.labelData.please_select_your_plan_first,
                 Toast.SHORT,
                 Toast.CENTER,
               );
@@ -71,6 +71,10 @@ const Header = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return {listOfItem: state.cartReducer.listOfItems};
+  return {
+    labelData: state.labelReducer.labelData,
+    listOfItem: state.cartReducer.listOfItems,
+  };
 };
+
 export default connect(mapStateToProps, null)(Header);

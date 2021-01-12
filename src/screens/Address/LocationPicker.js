@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {connect} from 'react-redux';
 import {
   Text,
   View,
@@ -6,6 +7,7 @@ import {
   Image,
   KeyboardAvoidingView,
   PermissionsAndroid,
+  I18nManager,
 } from 'react-native';
 import Loader from '../../components/Loader/Loader';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
@@ -38,27 +40,9 @@ const LocationPicker = (props) => {
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       getGeoLocation();
-      setRegion({
-        latitudeDelta,
-        longitudeDelta,
-        latitude: 0,
-        longitude: 0,
-      });
-      setaddress('');
-      setMarkers({
-        coordinate: {
-          latitude: 0,
-          longitude: 0,
-        },
-        title: 'Best Place',
-        description: 'Description',
-        id: 1,
-      });
     });
-    getGeoLocation();
-
     return () => unsubscribe;
-  }, []);
+  }, [address, markers, region]);
   const GeocoderLocation = async (latitude, longitude) => {
     await Geocoder.init(GOOGLE_API_KEY);
     await Geocoder.from(latitude, longitude)
@@ -99,6 +83,7 @@ const LocationPicker = (props) => {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           });
+          // GeocoderLocation(position.coords.latitude, position.coords.longitude);
           getCurrentAddress(
             position.coords.latitude,
             position.coords.longitude,
@@ -173,7 +158,13 @@ const LocationPicker = (props) => {
             title={markers.title}
             description={markers.description}
             draggable
-            pinColor="#f2ae88"
+            pinColor="#f2A884"
+            onDragEnd={(e) => {
+              GeocoderLocation(
+                e.nativeEvent.coordinate.latitude,
+                e.nativeEvent.coordinate.longitude,
+              );
+            }}
           />
         </MapView>
         <View style={styles.panel}>
@@ -192,7 +183,7 @@ const LocationPicker = (props) => {
               listUnderlayColor="lightgrey"
               onPress={(data, details) => {
                 setlistViewDisplayed(null);
-                setaddress(data.description);
+                // setaddress(data.description);
                 setRegion({
                   latitudeDelta,
                   longitudeDelta,
@@ -211,8 +202,8 @@ const LocationPicker = (props) => {
               }}
               query={{
                 key: GOOGLE_API_KEY,
-                language: 'en', // language of the results
-                components: 'country:ind',
+                language: I18nManager.isRTL ? 'ar' : 'en', // language of the results
+                // components: I18nManager.isRTL ? 'country:ind' : 'country:ind',
               }}
               styles={{
                 description: {
@@ -249,25 +240,23 @@ const LocationPicker = (props) => {
           <KeyboardAvoidingView style={styles.footer}>
             <View style={{flexDirection: 'column', margin: 20}}>
               <Text style={styles.addressText}>
-                Select your location from map
+                {props.labelData.map_location}
               </Text>
-              {address && (
-                <View style={{flexDirection: 'row'}}>
-                  <Image
-                    source={CURSOR_ICON}
-                    style={{width: 20, height: 20, padding: 10, margin: 10}}
-                  />
-                  <Text
-                    style={{
-                      width: '100%',
-                      alignSelf: 'center',
-                      flex: 0.9,
-                      alignContent: 'flex-start',
-                    }}>
-                    {address}
-                  </Text>
-                </View>
-              )}
+              <View style={{flexDirection: 'row'}}>
+                <Image
+                  source={CURSOR_ICON}
+                  style={{width: 20, height: 20, padding: 10, margin: 10}}
+                />
+                <Text
+                  style={{
+                    width: '100%',
+                    alignSelf: 'center',
+                    flex: 0.9,
+                    alignContent: 'flex-start',
+                  }}>
+                  {address}
+                </Text>
+              </View>
             </View>
             <TouchableOpacity
               onPress={() => {
@@ -291,7 +280,7 @@ const LocationPicker = (props) => {
                 width: '90%',
                 alignSelf: 'center',
                 alignItems: 'center',
-                backgroundColor: '#f2ae88',
+                backgroundColor: '#f2A884',
                 borderRadius: 10,
                 shadowColor: 'rgba(0,0,0, .4)', // IOS
                 shadowOffset: {height: 1, width: 1}, // IOS
@@ -306,7 +295,7 @@ const LocationPicker = (props) => {
                   fontWeight: 'bold',
                   paddingVertical: 15,
                 }}>
-                Next
+                {props.labelData.next}
               </Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
@@ -315,8 +304,12 @@ const LocationPicker = (props) => {
     );
   } else return <Loader />;
 };
-
-export default LocationPicker;
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
+export default connect(mapStateToProps, null)(LocationPicker);
 const styles = StyleSheet.create({
   map: {
     flex: 1,

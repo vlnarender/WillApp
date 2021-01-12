@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, View, Modal, Image} from 'react-native';
 import {LOGO} from '../../_helpers/ImageProvide';

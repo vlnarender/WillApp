@@ -78,7 +78,7 @@ const AddNewCard = (props) => {
           }}>
           <TouchableOpacity
             style={{
-              backgroundColor: '#F2AE88',
+              backgroundColor: '#f2A884',
               paddingVertical: 15,
               borderRadius: 10,
             }}>
@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginTop: 30,
     fontSize: 18,
+    alignSelf: 'flex-start',
   },
   redioText: {
     fontSize: 30,

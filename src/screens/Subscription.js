@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,8 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import {connect} from 'react-redux';
+
 let styleCss = require('../GlobalStyle');
 import {CROSS, LOGIN_pass, LOGO} from '../_helpers/ImageProvide';
 
@@ -53,7 +55,9 @@ const Subscription = (props) => {
 
           <View style={styles.mrgTop}>
             <View>
-              <Text style={styles.inputLabel}>Old Password</Text>
+              <Text style={styles.inputLabel}>
+                {props.labelData.old_password}
+              </Text>
             </View>
             <View style={styleCss.inputStylesPass}>
               <View style={styles.imgStyle}>
@@ -62,39 +66,16 @@ const Subscription = (props) => {
               <View style={{flex: 5}}>
                 <TextInput
                   style={{height: 50, paddingLeft: 5}}
-                  placeholder="Old Password"
+                  placeholder={props.labelData.old_password}
                   onChangeText={handleCardNumber}
                   value={oldpass}
                   keyboardType={'numeric'}
                 />
-                {/*  <TextInput 
-            style={focus?{ alignSelf: 'stretch',
-            padding: 10,
-            marginLeft: 50,
-            margin:5,
-            marginRight:50,
-            borderBottomWidth: 2 ,
-            borderBottomColor:'green'
-          }:{ alignSelf: 'stretch',
-            padding: 10,
-            marginLeft: 50,
-            margin:5,
-            marginRight:50,
-            borderBottomWidth: 2,
-            borderBottomColor:'#000'
-          }}
-            placeholder="Old Password" 
-            onChangeText={handleCardNumber}
-            value={oldpass}
-            keyboardType={"numeric"}
-            maxLength={5}
-           // onFocus={focusInput}
-            /> */}
               </View>
             </View>
           </View>
           <TouchableOpacity style={styleCss.btnButton} onPress={handleSubmit}>
-            <Text style={styles.text}>Submit</Text>
+            <Text style={styles.text}>{props.labelData.submit}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -128,4 +109,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Subscription;
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
+export default connect(mapStateToProps, null)(Subscription);

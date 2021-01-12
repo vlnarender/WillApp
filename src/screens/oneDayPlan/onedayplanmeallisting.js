@@ -42,7 +42,7 @@ const OneDayPlanMealListing = (props) => {
 
           <View style={styles.back}>
             <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
-              <Text style={{color: '#f2ae88', fontSize: 11}}>
+              <Text style={{color: '#f2A884', fontSize: 11}}>
                 {props.labelData.back}
               </Text>
             </TouchableOpacity>
@@ -83,7 +83,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  labelData: state.labelReducer.labelData,
-});
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
 export default connect(mapStateToProps, null)(OneDayPlanMealListing);

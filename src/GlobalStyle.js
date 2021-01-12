@@ -38,13 +38,13 @@ module.exports = StyleSheet.create({
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 50,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: 300,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 5,
     backgroundColor: '#0000', // invisible color
@@ -63,7 +63,7 @@ module.exports = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    shadowColor: '#000',
+    shadowColor: '#F2A884',
     shadowOffset: {
       width: 0,
       height: -3,
@@ -79,7 +79,7 @@ module.exports = StyleSheet.create({
     borderRadius: 20,
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
-    shadowColor: '#000',
+    shadowColor: '#F2A884',
     shadowOffset: {
       width: 0,
       height: 0,
@@ -92,8 +92,9 @@ module.exports = StyleSheet.create({
 
   header: {
     width: '100%',
+    backgroundColor: '#fff',
     height: 50,
-    shadowColor: '#000',
+    shadowColor: '#F2A884',
     shadowOffset: {
       width: 0,
       height: 0,
@@ -141,7 +142,7 @@ module.exports = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#989797',
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
@@ -175,12 +176,12 @@ module.exports = StyleSheet.create({
 
   inputStyles: {
     borderColor: '#e0e0e0',
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 5,
     backgroundColor: '#0000', // invisible color
@@ -193,16 +194,16 @@ module.exports = StyleSheet.create({
   },
 
   btnButton: {
-    borderColor: '#f2ae88',
+    borderColor: '#f2A884',
     height: 50,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 5,
     borderRadius: 16,
-    backgroundColor: '#f2ae88',
+    backgroundColor: '#f2A884',
     marginTop: 30,
     alignItems: 'center',
     justifyContent: 'center',
@@ -212,12 +213,12 @@ module.exports = StyleSheet.create({
   /// change password
   inputStylesPass: {
     borderColor: '#e0e0e0',
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 20,
     backgroundColor: '#0000', // invisible color
@@ -234,7 +235,7 @@ module.exports = StyleSheet.create({
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 20,
     backgroundColor: '#0000', // invisible color
@@ -274,7 +275,7 @@ module.exports = StyleSheet.create({
     fontWeight: '700',
   },
   textColor: {
-    color: '#f2ae88',
+    color: '#f2A884',
   },
   mrTop: {
     marginTop: 0,
@@ -290,44 +291,40 @@ module.exports = StyleSheet.create({
     borderRadius: 8,
     borderColor: '#ddd',
     borderBottomWidth: 1,
-    shadowColor: '#ddd',
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     shadowRadius: 3,
     elevation: 6,
-    padding: 10,
-    margin: 10,
+    padding: 8,
     height: 80,
   },
   serviceBoxAlter: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderRadius: 8,
     borderColor: '#ddd',
     borderBottomWidth: 1,
-    shadowColor: '#ddd',
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     shadowRadius: 3,
     elevation: 6,
-    padding: 10,
-    margin: 10,
+    padding: 8,
     height: 80,
     borderWidth: 1,
-    borderColor: 'orange',
+    borderColor: '#F2A884',
   },
   textContainer: {
-    marginLeft: 10,
+    marginHorizontal: 7,
   },
 
   h2: {
     fontSize: 18,
-    color: '#f2ae88',
+    color: '#f2A884',
     fontWeight: '700',
   },
   ptext: {
@@ -339,11 +336,11 @@ module.exports = StyleSheet.create({
   // feature css start
 
   featureBox: {
-    width: 165,
-    height: 175,
+    width: 155,
+    height: 155,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 6,
     backgroundColor: '#0000', // invisible color
@@ -361,15 +358,15 @@ module.exports = StyleSheet.create({
 
   // program css start
   programBox: {
-    width: 165,
-    height: 175,
+    width: 155,
+    height: 165,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 6,
     backgroundColor: '#0000', // invisible color
-    borderRadius: 20,
+    borderRadius: 15,
     backgroundColor: '#FFFFFF',
     marginHorizontal: 12,
     marginVertical: 15,
@@ -389,14 +386,14 @@ module.exports = StyleSheet.create({
   homeCard: {
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 6,
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
-    width: width / 2.2,
+    width: width / 2.3,
     margin: 5,
-    padding: 10,
+    padding: 8,
     height: 170,
     marginBottom: 10,
   },
@@ -404,7 +401,7 @@ module.exports = StyleSheet.create({
   homeCard2: {
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 6,
     borderRadius: 10,
@@ -427,7 +424,7 @@ module.exports = StyleSheet.create({
   compBox: {
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 6,
     backgroundColor: '#0000', // invisible color
@@ -450,13 +447,13 @@ module.exports = StyleSheet.create({
     paddingRight: 20,
     paddingBottom: 10,
     paddingLeft: 20,
-    textAlign: 'left',
+    alignSelf: 'flex-start',
     height: 50,
     width: '100%',
     borderWidth: 1,
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 5,
     backgroundColor: '#0000', // invisible color
@@ -466,6 +463,7 @@ module.exports = StyleSheet.create({
   textInput: {
     height: 40,
     backgroundColor: 'white',
+    alignSelf: 'flex-start',
     fontStyle: 'italic',
   },
 
@@ -480,11 +478,12 @@ module.exports = StyleSheet.create({
   },
 
   dropText: {
-    color: '#f2ae88',
+    color: '#f2A884',
     textAlign: 'center',
   },
 
   headingPro: {
+    paddingTop: 15,
     fontSize: 20,
     fontWeight: '700',
   },
@@ -493,7 +492,7 @@ module.exports = StyleSheet.create({
   choosePlan: {
     shadowOffset:
       Platform.OS === 'ios' ? {width: 15, height: 15} : {width: 20, height: 20},
-    shadowColor: 'black',
+    shadowColor: '#F2A884',
     shadowOpacity: Platform.OS === 'ios' ? 0.2 : 8,
     elevation: 5,
     backgroundColor: '#0000', // invisible color
@@ -512,6 +511,6 @@ module.exports = StyleSheet.create({
   },
 });
 
-// #F2AE88
+// #f2A884
 
 //https://medium.com/@muthudevendra/react-native-custom-shareable-components-radio-button-708ce480e1f7

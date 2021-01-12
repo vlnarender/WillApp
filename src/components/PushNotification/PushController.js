@@ -5,7 +5,29 @@ import messaging from '@react-native-firebase/messaging';
 export default class PushController extends Component {
   componentDidMount() {
     messaging().onMessage(async (remoteMessage) => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      Alert.alert(
+        'A new FCM message arrived!',
+        JSON.stringify(remoteMessage),
+        [
+          {
+            text: 'Ask me later',
+            onPress: () => console.log('Ask me later pressed'),
+          },
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'Show',
+            onPress: () => {
+              console.log('OK Pressed', this.props);
+              // this.props.navigation.navigate('PushNotification');
+            },
+          },
+        ],
+        {cancelable: false},
+      );
       PushNotification.popInitialNotification((notification) => {
         console.log('Initial Notification', notification);
       });

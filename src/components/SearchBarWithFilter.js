@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, Image} from 'react-native';
+import {View, TextInput, Image} from 'react-native';
 import {HOME_FILTER, HOME_SEARCH} from '../_helpers/ImageProvide';
+import {connect} from 'react-redux';
 
 let styleCss = require('../GlobalStyle');
-const SearchbarFilter = () => {
+const SearchbarFilter = (props) => {
   const [value, onChangeText] = useState();
   return (
     <View style={{marginTop: 10}}>
@@ -15,7 +16,7 @@ const SearchbarFilter = () => {
         <View style={{flex: 9}}>
           <TextInput
             style={styleCss.textInput}
-            placeholder=" Search of Specfic Plan or Diet Company"
+            placeholder={props.labelData.search_Text}
             onChangeText={(text) => onChangeText(text)}
             value={value}
           />
@@ -31,4 +32,10 @@ const SearchbarFilter = () => {
   );
 };
 
-export default SearchbarFilter;
+const mapStateToProps = (state) => {
+  return {
+    labelData: state.labelReducer.labelData,
+  };
+};
+
+export default connect(mapStateToProps, null)(SearchbarFilter);
