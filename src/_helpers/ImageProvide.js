@@ -5,7 +5,10 @@
  */
 
 // arrow
-
+export const LIVE_CHAT = require('../../assets/image/live_chat.png');
+export const EMAIL = require('../../assets/image/email.png');
+export const CALL = require('../../assets/image/call.png');
+export const WHATS_APP = require('../../assets/image/whatsapp.png');
 export const FOOD_AV = require('../../assets/image/food_temp.png');
 export const AR = require('../../assets/image/arrows/ar.png');
 export const LOADER_FOOD = require('../../assets/image/loader/food.gif');

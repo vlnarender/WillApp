@@ -20,7 +20,7 @@ import SearchbarFilter from '../components/SearchBarWithFilter';
 import {labelActions} from '../actions/label';
 import {homeActions} from '../actions/home';
 import {profileActions} from '../actions/profile';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import {programActions} from '../actions/program';
 import {cartActions} from '../actions/cart';
@@ -40,8 +40,8 @@ const Home = (props) => {
   const [viewall, setViewall] = useState(false);
   const [visible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  let currentCount = 0;
   const [box, setBox] = useState('1');
+  let currentCount = 0;
   const handleBackButtonClick = () => {
     if (currentCount < 1) {
       currentCount += 1;
@@ -70,6 +70,7 @@ const Home = (props) => {
     }, 2000);
     return true;
   };
+  const route = useRoute();
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     getValue();

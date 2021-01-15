@@ -1,46 +1,55 @@
 import {userConstants} from './actionTypes';
-import RNRestart from 'react-native-restart';
 import {USER_API} from '../util/api';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useContext} from 'react';
 export const loginActions = {
   loginUserAction,
   logOutAction,
-  storeToken,
 };
 function logOutAction() {
   return {type: userConstants.LOGOUT_REQUEST};
 }
-function storeToken(user) {
-  return (dispatch) => {
-    dispatch({type: userConstants.TOKEN_RESTORE, user});
-  };
-}
+const commonAction = (data, navigation) => {
+  AsyncStorage.setItem(
+    'AllowLocation',
+    JSON.stringify(data.userdetails.is_location_allow),
+  );
+  AsyncStorage.setItem(
+    'Notification',
+    JSON.stringify(data.userdetails.is_receive_notification),
+  );
+  AsyncStorage.setItem(
+    'ReceiveOffer',
+    JSON.stringify(data.userdetails.is_receive_special_offer),
+  );
+  AsyncStorage.setItem('token', data.authorization_token);
+  AsyncStorage.setItem('email', data.userdetails.email);
+  AsyncStorage.setItem('verify', 'yes');
+  AsyncStorage.setItem('User_id', data.userdetails.id.toString());
+  navigation.navigate('Drawer');
+};
+
 function loginUserAction(data, navigation) {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(request());
+    let userType = await AsyncStorage.getItem('UserType');
+    console.log(userType);
+    let path = parseInt(data.device_type) === 1 ? 'login' : 'guest/login';
+    if (userType === 'Guest') {
+      path = 'loginwithcredential';
+      data = {...data, guest_id: await AsyncStorage.getItem('User_id')};
+    }
     AsyncStorage.setItem(
       'UserType',
       parseInt(data.device_type) === 1 ? 'User' : 'Guest',
     );
-    let path = parseInt(data.device_type) === 1 ? 'login' : 'guest/login';
+    console.log(data);
     USER_API(data, path).then(
       (data) => {
         if (data.success) {
-          //getValue()
+          console.log(data);
           if (data.data.is_verified == 1) {
             dispatch(success(data));
-            AsyncStorage.setItem('token', data.data.authorization_token);
-            AsyncStorage.setItem('email', data.data.userdetails.email);
-            AsyncStorage.setItem('verify', 'yes');
-            dispatch(
-              tokenStore({
-                isSignOut: false,
-                token: data.data.authorization_token,
-              }),
-            );
-            // navigation.navigate('Drawer');
-            // RNRestart.Restart();
+            commonAction(data.data, navigation);
           }
           if (data.data.is_verified == 0) {
             dispatch(success_verify(data));
@@ -55,17 +64,7 @@ function loginUserAction(data, navigation) {
             navigation.navigate('Otp');
           } else {
             dispatch(success(data));
-            AsyncStorage.setItem('token', data.data.authorization_token);
-            AsyncStorage.setItem('email', data.data.userdetails.email);
-            AsyncStorage.setItem('verify', 'yes');
-            dispatch(
-              tokenStore({
-                isSignOut: false,
-                token: data.data.authorization_token,
-              }),
-            );
-            // navigation.navigate('Drawer');
-            // RNRestart.Restart();
+            commonAction(data.data, navigation);
           }
         } else {
           dispatch(failure(data));
@@ -84,9 +83,6 @@ function loginUserAction(data, navigation) {
   }
   function clear() {
     return {type: userConstants.CLEAR};
-  }
-  function tokenStore(user) {
-    return {type: userConstants.TOKEN_RESTORE, user};
   }
   function success(user) {
     return {type: userConstants.LOGIN_SUCCESS, user};

@@ -70,7 +70,7 @@ const Offers = () => {
             </View>
           </ScrollView>
         </SafeAreaView>
-        <PushController />
+        {/* <PushController /> */}
       </Fragment>
     </View>
   );

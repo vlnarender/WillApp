@@ -3,6 +3,7 @@ import React from 'react';
 import {StyleSheet, View, Modal, Image} from 'react-native';
 import {LOGO} from '../../_helpers/ImageProvide';
 const Loader = () => {
+  const navigation = useNavigation();
   return (
     <Modal
       transparent={true}
@@ -11,6 +12,7 @@ const Loader = () => {
       animationType="slide"
       onRequestClose={() => {
         console.log('close modal');
+        // navigation.navigate('Home');
       }}>
       <View style={styles.modalBackground}>
         <View style={styles.activityIndicatorWrapper}>

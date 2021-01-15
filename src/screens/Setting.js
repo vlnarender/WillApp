@@ -12,11 +12,12 @@ import Headers from '../components/Header/Header';
 import {languageRestart} from '../components/LanguageRestart';
 import {commonAction} from '../actions/common';
 import Loader from '../components/Loader/Loader';
+import {ADD_AND_UPDATE_API} from '../util/api';
 const Setting = (props) => {
   const [LocalLanguage, setLocalLanguage] = useState('');
-  const [AllowLocation, setAllowLocation] = useState(true);
-  const [Notification, setNotification] = useState(true);
-  const [ReceiveOffer, setReceiveOffer] = useState(true);
+  const [AllowLocation, setAllowLocation] = useState(false);
+  const [Notification, setNotification] = useState(false);
+  const [ReceiveOffer, setReceiveOffer] = useState(false);
 
   useEffect(() => {
     getValue();
@@ -26,6 +27,9 @@ const Setting = (props) => {
     try {
       props.addressListAction();
       setLocalLanguage(await AsyncStorage.getItem('language'));
+      setAllowLocation(parseInt(await AsyncStorage.getItem('AllowLocation')));
+      setNotification(parseInt(await AsyncStorage.getItem('Notification')));
+      setReceiveOffer(parseInt(await AsyncStorage.getItem('ReceiveOffer')));
     } catch (e) {
       console.error(e);
     }
@@ -43,6 +47,27 @@ const Setting = (props) => {
     const email_2 = props.settingData.email.slice(length + 3);
     const email = email_1 + '**@**' + email_2;
     const langChange = props.labelData;
+
+    const api_Update = (data) => {
+      console.log(data);
+      ADD_AND_UPDATE_API(data, 'update-status').then((data) => {
+        console.log(data);
+        if (data.status) {
+          AsyncStorage.setItem(
+            'AllowLocation',
+            JSON.stringify(data.data.is_location_allow),
+          );
+          AsyncStorage.setItem(
+            'Notification',
+            JSON.stringify(data.data.is_receive_notification),
+          );
+          AsyncStorage.setItem(
+            'ReceiveOffer',
+            JSON.stringify(data.data.is_receive_special_offer),
+          );
+        }
+      });
+    };
     return (
       <>
         <Headers />
@@ -150,8 +175,11 @@ const Setting = (props) => {
               trackColor={{false: '#d0d0d2', true: '#f2A884'}}
               thumbColor={'#ffffff'}
               ios_backgroundColor="#3e3e3e"
-              onValueChange={() => setNotification(!Notification)}
-              value={Notification}
+              onValueChange={() => {
+                api_Update({status_type: 1, status: Notification ? 1 : 0});
+                setNotification(!Notification);
+              }}
+              value={Notification ? true : false}
             />
           </View>
           <View style={styles.settingRow}>
@@ -165,12 +193,16 @@ const Setting = (props) => {
                   : props.labelData.disabled}
               </Text>
             </View>
+
             <Switch
               trackColor={{false: '#d0d0d2', true: '#f2A884'}}
               thumbColor={'#ffffff'}
               ios_backgroundColor="#3e3e3e"
-              onValueChange={() => setAllowLocation(!AllowLocation)}
-              value={AllowLocation}
+              onValueChange={() => {
+                api_Update({status_type: 2, status: AllowLocation ? 1 : 0});
+                setAllowLocation(!AllowLocation);
+              }}
+              value={AllowLocation ? true : false}
             />
           </View>
 
@@ -189,8 +221,11 @@ const Setting = (props) => {
               trackColor={{false: '#d0d0d2', true: '#f2A884'}}
               thumbColor={'#ffffff'}
               ios_backgroundColor="#3e3e3e"
-              onValueChange={() => setReceiveOffer(!ReceiveOffer)}
-              value={ReceiveOffer}
+              onValueChange={() => {
+                api_Update({status_type: 3, status: ReceiveOffer ? 1 : 0});
+                setReceiveOffer(!ReceiveOffer);
+              }}
+              value={ReceiveOffer ? true : false}
             />
           </View>
         </View>
@@ -233,6 +268,7 @@ const mapStateToProps = (state) => {
     addressData: state.addresslistReducer.addressData,
     addressStatus: state.addresslistReducer.addressStatus,
     labelStatus: state.labelReducer.labelStatus,
+    userdata: state.loginReducer.userData,
   };
 };
 const actionCreators = {

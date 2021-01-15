@@ -5,9 +5,9 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  BackHandler,
   StyleSheet,
   Alert,
+  BackHandler,
 } from 'react-native';
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 import {COOMMON_API} from '../../util/api';
@@ -16,21 +16,15 @@ import AsyncStorage from '@react-native-community/async-storage';
 import OneDayPlan from '../../screens/oneDayPlan/oneDayPlan';
 import {DrawerActions, CommonActions} from '@react-navigation/native';
 import {
-  CardStackNavigator,
   SettingStackNavigator,
+  CardStackNavigator,
   AddressStackNavigator,
-  RegisterStackNavigator,
-  ProgramsStackNavigator,
-  FaqSupportStackNavigator,
   TermConditionStackNavigator,
   PrivacyPolicyStackNavigator,
+  FaqSupportStackNavigator,
+  ProgramsStackNavigator,
   CommonCalendarStackNavigator,
 } from './stackNavigator';
-import LoginScreen from '../../screens/Auth/login';
-import ForgotScreen from '../../screens/forgot';
-import EmailScreen from '../../screens/email';
-import ForgotOtpScreen from '../../screens/forgototp';
-import OtpScreen from '../../screens/otp';
 import HomeScreen from '../../screens/home';
 import BottomTabNavigator from './navigation';
 import OneDayCalender from '../../screens/oneDayPlan/calendar';
@@ -59,6 +53,8 @@ import dietcompanies from '../../screens/dietcompanies';
 import addaddress from '../../screens/Address/addaddress';
 import {languageRestart} from '../LanguageRestart';
 import addresslist from '../../screens/Address/addresslist';
+import ContactUs from '../../screens/ContactUs';
+import SearchComponent from '../../screens/searchComponent';
 let styleCss = require('../../GlobalStyle');
 const Drawer = createDrawerNavigator();
 
@@ -70,9 +66,10 @@ const signOut = async (props) => {
   if (language == 'ar') {
     language = 'ar';
   }
-  var data = {};
-  data.device_token = device_token;
-  data.device_type = device_type;
+  var data = {
+    device_token: device_token,
+    device_type: device_type,
+  };
   let formBody = [];
   for (let property in data) {
     let encodedKey = encodeURIComponent(property);
@@ -81,6 +78,8 @@ const signOut = async (props) => {
   }
   formBody = formBody.join('&');
   COOMMON_API(formBody, 'logout').then(async (responseJson) => {
+    console.log('----LOGOUT-----', responseJson);
+
     if (responseJson.success) {
       let keys = [];
       keys = await AsyncStorage.getAllKeys();
@@ -116,7 +115,7 @@ const DrawerNavigator = (props) => {
     const TPF = [
       {name: props.labelData.terms_condition, navigation: 'TermCondition'},
       {name: props.labelData.privacy_policy, navigation: 'FaqSupport'},
-      {name: props.labelData.faq_support, navigation: 'PrivacyPolicy'},
+      {name: props.labelData.faq_support, navigation: 'ContactUs'},
     ];
     const drowerList =
       userType === 'Guest'
@@ -164,6 +163,7 @@ const DrawerNavigator = (props) => {
               image: require('../../../assets/image/menu/bell.png'),
               navigation: 'PushNotification',
             },
+
             {
               lable: props.labelData.lout_out,
               image: require('../../../assets/image/menu/logout.png'),
@@ -277,16 +277,7 @@ const DrawerNavigator = (props) => {
           component={MealSelection}
           options={{swipeEnabled: false}}
         />
-        <Drawer.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{swipeEnabled: false}}
-        />
-        <Drawer.Screen
-          name="Register"
-          component={RegisterStackNavigator}
-          options={{swipeEnabled: false}}
-        />
+
         <Drawer.Screen
           name="Addresslist"
           component={addresslist}
@@ -302,6 +293,13 @@ const DrawerNavigator = (props) => {
           component={PushNotification}
           options={{swipeEnabled: false}}
         />
+
+        <Drawer.Screen
+          name="ContactUs"
+          component={ContactUs}
+          options={{swipeEnabled: false}}
+        />
+
         <Drawer.Screen
           name="Conformation"
           component={Conformation}
@@ -456,21 +454,9 @@ const DrawerNavigator = (props) => {
           component={MyOrders}
           options={{swipeEnabled: false}}
         />
-        <Drawer.Screen name="Otp" component={OtpScreen} />
         <Drawer.Screen
-          name="Forgot"
-          component={ForgotScreen}
-          options={{swipeEnabled: false}}
-        />
-
-        <Drawer.Screen
-          name="Email"
-          component={EmailScreen}
-          options={{swipeEnabled: false}}
-        />
-        <Drawer.Screen
-          name="ForgotOtp"
-          component={ForgotOtpScreen}
+          name="SearchComponent"
+          component={SearchComponent}
           options={{swipeEnabled: false}}
         />
         <Drawer.Screen

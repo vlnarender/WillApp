@@ -483,7 +483,6 @@ module.exports = StyleSheet.create({
   },
 
   headingPro: {
-    paddingTop: 15,
     fontSize: 20,
     fontWeight: '700',
   },

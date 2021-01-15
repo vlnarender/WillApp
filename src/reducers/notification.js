@@ -1,8 +1,9 @@
 import {userConstants} from '../actions/actionTypes';
 
 const initialState = {
-  notificationData: {},
+  notificationData: [],
   active_notification: 0,
+  notificationStatus: false,
 };
 
 export default function (state = initialState, action) {
@@ -10,7 +11,7 @@ export default function (state = initialState, action) {
     case userConstants.NOTIFICATION_REQUEST:
       return {
         ...state,
-        status: true,
+        notificationStatus: false,
       };
     case userConstants.NOTIFICATION_SUCCESS:
       return {
@@ -21,7 +22,7 @@ export default function (state = initialState, action) {
     case userConstants.NOTIFICATION_FAILURE:
       return {
         ...state,
-        status: false,
+        notificationStatus: false,
       };
     default:
       return state;

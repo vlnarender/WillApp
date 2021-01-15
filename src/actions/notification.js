@@ -4,13 +4,15 @@ export const notificationActions = {
   notificationAction,
 };
 
-function notificationAction(data, navigation) {
+function notificationAction() {
   return (dispatch) => {
     dispatch(request());
-    return GET_API('creditcard/list').then(
+    return GET_API('my/notification-list').then(
       (data) => {
+        console.log('pn', data);
         if (data.success) {
-          dispatch(success(data));
+          console.log('pn', data.data);
+          dispatch(success(data.data));
         } else {
           dispatch(failure(data));
         }
@@ -24,8 +26,8 @@ function notificationAction(data, navigation) {
   function request() {
     return {type: userConstants.NOTIFICATION_REQUEST};
   }
-  function success(user) {
-    return {type: userConstants.NOTIFICATION_SUCCESS, user};
+  function success(data) {
+    return {type: userConstants.NOTIFICATION_SUCCESS, data};
   }
   function failure(error) {
     return {type: userConstants.NOTIFICATION_FAILURE, error};

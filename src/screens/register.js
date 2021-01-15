@@ -12,6 +12,7 @@ import {
   Platform,
   Keyboard,
 } from 'react-native';
+import {getUniqueId, getSystemName} from 'react-native-device-info';
 import {Formik} from 'formik';
 import * as yup from 'yup'; // for everything
 import Toast from 'react-native-simple-toast';
@@ -338,7 +339,6 @@ const RegisterScreen = (props) => {
   };
   const getDeviceValue = async () => {
     try {
-      formikKey.resetForm();
       let uType = await AsyncStorage.getItem('UserType');
       setUserType(uType);
       const device_token = await AsyncStorage.getItem('device_token');
@@ -412,16 +412,15 @@ const RegisterScreen = (props) => {
                   email: values.email,
                   password: values.password,
                   confirm_password: values.confirm_password,
-                  device_token: device_token,
-                  device_type: device_type,
+                  device_token: getUniqueId(),
+                  device_type: getSystemName() === 'Android' ? '1' : '2',
                   language: 'en',
                   is_guest: userType === 'Guest' ? 1 : 0,
                 };
                 userType === 'Guest'
                   ? (user.guest_id = props.profileData.id)
                   : null;
-                props.registerUserAction(user, props.navigation, actions);
-                actions.resetForm();
+                props.registerUserAction(user, props.navigation);
                 actions.setSubmitting(true);
               } else {
                 Toast.showWithGravity(

@@ -3,6 +3,7 @@ import {combineReducers} from 'redux';
 import * as types from '../actions/actionTypes';
 import oneDayMealListReducer from './OneDayMealList';
 import registrationReducer from './registration';
+import notificationReducer from './notification';
 import addresslistReducer from './addresslist';
 import emailExportReducer from './emailExport';
 import editaddressReducer from './editaddress';
@@ -31,6 +32,7 @@ const AppReducer = combineReducers({
   registrationReducer: registrationReducer,
   oneDayMealListReducer: oneDayMealListReducer,
   editaddressReducer: editaddressReducer,
+  notificationReducer: notificationReducer,
   addresslistReducer: addresslistReducer,
   addresslistReducer: addresslistReducer,
   emailExportReducer: emailExportReducer,

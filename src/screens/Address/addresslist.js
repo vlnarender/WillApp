@@ -49,43 +49,47 @@ const Addresslist = (props) => {
     if (props.addressData.length > 0) {
       return (
         <>
-          <View style={styleCss.header}>
-            <View style={{flex: 1, alignSelf: 'center', alignItems: 'center'}}>
-              <TouchableOpacity
-                onPress={() => {
-                  props.navigation.navigate(props.pathFinder);
-                }}>
-                <Image source={I18nManager.isRTL ? ARROW_RIGHT : ARROW_LEFT} />
-              </TouchableOpacity>
-            </View>
-            <View style={{flex: 4, alignItems: 'center', alignSelf: 'center'}}>
-              <TouchableOpacity
-                onPress={() => props.navigation.navigate('Home')}>
-                <Image
-                  style={{width: 50, height: 50}}
-                  source={HEADER_SMALL_LOGO}
-                />
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                alignSelf: 'center',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <TouchableOpacity
-                onPress={() => {
-                  props.navigation.navigate(props.pathFinder);
-                }}>
-                <Image style={{height: 20, width: 20}} source={CROSS} />
-              </TouchableOpacity>
-            </View>
-          </View>
           <ScrollView
             style={{backgroundColor: 'white', flex: 1}}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="interactive">
+            <View style={styleCss.header}>
+              <View
+                style={{flex: 1, alignSelf: 'center', alignItems: 'center'}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    props.navigation.navigate(props.pathFinder);
+                  }}>
+                  <Image
+                    source={I18nManager.isRTL ? ARROW_RIGHT : ARROW_LEFT}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{flex: 4, alignItems: 'center', alignSelf: 'center'}}>
+                <TouchableOpacity
+                  onPress={() => props.navigation.navigate('Home')}>
+                  <Image
+                    style={{width: 50, height: 50}}
+                    source={HEADER_SMALL_LOGO}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    props.navigation.navigate(props.pathFinder);
+                  }}>
+                  <Image style={{height: 20, width: 20}} source={CROSS} />
+                </TouchableOpacity>
+              </View>
+            </View>
             <View style={styleCss.mainContainer}>
               <View>
                 <Text style={styleCss.headingPro}>

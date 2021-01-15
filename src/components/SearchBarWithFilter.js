@@ -1,25 +1,24 @@
 import React, {useState} from 'react';
-import {View, TextInput, Image} from 'react-native';
+import {View, TextInput, Text, Image, TouchableOpacity} from 'react-native';
 import {HOME_FILTER, HOME_SEARCH} from '../_helpers/ImageProvide';
 import {connect} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 
 let styleCss = require('../GlobalStyle');
 const SearchbarFilter = (props) => {
-  const [value, onChangeText] = useState();
+  const navigation = useNavigation();
   return (
     <View style={{marginTop: 10}}>
-      <View style={styleCss.inputArea}>
+      <TouchableOpacity
+        style={styleCss.inputArea}
+        onPress={() => {
+          navigation.navigate('SearchComponent');
+        }}>
         <View style={{flex: 1}}>
           <Image style={{width: 20, height: 20}} source={HOME_FILTER} />
         </View>
-
         <View style={{flex: 9}}>
-          <TextInput
-            style={styleCss.textInput}
-            placeholder={props.labelData.search_Text}
-            onChangeText={(text) => onChangeText(text)}
-            value={value}
-          />
+          <Text> {props.labelData.search_Text}</Text>
         </View>
         <View style={{flex: 1}}>
           <Image
@@ -27,7 +26,7 @@ const SearchbarFilter = (props) => {
             source={HOME_SEARCH}
           />
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

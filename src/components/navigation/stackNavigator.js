@@ -90,21 +90,6 @@ const CustomStackNavigator = () => {
     </Stack.Navigator>
   );
 };
-const RegisterStackNavigator = () => {
-  return (
-    <Stack.Navigator
-      initialRouteName={'Register'}
-      screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Otp" component={OtpScreen} />
-      <Stack.Screen name="Forgot" component={ForgotScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Email" component={EmailScreen} />
-      <Stack.Screen name="ForgotOtp" component={ForgotOtpScreen} />
-    </Stack.Navigator>
-  );
-};
 const ContactStackNavigator = () => {
   return (
     <Stack.Navigator

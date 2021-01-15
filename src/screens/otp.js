@@ -15,6 +15,7 @@ import {
 import {Formik} from 'formik';
 import * as yup from 'yup'; // for everything
 import Toast from 'react-native-simple-toast';
+import {ScrollView} from 'react-native-gesture-handler';
 import {otpActions} from '../actions/otp';
 import AsyncStorage from '@react-native-community/async-storage';
 import {LOGIN_logo, LOGIN_pass} from '../_helpers/ImageProvide';
@@ -83,6 +84,18 @@ const StyledInputPass = ({label, formikProps, formikKey, icon, ...rest}) => {
   );
 };
 
+const StyledSwitch = ({formikKey, formikProps, label, ...rest}) => (
+  <FieldWrapper label={label} formikKey={formikKey} formikProps={formikProps}>
+    <Switch
+      value={formikProps.values[formikKey]}
+      onValueChange={(value) => {
+        formikProps.setFieldValue(formikKey, value);
+      }}
+      {...rest}
+    />
+  </FieldWrapper>
+);
+
 const validationSchema = yup.object().shape({
   otp: yup.string().required(),
 });
@@ -106,14 +119,13 @@ const OtpScreen = (props) => {
     try {
       const email = await AsyncStorage.getItem('email');
       const id = await AsyncStorage.getItem('userid');
+      const userid = Number(id);
       const device_token = await AsyncStorage.getItem('device_token');
       const device_type = await AsyncStorage.getItem('device_type');
-      const userid = Number(id);
       setToken(device_token);
       setType(device_type);
       setEmail(email);
       setUserid(userid);
-      console.log('-------- OTP ----------');
     } catch (e) {
       console.error(e);
     }
@@ -143,6 +155,7 @@ const OtpScreen = (props) => {
           }}
           onSubmit={(values, actions) => {
             Keyboard.dismiss();
+
             var user = {};
             user.verification_code = values.otp;
             user.user_id = userid;
@@ -257,3 +270,4 @@ const actionCreators = {
 };
 
 export default connect(mapStateToProps, actionCreators)(OtpScreen);
+//export default OtpScreen;

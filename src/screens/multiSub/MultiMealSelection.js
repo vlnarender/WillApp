@@ -225,7 +225,7 @@ const MultiMealSelection = (props) => {
                   borderRadius: 10,
                 }}>
                 <Text style={{fontWeight: 'bold', paddingRight: 5}}>
-                  `${props.labelData.day} ${daysNumber}`
+                  {props.labelData.day} {daysNumber}
                 </Text>
                 <Image
                   source={UP_DOWN_ARROW_BLACK}
